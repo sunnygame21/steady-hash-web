@@ -1,0 +1,43 @@
+.footerWrap {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #fff;
+
+}
+
+.content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.menuItem {
+  width: calc((100%) / 3);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 8px;
+}
+
+.menuItem svg {
+  width: 24px;
+  height: 24px;
+}
+
+.menuItem p {
+  margin-top: 4px;
+  text-align: center;
+  color: rgba(162, 182, 185, 1);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.active path{
+  fill: rgba(22, 73, 81, 1);
+}
+
+.active p {
+  color: rgba(22, 73, 81, 1);
+  font-family: Roboto Bold;
+}

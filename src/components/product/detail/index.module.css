@@ -1,0 +1,136 @@
+.wrap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(17, 24, 39, 1);
+  overflow: auto;
+}
+
+.close {
+  margin: 24px;
+}
+
+.titleCard {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  margin: 12px 24px;
+  background: #fff;
+  border-radius: 12px;
+  color: #000;
+}
+
+.itemImage {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
+.itemRight {
+  width: calc(100% - 84px);
+  flex: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.name {
+  font-size: 14px;
+  font-family: Roboto Bold;
+}
+.name span {
+  font-family: Roboto;
+}
+.itemDetail {
+  flex: 1;
+  width: calc(70%);
+  margin-right: 10px;
+}
+.desc {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(107, 114, 128, 1);
+  height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: calc(100%);
+}
+.status {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.money {
+  font-size: 14px;
+  font-family: Roboto Bold;
+}
+.type {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(69, 179, 105, 1);
+  font-family: Roboto Bold;
+}
+
+.chart {
+  height: 238px;
+  background-color: aliceblue;
+}
+.times {
+  margin: 12px 24px 0 24px;
+  display: flex;
+}
+.times div {
+  width: calc(100% / 3);
+  color: rgba(115, 146, 151, 1);
+  font-size: 12px;
+  padding: 3px 0;
+  text-align: center;
+}
+.timeActive {
+  background-color: #fff;
+  border-radius: 6px;
+  font-family: Roboto Bold;
+  color: rgba(22, 73, 81, 1);
+}
+.intro {
+  margin-top: 24px;
+  padding: 24px;
+  background-color: #fff;
+}
+.tabs {
+  width: 200%;
+  display: flex;
+  align-items: center;
+}
+.tabs div {
+  border: 1px solid rgba(235, 236, 239, 1);
+  border-radius: 10px;
+  padding: 8px 16px;
+  margin-right: 12px;
+  color: rgba(107, 114, 128, 1);
+  font-size: 14px;
+}
+
+.tabActive {
+  background: rgba(255, 216, 74, 1);
+  color: rgba(22, 73, 81, 1);
+  font-family: Roboto Bold;
+}
+.introDetail {
+  margin-top: 18px;
+}
+.title {
+  font-size: 16px;
+  font-family: Roboto Bold;
+  color: rgba(16, 24, 40, 1);
+}
+.detail {
+  margin-top: 20px;
+  color: rgba(16, 24, 40, 1);
+  font-size: 16px;
+}

@@ -1,0 +1,48 @@
+.chartContainer {
+  position: relative;
+  border-radius: 10px;
+}
+.barWrap {
+  background: rgba(31, 41, 55, 1);
+  border-radius: 16px;
+}
+
+.icon {
+  position: absolute;
+  padding: 7px;
+  border-radius: 8px;
+  background: rgba(235, 236, 239, 1);
+  right: 12px;
+  top: 16px;
+  z-index: 1;
+}
+.barIcon {
+  background: rgba(55, 65, 81, 1);
+
+}
+
+.chartContainer :global(.react-calendar__navigation__label) {
+  flex-grow: initial !important;
+  width: 100px;
+
+  
+}
+.chartContainer :global(.react-calendar__navigation button) {
+  background-color: transparent !important;
+
+}
+.navigation {
+  background-color: transparent;
+}
+.navigation p:first-child {
+  font-size: 14px;
+  font-weight: 500;
+
+}
+.navigation p:last-child {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(69, 179, 105, 1);
+  ;
+
+}

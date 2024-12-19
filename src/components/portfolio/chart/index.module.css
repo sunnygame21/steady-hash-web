@@ -1,0 +1,22 @@
+.chartContainer {
+  position: relative;
+  border-radius: 10px;
+}
+.barWrap {
+  background: rgba(31, 41, 55, 1);
+  border-radius: 16px;
+}
+
+.icon {
+  position: absolute;
+  padding: 7px;
+  border-radius: 8px;
+  background: rgba(235, 236, 239, 1);
+  right: 12px;
+  top: 16px;
+  z-index: 1;
+}
+.barIcon {
+  background: rgba(55, 65, 81, 1);
+
+}

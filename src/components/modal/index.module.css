@@ -1,0 +1,102 @@
+.modalWrap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-width: 600px;
+  min-height: 100px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  color: #000;
+  padding: 20px;
+}
+
+.modalWrap :global(.small) {
+  min-width: 380px !important;
+}
+
+.modalWrap :global(.large) {
+  min-width: 80% !important;
+}
+
+.title {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 18px;
+  color: #000;
+  text-align: center;
+  line-height: 25px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: Roboto Bold;
+  font-style: italic;
+}
+
+.closeIcon {
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+
+.closeIcon path {
+  stroke: #000
+}
+
+.desc {
+  margin-bottom: 10px;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-self: flex-end;
+}
+.footer div {
+  width: 48%;
+  height: 50px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+}
+.cancelBtn {
+  border: 1px solid #000;
+  color: #000 !important;
+}
+.confirmBtn {
+  background-color: #f44141;
+}
+
+
+@media screen and (max-width: 768px) {
+  .modalWrap :global(.small) {
+    min-width: auto !important;
+    margin: 0 30px;
+  }
+ }

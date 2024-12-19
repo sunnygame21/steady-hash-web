@@ -1,0 +1,69 @@
+.portfolioList {
+  margin-top: 16px;
+  display: flex;
+  overflow: auto;
+}
+.portfolioWrap {
+  margin-top: 24px;
+}
+.title {
+  font-size: 16px;
+  font-family: Roboto Bold;
+  color: rgba(17, 24, 39, 1);
+}
+
+.portfolioItem {
+  display: flex;
+  margin-right: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(243, 244, 246, 1);
+  background: rgba(249, 250, 251, 1);
+  border-radius: 12px;
+}
+.detailName {
+  display: flex;
+}
+
+.detailName img {
+  margin-right: 12px;
+  width: 32px;
+  height: 32px;
+}
+.nameInfo p:first-child {
+  color: rgba(17, 24, 39, 1);
+  font-size: 12px;
+    font-family: Roboto Bold;
+}
+.nameInfo p:last-child {
+  color: rgba(107, 114, 128, 1);
+  font-size: 12px;
+  font-weight: 400;
+}
+.money {
+  margin-top: 20px;
+  color: rgba(17, 24, 39, 1);
+  font-size: 20px;
+  font-weight: 700;
+  font-family: Roboto Bold;
+}
+.profit {
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(69, 179, 105, 1);
+}
+.profit svg {
+  margin-right: 4px;
+  width: 12px;
+  height: 12px;
+}
+
+.portfolioChart {
+  align-self: flex-end;
+  margin-left: 30px;
+  height: 33px;
+  width: 66px;
+  background-color: antiquewhite;
+}
