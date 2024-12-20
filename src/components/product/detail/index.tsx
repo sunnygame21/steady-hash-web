@@ -1,10 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import EchartLine from "@/components/multi-chart/line/index1";
 import { AlertIcon, BackIcon, CloseIcon } from "../../Icons";
 import icon from "/public/home/item1.png";
 
 import styles from "./index.module.css";
+
 
 const Date = ["Daily", "Weekly", "Monthly"];
 const IntroType = ["Overview", "Statistics", "History Data"];
@@ -14,7 +16,7 @@ const Detail = ({ onClose }: any) => {
   const [type, setType] = useState(IntroType[0]);
   return (
     <div className={styles.wrap}>
-      <CloseIcon className={styles.close} onClick={onClose} />
+      <BackIcon className={styles.close} onClick={onClose} />
       <div className={styles.titleCard}>
         <img src={icon.src} className={styles.itemImage}></img>
         <div className={styles.itemRight}>
@@ -31,7 +33,9 @@ const Detail = ({ onClose }: any) => {
         </div>
       </div>
       <div className={styles.chartWrap}>
-        <div className={styles.chart}></div>
+        <div className={styles.chart}>
+          <EchartLine></EchartLine>
+        </div>
         <div className={styles.times}>
           {Date.map((item) => (
             <div

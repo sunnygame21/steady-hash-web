@@ -6,9 +6,6 @@ import { PortfolioIcon, ProfileIcon, ProfitIcon } from "@/components/Icons";
 
 const EchartsBar = () => {
   const option = {
-    legend: {
-      show: false
-    },
     tooltip: {},
     grid: {
       top: '5%',   // 调整顶部的间距
@@ -19,20 +16,22 @@ const EchartsBar = () => {
     xAxis: {
       type: 'category',
       data: ['1', '2', '3', '4', '5', '6', '7'],
-      nameTextStyle: {
-        fontSize: 12,
-        color: 'rgba(162, 182, 185, 1)',
 
-      },
       axisLine: {
-        show: true, // 显示 x 轴轴线
+        // show: true, // 显示 x 轴轴线
         lineStyle: {
           type: 'dashed', // 将轴线设置为虚线
           color: 'rgba(55, 65, 81, 1)'
-        }
+        },
+      
       },
       axisTick: {
         show:false
+      },
+      axisLabel: {
+        fontSize: 12,
+        color: 'rgba(162, 182, 185, 1)',
+        fontWeight: 'bold'
       }
     },
     yAxis: {
@@ -77,7 +76,7 @@ const EchartsBar = () => {
   };
 
   useEffect(() => {
-    const chartDom = document.getElementById("mainbar");
+    const chartDom = document.getElementById("bar-chart");
     const myChart = echarts.init(chartDom);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     option && myChart.setOption(option);
@@ -90,7 +89,7 @@ const EchartsBar = () => {
         <p className={styles.num}>$18,908.00</p>
         <p className={styles.desc}><ProfitIcon /> <span>4.78% (+0.20%) </span>  vs Last week</p>
       </div>
-      <div id="mainbar" className={styles.bar}></div>
+      <div id="bar-chart" className={styles.bar}></div>
     </div>
   );
 };

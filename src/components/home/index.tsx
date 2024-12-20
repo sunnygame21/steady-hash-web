@@ -5,13 +5,14 @@ import CommonChart from "../common-chart";
 import { CartIcon } from "../Icons";
 import PortfolioList from "./portfolio";
 import Orders from "./order";
+import BarCalendarChart from "../multi-chart";
 
 import styles from "./index.module.css";
-import BarCalendarChart from "../multi-chart";
+
 
 const Home = () => {
   const router = useRouter();
-  return (
+  return ( 
     <div className={styles.wrap}>
       <div className={styles.info}>
         <p className={styles.name}>Hi, Jeff 👋</p>

@@ -42,9 +42,9 @@ const Footer: React.FC<{}> = ({}) => {
   useEffect(() => {
     const current = pathname;
     const targetMenu = find(MenuList, { link: current });
-    console.log('targetMenu', targetMenu)
     setActive(targetMenu?.link || "");
   }, [pathname]);
+  
   return (
     <div className={classNames(styles.footerWrap)}>
       <div className={styles.content}>

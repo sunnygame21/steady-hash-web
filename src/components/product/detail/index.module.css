@@ -78,7 +78,8 @@
 
 .chart {
   height: 238px;
-  background-color: aliceblue;
+  background: rgba(17, 24, 39, 1);
+
 }
 .times {
   margin: 12px 24px 0 24px;

@@ -17,10 +17,11 @@ export default function RootLayout({
   const pathname = usePathname();
   return (
     <>
-      <Head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </Head>
+     
       <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
         <body>
           <GlobalProvider>
             <>

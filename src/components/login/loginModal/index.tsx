@@ -1,23 +1,19 @@
 import React, { useState, useRef, useContext } from "react";
 import isEmail from "validator/lib/isEmail";
-import { message } from "antd";
 import { GlobalContext } from "@/app/state/global";
-import { GoogleIcon } from "@/components/Icons";
 import Modal from "@/components/modal";
 import Loading from "@/components/loading";
 
 import styles from "./index.module.css";
 
-
-const LoginModal: React.FC<{ close: () => void }> = (props) => {
-  const { close } = props;
+const LoginModal: React.FC<{
+  close: () => void;
+  getCode: (email: string) => void;
+  setEmail: (email: string) => void;
+}> = (props) => {
+  const { close, getCode, setEmail } = props;
   const inputRef = useRef<any>(null);
-  const [messageApi, contextHolder] = message.useMessage();
-  const info = () => {
-    messageApi.error('please input email!');
-  };
-  const [email, setEmail] = useState<boolean>(false);
-  const [success, setSuccess] = useState<boolean>(false);
+  const { messageApi } = useContext(GlobalContext);
   const [loading, setLoading] = useState<boolean>(false);
 
   const ItemsNode = (
@@ -29,31 +25,24 @@ const LoginModal: React.FC<{ close: () => void }> = (props) => {
   );
 
   const onClose = () => {
-    setEmail(false);
-    setSuccess(false);
+    setEmail("");
     close && close();
-  };
-
-  const showSuccess = () => {
-    setEmail(false);
-    setSuccess(true);
   };
 
   const emailLogin = async () => {
     const value = inputRef?.current?.value || "";
     if (value && isEmail(value)) {
       setLoading(true);
-      // const data = await loginEmail(value);
-      // if (data?.success) showSuccess();
+      await getCode(value);
       setLoading(false);
     } else {
-      messageApi.error('please input email!');
+      messageApi.error("please input email!");
     }
   };
 
   return (
     <Modal title="Sign Up To Steady" size="small" hiddenFooter close={onClose}>
-       {contextHolder}
+      {loading && <Loading />}
       <div className={styles.wrap}>
         <div className={styles.inputWrap}>
           <input

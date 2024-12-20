@@ -1,29 +1,17 @@
 .wrap {
   padding: 160px 24px 42px 24px;
 }
-.logo {
-  padding: 15px 15px 45px 15px;
+
+.logo img {
+  margin: auto;
   width: 150px;
   height: 150px;
-  margin: auto;
-  box-sizing: border-box;
-  background: rgba(22, 73, 81, 1);
-  font-size: 30px;
-  font-weight: 100;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  line-height: 30px;
-  font-family: "Roboto Thin";
-}
-.logo span {
-  font-family: "Roboto";
 }
 .title {
   margin-top: 50px;
   font-size: 24px;
-  font-weight: 700;
   text-align: center;
+  font-family: Roboto Bold;
 }
 .desc {
   margin-top: 12px;
@@ -42,10 +30,12 @@
   font-size: 16px;
   font-weight: 700;
   color: #fff;
-  background: rgba(22, 73, 81, 1);
+  background: rgba(31, 41, 55, 1);
+
   height: 56px;
   border: 1px solid rgba(243, 244, 246, 1);
   border-radius: 12px;
+  font-family: Roboto Bold;
 }
 .icon {
   margin-right: 12px;
@@ -62,6 +52,7 @@
 }
 .info span {
   color: rgba(69, 179, 105, 1);
+  font-family: Roboto Bold;
 }
 .info div {
   width: 100%;
