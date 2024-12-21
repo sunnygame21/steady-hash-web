@@ -13,7 +13,7 @@
   border-radius: 8px;
   background: rgba(235, 236, 239, 1);
   right: 12px;
-  top: 16px;
+  top: 22px;
   z-index: 1;
 }
 .barIcon {
@@ -23,7 +23,7 @@
 
 .chartContainer :global(.react-calendar__navigation__label) {
   flex-grow: initial !important;
-  width: 100px;
+  width: 120px;
 
   
 }
@@ -43,6 +43,5 @@
   font-size: 10px;
   font-weight: 500;
   color: rgba(69, 179, 105, 1);
-  ;
 
 }

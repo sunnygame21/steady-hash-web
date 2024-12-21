@@ -26,7 +26,7 @@
 
 .googleBtn:hover,
 .emailBtn:hover,
-.createBtn:hover {
+.errorBtn {
   background: #f56b46;
   color: #fff;
   border: 1px solid #f56b46;

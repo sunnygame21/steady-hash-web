@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import EchartLine from "@/components/multi-chart/line/index1";
+import EchartLine from "@/components/multi-chart/line";
 import { AlertIcon, BackIcon, CloseIcon } from "../../Icons";
 import icon from "/public/home/item1.png";
 

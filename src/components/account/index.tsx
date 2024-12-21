@@ -1,5 +1,6 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import { GlobalContext } from "@/app/state/global";
 import deposit from "/public/account/deposit.png";
 import exchange from "/public/account/exchange.png";
 import withdraw from "/public/account/withdraw.png";
@@ -8,11 +9,11 @@ import icon from "/public/home/item1.png";
 import styles from "./index.module.css";
 
 const Account = () => {
-  useEffect(() => {}, []);
+  const { user } = useContext(GlobalContext);
   return (
     <div className={styles.wrap}>
       <div className={styles.title}>
-        <p className={styles.name}>Hi, Jeff 👋</p>
+        <p className={styles.name}>Hi, {user?.showName} 👋</p>
         <p className={styles.desc}>Account Value</p>
         <p className={styles.money}>$45,950.00</p>
       </div>
@@ -62,18 +63,17 @@ const Account = () => {
               <p>$3,450.00</p>
             </div>
           </div>
-         
         </div>
         <div className={styles.balance}>
-            <div className={styles.infoTitle}>
-              <p>Balance</p>
-              <p>Available</p>
-            </div>
-            <div className={styles.infoNum}>
-              <p>$20,000.00</p>
-              <p>$3,450.00</p>
-            </div>
+          <div className={styles.infoTitle}>
+            <p>Balance</p>
+            <p>Available</p>
           </div>
+          <div className={styles.infoNum}>
+            <p>$20,000.00</p>
+            <p>$3,450.00</p>
+          </div>
+        </div>
       </div>
     </div>
   );

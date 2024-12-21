@@ -7,6 +7,7 @@ import LoginModal from "./loginModal";
 import { BackIcon, BlackBackIcon } from "../Icons";
 
 import styles from "./index.module.css";
+import { classNames } from "@/utils/helper";
 
 const Codebox = dynamic(() => import("react-otp-input"), { ssr: false });
 
@@ -16,10 +17,11 @@ const Code = () => {
   const [showCode, setShowCode] = useState<boolean>(false);
   const [code, setCode] = useState<string>("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const getCode = async (email: string) => {
     setEmail(email);
-    const { success, data } = await fetch("/api/user/email-login", {
+    const { success, data, err } = await fetch("/api/user/email-login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -28,14 +30,18 @@ const Code = () => {
     })
       .then((res) => res.json())
       .catch(() => ({ success: false }));
+    console.log("success, data", success, data);
     if (success && data) {
       setShowCode(true);
       setShowLogin(false);
+    } else {
+      messageApi.error(err);
     }
   };
 
   const loginByCode = async () => {
-    const { success, data } = await fetch("/api/user/login", {
+    setLoading(true);
+    const { success, data, err } = await fetch("/api/user/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,13 +55,16 @@ const Code = () => {
       document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=${access_token}`;
       await fetchUserInfo();
       messageApi.success("Login success!");
+    } else {
+      messageApi.error(err);
     }
+    setLoading(false);
   };
+
   return (
     <div className={styles.wrap}>
       <div className={styles.logo}>
         <img src={logo.src}></img>
-        
       </div>
       <div className={styles.title}>Welcome to SteadyHash</div>
       <div className={styles.desc}>
@@ -63,7 +72,7 @@ const Code = () => {
         algorithmic trading strategies for you to choose from.
       </div>
       <div className={styles.button} onClick={() => setShowLogin(true)}>
-      Sign in with Email
+        Sign in with Email
       </div>
       <div className={styles.info}>
         <div>
@@ -77,27 +86,25 @@ const Code = () => {
           setEmail={setEmail}
         ></LoginModal>
       )}
-      {showCode && (
-        <div className={styles.codeWrap}>
-          <BlackBackIcon className={styles.back} />
-          <div className={styles.codeTitle}>Authentication Code</div>
-          <div className={styles.codeDesc}>
-            Enter the 6-digit code we just sent to your email,
-            user@steadyhash.ai
-          </div>
-          <Codebox
-            value={code}
-            onChange={setCode}
-            numInputs={6}
-            renderInput={(props) => <input {...props} />}
-            inputStyle={styles.codeInput}
-            containerStyle={styles.codeBox}
-          />
-          <div className={styles.confirm} onClick={loginByCode}>
-            Continue
-          </div>
+      <div className={classNames(styles.codeWrap, showCode ? styles.show : "")}>
+        <BlackBackIcon className={styles.back} />
+        <div className={styles.codeTitle}>Authentication Code</div>
+        <div className={styles.codeDesc}>
+          Enter the 6-digit code we just sent to your email, user@steadyhash.ai
         </div>
-      )}
+        <Codebox
+          value={code}
+          onChange={setCode}
+          numInputs={6}
+          renderInput={(props) => <input {...props} />}
+          inputStyle={styles.codeInput}
+          containerStyle={styles.codeBox}
+        />
+        <div className={styles.confirm} onClick={loginByCode}>
+          {loading && <div className="loading"></div>}
+          Continue
+        </div>
+      </div>
     </div>
   );
 };

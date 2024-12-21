@@ -10,7 +10,7 @@ const Loading: React.FC<{ text?: string; className?: string }> = ({
   return (
     <div className={classNames("global-loading", styles.loading, className)}>
       <img src={loading.src} alt="" className={styles.img} />
-      <p className={styles.desc}>{text || "loading"}</p>
+      <p className={styles.desc}>{text || "Loading"}</p>
     </div>
   );
 };

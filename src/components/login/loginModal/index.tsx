@@ -1,10 +1,11 @@
 import React, { useState, useRef, useContext } from "react";
 import isEmail from "validator/lib/isEmail";
 import { GlobalContext } from "@/app/state/global";
+import { classNames } from "@/utils/helper";
 import Modal from "@/components/modal";
-import Loading from "@/components/loading";
 
 import styles from "./index.module.css";
+
 
 const LoginModal: React.FC<{
   close: () => void;
@@ -36,22 +37,23 @@ const LoginModal: React.FC<{
       await getCode(value);
       setLoading(false);
     } else {
-      messageApi.error("please input email!");
+      messageApi.error("Please Input Email!");
     }
   };
 
   return (
     <Modal title="Sign Up To Steady" size="small" hiddenFooter close={onClose}>
-      {loading && <Loading />}
       <div className={styles.wrap}>
         <div className={styles.inputWrap}>
           <input
             className={styles.input}
             ref={inputRef}
             placeholder="name@email.com"
+            disabled={loading}
           />
         </div>
-        <button className={styles.createBtn} onClick={emailLogin}>
+        <button className={classNames(styles.createBtn)} onClick={emailLogin}>
+          {loading && <div className="loading"></div>}
           Get Code
         </button>
         {ItemsNode}

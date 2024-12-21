@@ -24,7 +24,6 @@ export const initialGlobalState: GlobalState = {
 
 export const GlobalContext = createContext<GlobalState>(initialGlobalState);
 
-let fetching = false;
 
 export const GlobalProvider = ({ children }: any) => {
   const [user, setUser] = useState<Info | null>(null);
@@ -39,14 +38,16 @@ export const GlobalProvider = ({ children }: any) => {
     })
       .then((res) => res.json())
       .catch(() => ({ success: false }));
-    const { data, success } = res || {};
+    const { data = {}, success } = res || {};
     if (success) {
-      setUser(data);
+      setUser({...data, showName: data?.username?.split('@')[0] });
       router.push("/");
     } else {
       router.push('/login')
     }
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
   };
 
   useEffect(() => {

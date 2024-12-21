@@ -27,7 +27,13 @@ export async function GET(req: any) {
       }
     ).then((res) => res.json());
 
-    console.log("profile", data);
+    if (!data?.id) {
+      return jsonResponse({
+        success: false,
+        err: data?.message || ServerErrorStatus.ServerError,
+      });
+    }
+
     return jsonResponse({ success: true, data });
   } catch (e: any) {
     console.log(e);

@@ -23,7 +23,12 @@ export async function POST(req: any) {
         body: JSON.stringify({ username, verifyCode }),
       }
     ).then((res) => res.json());
-
+    if (data?.error || data?.statusCode) {
+      return jsonResponse({
+        success: false,
+        err: data?.message || ServerErrorStatus.ServerError,
+      });
+    }
     return jsonResponse({ success: true, data });
   } catch (e: any) {
     console.log(e);

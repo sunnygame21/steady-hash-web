@@ -2,32 +2,41 @@ import React, { useEffect, useState } from "react";
 import moment, { MomentInput } from "moment";
 import ReactCalendar from "react-calendar";
 import { classNames, formatAmount } from "@/utils/helper";
-import { BarIcon, CalendarIcon } from "@/components/Icons";
+import {
+  BarIcon,
+  CalendarIcon,
+  PreIcon,
+  PreWhiteIcon,
+} from "@/components/Icons";
 
 import styles from "./index.module.css";
+
+const CURRENT = moment().utc();
 
 const CalenderViewType = {
   month: {
     key: "month",
     text: "D",
-    style: ''
+    style: "",
+    date: CURRENT.format("YYYY-MM-DD"),
+    lastDate: CURRENT.format("MMMM YYYY"),
   },
   year: {
     key: "year",
     text: "M",
-    style: styles.yearCalendar
+    style: styles.yearCalendar,
+    date: CURRENT.format("YYYY-MM"),
+    lastDate: `${CURRENT.year()}`,
   },
 };
-const shortMonthNames = [
-  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-];
 
 const Calendar = () => {
   useEffect(() => {}, []);
   const currentDate = moment().utc().format("YYYY-MM-DD");
-  const [date, setDate] = useState(currentDate);
+
   const [calenderType, setCalenderType] = useState<any>(CalenderViewType.month);
+  const [date, setDate] = useState(calenderType.date);
+  const [curDateText, setCurDateText] = useState<string>("");
 
   const isNotStart = (date: any) => {
     return (
@@ -37,7 +46,7 @@ const Calendar = () => {
   };
 
   const tileContent = ({ date }: any) => {
-    if (moment(date).format("YYYY-MM-DD") === currentDate) {
+    if (moment(date).format("YYYY-MM-DD") === calenderType.date) {
       return <div className={styles.activeDate}>{date.getDate()}</div>;
     }
     // if (isNotStart(date)) {
@@ -55,7 +64,6 @@ const Calendar = () => {
   };
 
   const onClickDay = (date: MomentInput) => {};
-
   return (
     <>
       <div className={styles.viewWrap}>
@@ -65,7 +73,7 @@ const Calendar = () => {
               className={calenderType.key === item.key ? styles.viewActive : ""}
               key={`calender-view-${item.key}`}
               onClick={() => {
-                setCalenderType(item)
+                setCalenderType(item);
               }}
             >
               {item.text}
@@ -74,10 +82,10 @@ const Calendar = () => {
         })}
       </div>
       <ReactCalendar
-        onChange={() => {}}
+        onChange={setDate}
         showNeighboringMonth={false}
         calendarType="gregory"
-          locale="en"
+        locale="en"
         value={date}
         className={classNames(styles.calendar, calenderType.style)}
         tileClassName={styles.calendarTile}
@@ -86,7 +94,9 @@ const Calendar = () => {
         next2Label={null}
         prev2Label={null}
         navigationLabel={({ date, label, locale, view }) => {
-          console.log("<div>asdsad</div>", date, label, locale, view);
+          setTimeout(() => {
+            setCurDateText(label);
+          }, 200);
           return (
             <div className={styles.navigation}>
               <p>{label}</p>
@@ -94,13 +104,19 @@ const Calendar = () => {
             </div>
           );
         }}
-        formatMonth={(locale, date) =>
-        {
-         return   date.toLocaleString(locale, { month: "short" }) // "Jan", "Feb", etc.
+        maxDate={new Date()} // 禁用前进按钮
+        prevLabel={<PreIcon />}
+        nextLabel={
+          curDateText === calenderType.lastDate ? (
+            <PreWhiteIcon className={styles.nextBtn} />
+          ) : (
+            <PreIcon className={styles.nextBtn} />
+          )
         }
-        }
+        formatMonth={(locale, date) => {
+          return date.toLocaleString(locale, { month: "short" }); // "Jan", "Feb", etc.
+        }}
         onClickYear={(date, event) => {
-         
           event.preventDefault(); // 阻止默认行为
           console.log("Year clicked:", date.getFullYear());
         }}
