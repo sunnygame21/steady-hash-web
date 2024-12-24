@@ -27,7 +27,7 @@ export const GlobalContext = createContext<GlobalState>(initialGlobalState);
 
 export const GlobalProvider = ({ children }: any) => {
   const [user, setUser] = useState<Info | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   
@@ -45,13 +45,11 @@ export const GlobalProvider = ({ children }: any) => {
     } else {
       router.push('/login')
     }
-    setTimeout(() => {
-      setLoading(false);
-    }, 100);
+    setLoading(false);
   };
 
   useEffect(() => {
-    // fetchUserInfo();
+    fetchUserInfo();
   }, []);
 
   const globalValue = useMemo(
