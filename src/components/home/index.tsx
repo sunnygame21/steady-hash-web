@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/navigation";
 import { GlobalContext } from "@/app/state/global";
 import { CartIcon } from "../Icons";

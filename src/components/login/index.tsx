@@ -1,13 +1,13 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import dynamic from "next/dynamic";
 import { GlobalContext } from "@/app/state/global";
+import { classNames } from "@/utils/helper";
 import logo from "/public/login-logo.png";
 import LoginModal from "./loginModal";
-import { BackIcon, BlackBackIcon } from "../Icons";
+import { BlackBackIcon } from "../Icons";
 
 import styles from "./index.module.css";
-import { classNames } from "@/utils/helper";
 
 const Codebox = dynamic(() => import("react-otp-input"), { ssr: false });
 

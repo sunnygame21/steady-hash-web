@@ -4,7 +4,6 @@ import React, {
   createContext,
   forwardRef,
   Context,
-  ReactNode,
 } from "react";
 import { ModalContext } from "./ModalProvider";
 

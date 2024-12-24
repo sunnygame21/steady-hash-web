@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AlertIcon, CloseIcon } from "../Icons";
 import icon from "/public/home/item1.png";

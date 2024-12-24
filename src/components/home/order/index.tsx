@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect } from "react";
-import { ProfitIcon } from "@/components/Icons";
 import icon from "/public/home/item1.png";
 
 import styles from "./index.module.css";

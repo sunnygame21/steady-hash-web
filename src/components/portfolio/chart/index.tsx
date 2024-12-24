@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { classNames } from "@/utils/helper";
 import { BarIcon, CalendarIcon } from "@/components/Icons";
 import EchartsBar from "./bar";
-import PortfolioList from "../../home/portfolio";
 import Calendar from "./calendar";
 
 import styles from "./index.module.css";

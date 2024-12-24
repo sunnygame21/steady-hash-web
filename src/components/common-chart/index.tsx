@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { classNames } from "@/utils/helper";
 import styles from "./index.module.css";
 
-const CommonChart: React.FC<{}> = ({}) => {
+const CommonChart = () => {
   return <div className={classNames(styles.chartWrap)}></div>;
 };
 

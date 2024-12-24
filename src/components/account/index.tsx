@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { GlobalContext } from "@/app/state/global";
 import deposit from "/public/account/deposit.png";
 import exchange from "/public/account/exchange.png";

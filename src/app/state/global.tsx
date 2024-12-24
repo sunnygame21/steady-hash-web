@@ -51,7 +51,7 @@ export const GlobalProvider = ({ children }: any) => {
   };
 
   useEffect(() => {
-    fetchUserInfo();
+    // fetchUserInfo();
   }, []);
 
   const globalValue = useMemo(

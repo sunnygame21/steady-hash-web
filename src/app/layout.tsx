@@ -1,6 +1,5 @@
 "use client";
 import Footer from "@/components/footer";
-import Head from "next/head";
 import { usePathname } from "next/navigation";
 import { GlobalProvider } from "./state/global";
 

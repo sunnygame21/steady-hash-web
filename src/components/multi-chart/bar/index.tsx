@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import * as echarts from "echarts";
+import { ProfitIcon } from "@/components/Icons";
 
 import styles from "./index.module.css";
-import { PortfolioIcon, ProfileIcon, ProfitIcon } from "@/components/Icons";
+
 
 const EchartsBar = () => {
   const option = {
