@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import dynamic from "next/dynamic";
 import { GlobalContext } from "@/app/state/global";
 import { classNames } from "@/utils/helper";
-import logo from "/public/login-logo.png";
+import logo from "@/images/login-logo.png";
 import LoginModal from "./loginModal";
 import { BlackBackIcon } from "../Icons";
 

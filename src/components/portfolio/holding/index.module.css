@@ -1,0 +1,117 @@
+.orderList {
+  margin-top: 16px;
+  display: flex;
+  overflow: auto;
+}
+
+.orderWrap {
+  margin-top: 24px;
+}
+.title {
+  font-size: 16px;
+  font-family: Roboto Bold;
+  color: rgba(17, 24, 39, 1);
+}
+.orderItem {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 16px;
+  border: 1px solid rgba(243, 244, 246, 1);
+  background: rgba(249, 250, 251, 1);
+  border-radius: 12px;
+}
+
+.itemImage {
+  width: 40px;
+  height: 40px;
+  margin-right: 12px;
+}
+.itemRight {
+  width: calc(100% - 84px);
+  flex: 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.name {
+  font-size: 14px;
+  font-family: Roboto Bold;
+}
+.name span {
+  font-family: Roboto;
+}
+.itemDetail {
+  flex: 1;
+  width: calc(70%);
+  margin-right: 10px;
+}
+.desc {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(107, 114, 128, 1);
+  height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: calc(100%);
+}
+.status {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.money {
+  font-size: 14px;
+  font-family: Roboto Bold;
+}
+.type {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(69, 179, 105, 1);
+  font-family: Roboto Bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.type svg {
+  margin-right: 6px;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+.colIcon {
+  margin-left: 8px;
+  transform: rotate(-90deg);
+}
+.colIcon svg {
+  fill: rgba(156, 163, 175, 1);
+}
+.holdingWrap {
+  margin-top: 24px;
+}
+
+.holdingWrap :global(.ant-collapse) {
+  background-color: transparent !important;
+}
+.holdingWrap :global(.ant-collapse-item) {
+  border: none !important;
+}
+.holdingWrap :global(.ant-collapse-header) {
+  padding: 0 !important;
+  font-size: 16px;
+  font-family: Roboto Bold !important;
+  flex-direction: row-reverse;
+}
+.holdingWrap :global(.ant-collapse-content-box) {
+  padding: 0 !important;
+}
+.holdingWrap :global(.ant-collapse-item-active) .colIcon {
+  transform: rotate(0deg);
+}

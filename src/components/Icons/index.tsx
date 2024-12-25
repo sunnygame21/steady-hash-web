@@ -469,3 +469,23 @@ export const PreWhiteIcon: React.FC<any> = ({ className, style, onClick }) => (
     </g>
   </svg>
 );
+
+export const ArrowIcon: React.FC<any> = ({ className, style, onClick }) => (
+  <svg
+    className={className}
+    style={style}
+    onClick={onClick}
+    width="18"
+    height="18"
+    viewBox="0 0 18 18"
+    fill="none"
+  >
+    <path
+      d="M3.9375 6.46875L9 11.5312L14.0625 6.46875"
+      stroke="#739297"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

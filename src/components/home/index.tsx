@@ -12,6 +12,7 @@ import styles from "./index.module.css";
 const Home = () => {
   const router = useRouter();
   const { user } = useContext(GlobalContext);
+
   return user?.id ? (
     <div className={styles.wrap}>
       <div className={styles.info}>
@@ -26,7 +27,7 @@ const Home = () => {
         <CartIcon />
         Explore
       </div>
-      <PortfolioList title={"Portfolio"} />
+      <PortfolioList title={"Portfolio"} type="bar" />
       <Orders />
     </div>
   ) : null;

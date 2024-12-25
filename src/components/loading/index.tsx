@@ -1,5 +1,5 @@
 import React from "react";
-import loading from "/public/home/loading.gif";
+import loading from "@/images/loading.gif";
 import { classNames } from "@/utils/helper";
 import styles from "./index.module.css";
 

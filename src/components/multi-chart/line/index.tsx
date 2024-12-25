@@ -148,11 +148,11 @@ const EchartLine = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     option && myChart.setOption(option);
     // 手动显示 tooltip
-    // myChart.dispatchAction({
-    //   type: "showTip", // 显示 tooltip
-    //   seriesIndex: 0, // 指定第一个 series
-    //   dataIndex: 2, // 指定展示第几个点的 tooltip，比如此处为 "June"
-    // });
+    myChart.dispatchAction({
+      type: "showTip", // 显示 tooltip
+      seriesIndex: 0, // 指定第一个 series
+      dataIndex: 2, // 指定展示第几个点的 tooltip，比如此处为 "June"
+    });
   }, []);
 
   return <div id="line-chart" className={styles.chart}></div>;

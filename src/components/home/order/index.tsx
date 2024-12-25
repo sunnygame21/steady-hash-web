@@ -1,11 +1,11 @@
 "use client";
-import React, { useEffect } from "react";
-import icon from "/public/home/item1.png";
+import React from "react";
+import icon from "@/images/home/item1.png";
 
 import styles from "./index.module.css";
 
 const Orders = () => {
-  useEffect(() => {}, []);
+
   return (
     <div className={styles.orderWrap}>
          <p className={styles.title}>Orders</p>

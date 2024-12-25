@@ -3,20 +3,19 @@
   background: rgb(17, 24, 39);
   height: 100vh;
   color: #fff;
+  overflow: auto;
 }
 .logo {
   width: 152px;
-  margin: 32px  auto 0;
+  margin: 32px auto 0;
   border: 1.5px solid rgba(107, 114, 128, 1);
   font-size: 24px;
   text-align: center;
   padding: 7px 0;
-
 }
 .logo span {
   font-family: Roboto Thin;
-  color: rgba(243, 244, 246, 1)
-
+  color: rgba(243, 244, 246, 1);
 }
 .title {
   margin-top: 12px;
@@ -30,9 +29,8 @@
   font-size: 14px;
   font-weight: 400;
   text-align: center;
-
 }
-.productList{
+.productList {
   margin-top: 4px;
   display: flex;
   flex-wrap: wrap;
@@ -47,7 +45,7 @@
 }
 .top {
   display: flex;
-  justify-content:space-between;
+  justify-content: space-between;
 }
 .top img {
   width: 40px;
@@ -63,7 +61,6 @@
   font-size: 14px;
   font-family: Roboto Bold;
   color: rgba(17, 24, 39, 1);
-
 }
 .bottom p:last-child {
   font-size: 12px;
@@ -79,4 +76,40 @@
 }
 .warn svg {
   margin-right: 5px;
+}
+
+.questionWrap {
+  margin-top: 20px;
+  font-family: Roboto Bold;
+}
+.quesTitle {
+  font-size: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(55, 65, 81, 1);
+}
+.quesItem {
+  color: #fff;
+  font-size: 14px;
+}
+.quesItem :global(.ant-collapse-item) {
+  border-color: rgba(55, 65, 81, 1) !important;
+}
+.quesItem :global(.ant-collapse-header) {
+  color: #fff !important;
+  padding: 20px 0 !important;
+  font-family: Roboto Bold !important;
+}
+.quesItem :global(.ant-collapse-content-box) {
+  padding: 0 !important;
+}
+.quesItem :global(.ant-collapse-item-active) .colIcon {
+  transform: rotate(0deg);
+}
+.colIcon {
+  transform: rotate(-90deg);
+}
+.colItem {
+  color: #fff;
+  font-family: Roboto Bold;
+  margin-bottom: 16px;
 }

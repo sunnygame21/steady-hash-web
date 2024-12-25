@@ -1,15 +1,26 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
 import EchartLine from "@/components/multi-chart/line";
-import { AlertIcon, BackIcon, CloseIcon } from "../../Icons";
-import icon from "/public/home/item1.png";
+import { BackIcon } from "@/components/Icons";
+import icon from "@/images/home/item1.png";
 
 import styles from "./index.module.css";
 
-
 const Date = ["Daily", "Weekly", "Monthly"];
-const IntroType = ["Overview", "Statistics", "History Data"];
+const IntroType = [
+  {
+    key: "Overview",
+    text: "Overview",
+  },
+  {
+    key: "Statistics",
+    text: "Statistics",
+  },
+  {
+    key: "History",
+    text: "History Data",
+  },
+];
 
 const Detail = ({ onClose }: any) => {
   const [time, setTime] = useState(Date[1]);
@@ -52,11 +63,11 @@ const Detail = ({ onClose }: any) => {
         <div className={styles.tabs}>
           {IntroType.map((item) => (
             <div
-              key={`product-detail-intro-${item}`}
-              className={type === item ? styles.tabActive : ""}
+              key={`product-detail-intro-${item.key}`}
+              className={type.key === item.key ? styles.tabActive : ""}
               onClick={() => setType(item)}
             >
-              {item}
+              {item.text}
             </div>
           ))}
         </div>

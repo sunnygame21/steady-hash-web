@@ -1,12 +1,18 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import { ProfitIcon } from "@/components/Icons";
-import icon from "/public/home/item1.png";
+import icon from "@/images/home/item1.png";
+import Bar from "./bar";
+import Line from "./line";
 
 import styles from "./index.module.css";
 
-const PortfolioList = ({ title }: any) => {
-  useEffect(() => {}, []);
+const ChartType = {
+  bar: "bar",
+  line: "line",
+};
+
+const PortfolioList = ({ title, type }: any) => {
   return (
     <div className={styles.portfolioWrap}>
       <p className={styles.title}>{title}</p>
@@ -26,7 +32,10 @@ const PortfolioList = ({ title }: any) => {
               10.78% (+0.11%)
             </p>
           </div>
-          <div className={styles.portfolioChart}></div>
+          <div className={styles.portfolioChart}>
+            {/* <Bar /> */}
+            {type === ChartType.bar ? <Bar /> : <Line />}
+          </div>
         </div>
       </div>
     </div>

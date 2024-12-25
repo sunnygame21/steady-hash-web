@@ -1,10 +1,10 @@
 "use client";
 import React, { useContext } from "react";
 import { GlobalContext } from "@/app/state/global";
-import deposit from "/public/account/deposit.png";
-import exchange from "/public/account/exchange.png";
-import withdraw from "/public/account/withdraw.png";
-import icon from "/public/home/item1.png";
+import deposit from "@/images/account/deposit.png";
+import exchange from  "@/images/account/exchange.png";
+import withdraw from  "@/images/account/withdraw.png";
+import icon from "@/images/home/item1.png";
 
 import styles from "./index.module.css";
 
