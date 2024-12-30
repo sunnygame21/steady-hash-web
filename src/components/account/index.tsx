@@ -1,21 +1,22 @@
 "use client";
 import React, { useContext } from "react";
+import { find } from "lodash";
 import { GlobalContext } from "@/app/state/global";
+import { addCommas } from "@/utils/helper"
 import deposit from "@/images/account/deposit.png";
-import exchange from  "@/images/account/exchange.png";
-import withdraw from  "@/images/account/withdraw.png";
-import icon from "@/images/home/item1.png";
+import exchange from "@/images/account/exchange.png";
+import withdraw from "@/images/account/withdraw.png";
 
 import styles from "./index.module.css";
 
 const Account = () => {
-  const { user } = useContext(GlobalContext);
+  const { user, userShares, productsList } = useContext(GlobalContext);
   return (
     <div className={styles.wrap}>
       <div className={styles.title}>
         <p className={styles.name}>Hi, {user?.showName} 👋</p>
         <p className={styles.desc}>Account Value</p>
-        <p className={styles.money}>$45,950.00</p>
+        <p className={styles.money}>${user?.allMoney}</p>
       </div>
 
       <div className={styles.action}>
@@ -36,35 +37,47 @@ const Account = () => {
       </div>
       <div className={styles.bottom}>
         <div className={styles.mainTitle}>Your Assets</div>
-        <div className={styles.investItem}>
-          <div className={styles.topInfo}>
-            <img src={icon.src} alt="" className={styles.itemImage} />
-            <div className={styles.itemRight}>
-              <div className={styles.itemDetail}>
-                <p className={styles.name}>
-                  Steady <span> (#STEADY_4)</span>
-                </p>
-                <p className={styles.desc}>Earning starts soon, 12-04</p>
+        {userShares.map((item, i) => {
+          const curProduct = find(
+            productsList,
+            (product) => product?.id === item?.productId
+          );
+          return (
+            <div className={styles.investItem} key={`account-share-item-${i}`}>
+              <div className={styles.topInfo}>
+                <img
+                  src={curProduct?.icon}
+                  alt=""
+                  className={styles.itemImage}
+                />
+                <div className={styles.itemRight}>
+                  <div className={styles.itemDetail}>
+                    <p className={styles.name}>
+                      {curProduct?.name} <span> ({curProduct?.code})</span>
+                    </p>
+                    <p className={styles.desc}>Earning starts soon</p>
+                  </div>
+                  <div className={styles.status}>
+                    <p className={styles.money}>$5,000.00</p>
+                    <p className={styles.type}>Buy</p>
+                  </div>
+                </div>
               </div>
-              <div className={styles.status}>
-                <p className={styles.money}>$5,000.00</p>
-                <p className={styles.type}>Buy</p>
+              <div className={styles.Hline}></div>
+              <div className={styles.investInfo}>
+                <div className={styles.infoTitle}>
+                  <p>Investment</p>
+                  <p>Profits</p>
+                </div>
+                <div className={styles.infoNum}>
+                  <p>${addCommas(item.shareAmount)}</p>
+                  <p>${addCommas(item.profit)}</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className={styles.Hline}></div>
-          <div className={styles.investInfo}>
-            <div className={styles.infoTitle}>
-              <p>Investment</p>
-              <p>Profits</p>
-            </div>
-            <div className={styles.infoNum}>
-              <p>$20,000.00</p>
-              <p>$3,450.00</p>
-            </div>
-          </div>
-        </div>
-        <div className={styles.balance}>
+          );
+        })}
+        {/* <div className={styles.balance}>
           <div className={styles.infoTitle}>
             <p>Balance</p>
             <p>Available</p>
@@ -73,7 +86,7 @@ const Account = () => {
             <p>$20,000.00</p>
             <p>$3,450.00</p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

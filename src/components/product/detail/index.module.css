@@ -72,14 +72,19 @@
   text-align: center;
   font-size: 12px;
   font-weight: 500;
-  color: rgba(69, 179, 105, 1);
+  color: rgba(107, 114, 128, 1);
   font-family: Roboto Bold;
+}
+.open {
+  color: rgba(69, 179, 105, 1);
+}
+.closed {
+  color: rgba(239, 71, 112, 1);
 }
 
 .chart {
   height: 238px;
   background: rgba(17, 24, 39, 1);
-
 }
 .times {
   margin: 12px 24px 0 24px;

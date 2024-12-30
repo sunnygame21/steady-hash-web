@@ -5,6 +5,7 @@ import { GlobalProvider } from "./state/global";
 
 import "./globals.css";
 import "react-calendar/dist/Calendar.css";
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const noFooter = ["/login", "/product"];
 

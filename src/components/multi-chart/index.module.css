@@ -1,6 +1,18 @@
 .chartContainer {
   position: relative;
   border-radius: 10px;
+
+}
+.noData {
+  background: rgba(31, 41, 55, 1);
+  min-height: 240px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-family: Roboto Bold;
 }
 .barWrap {
   background: rgba(31, 41, 55, 1);

@@ -3,11 +3,24 @@
   margin-top: 16px;
   height: 240px;
   padding: 20px;
+  position: relative;
+}
+.skeletonWrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -4px;
+  bottom: 0;
+  height: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.skeleton {
+  height: 100%;
 }
 .bar {
   height: 120px;
   margin-top: 16px;
-
 }
 .detailInfo {
   margin-right: 30px;
@@ -18,11 +31,11 @@
 }
 .num {
   margin-top: 8px;
-  color: #Fff;
+  color: #fff;
   font-size: 24px;
   font-family: Roboto Bold;
 }
-.desc{
+.desc {
   margin-top: 4px;
   font-size: 10px;
   display: flex;
@@ -30,11 +43,10 @@
   color: #fff;
 }
 .desc svg {
-width: 12px;
-height: 12px;
-margin-right: 4px;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
 }
 .desc span {
   color: rgba(69, 179, 105, 1);
-
 }

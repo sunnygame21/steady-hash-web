@@ -11,7 +11,7 @@ import styles from "./index.module.css";
 
 const Home = () => {
   const router = useRouter();
-  const { user } = useContext(GlobalContext);
+  const { user, userShares } = useContext(GlobalContext);
 
   return user?.id ? (
     <div className={styles.wrap}>
@@ -27,8 +27,11 @@ const Home = () => {
         <CartIcon />
         Explore
       </div>
-      <PortfolioList title={"Portfolio"} type="bar" />
-      <Orders />
+      {userShares.length ? (
+        <PortfolioList title={"Portfolio"} type="bar" />
+      ) : null}
+
+      {/* <Orders /> */}
     </div>
   ) : null;
 };

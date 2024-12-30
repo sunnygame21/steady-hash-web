@@ -22,24 +22,29 @@ const IntroType = [
   },
 ];
 
-const Detail = ({ onClose }: any) => {
+const Detail = ({ onClose, detailData }: any) => {
   const [time, setTime] = useState(Date[1]);
   const [type, setType] = useState(IntroType[0]);
   return (
     <div className={styles.wrap}>
       <BackIcon className={styles.close} onClick={onClose} />
       <div className={styles.titleCard}>
-        <img src={icon.src} className={styles.itemImage}></img>
+        <img src={detailData?.icon} className={styles.itemImage}></img>
         <div className={styles.itemRight}>
           <div className={styles.itemDetail}>
             <p className={styles.name}>
-              Steady <span> (#STEADY_4)</span>
+              {detailData?.name} <span> ({detailData?.code})</span>
             </p>
-            <p className={styles.desc}>Earning starts soon, 12-04</p>
+            <p className={styles.desc}>
+            {/* Earning starts soon, 12-04 */}
+            </p>
           </div>
           <div className={styles.status}>
-            <p className={styles.money}>$5,000.00</p>
-            <p className={styles.type}>OPEN</p>
+            <p className={styles.money}>*APR 22%</p>
+            <p className={styles.type}>
+              <span className={styles.open}>OPEN</span>&ensp;/&ensp;
+              <span className={styles.closed}>CLOSED</span>
+            </p>
           </div>
         </div>
       </div>
@@ -60,7 +65,7 @@ const Detail = ({ onClose }: any) => {
         </div>
       </div>
       <div className={styles.intro}>
-        <div className={styles.tabs}>
+        {/* <div className={styles.tabs}>
           {IntroType.map((item) => (
             <div
               key={`product-detail-intro-${item.key}`}
@@ -70,18 +75,11 @@ const Detail = ({ onClose }: any) => {
               {item.text}
             </div>
           ))}
-        </div>
+        </div> */}
         <div className={styles.introDetail}>
           <p className={styles.title}>Flagship 22% - Quant Pioneer Plan</p>
           <div className={styles.detail}>
-            <li>
-              Annual Yield: 22% Minimum Investment: $20,000 Lock-up Period:
-              Minimum of 3 months Type: Quantitative Investment Description:
-              This plan leverages advanced AI and quantitative trading
-              strategies to maximize returns. Ideal for investors interested in
-              innovative financial technologies, it offers a substantial annual
-              yield of 22% with a 3-month lock-up period.
-            </li>
+            <li>{detailData?.description}</li>
           </div>
         </div>
       </div>

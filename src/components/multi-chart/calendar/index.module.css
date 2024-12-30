@@ -1,25 +1,41 @@
+.wrap {
+  position: relative;
+}
+.skeleton {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+}
 .navigation {
   background-color: transparent;
-  min-width: auto
+  min-width: auto;
 }
+
 .navigation p:first-child {
   font-size: 14px;
   font-family: Roboto Bold;
 }
+
 .navigation p:last-child {
   font-size: 10px;
   font-family: Roboto Bold;
   color: rgba(69, 179, 105, 1);
 }
+
 .calendar :global(.react-calendar__navigation__arrow) {
   margin-right: 10px;
   margin-left: 10px;
   min-width: auto !important;
 }
+
 .nextBtn {
   transform: rotate(180deg);
   margin-right: 0;
 }
+
 .calendar {
   margin-top: 16px;
   padding: 16px 0;
@@ -27,22 +43,23 @@
   background: rgba(249, 250, 251, 1);
   border-radius: 10px;
 }
-.calendar :global(.react-calendar__tile) {
+.calendar :global(.react-calendar__month-view__weekdays__weekday) {
+  text-decoration: none;
+}
+.calendarTile {
   border-radius: 7px;
   background: rgba(218, 240, 225, 1) !important;
-  margin: 1px 3px;
-  /* width: 44px; */
+  margin: 1px 3px !important;
   height: 44px;
   padding: 3px 0;
   color: #000;
   font-weight: 600;
   flex-basis: calc((100% - 24px) / 7) !important;
 }
-.calendar .calendarTile:nth-child(7n) {
-  margin-right: 0;
+
+.calendarTile:nth-child(1n) {
+  margin-right: 0 !important;
 }
-
-
 
 .num {
   font-size: 10px;
@@ -54,12 +71,14 @@
   text-align: center;
   width: 100%;
 }
+
 .viewWrap {
   position: absolute;
   display: flex;
   top: 25px;
   right: 50px;
 }
+
 .viewWrap p {
   padding: 5px 10px;
   border-radius: 5px;
@@ -70,32 +89,69 @@
   font-family: Roboto Bold;
 }
 
-
 .viewWrap .viewActive {
   background: rgba(156, 163, 175, 1);
   color: #fff;
 }
 
-.yearCalendar :global(.react-calendar__tile) {
-  border-radius: 7px;
-  background: rgba(218, 240, 225, 1) !important;
-  margin: 1px;
+.yearCalendar .calendarTile {
+  margin: 2px !important;
   height: 50px;
-  padding: 3px 0;
+  padding: 0 !important;
+  flex-basis: calc((100% - 8px) / 4) !important;
+}
+
+.yearCalendar .calendarTile:nth-child(1n) {
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+.calendarTile:has(.profitDate) {
+  /* background: rgba(69, 179, 105, 1) !important; */
+}
+
+.calendarTile:has(.noProfitDate) {
+  background: rgba(235, 236, 239, 1) !important;
+}
+
+.calendarTile:has(.lossProfitDate) {
+  background: rgba(235, 236, 239, 1) !important;
+}
+
+.profitDate {
+  color: rgba(69, 179, 105, 1);
+}
+
+.noProfitDate {
+  color: rgba(156, 163, 175, 1);
+}
+
+.lossProfitDate {
+  color: rgba(239, 71, 112, 1);
+}
+
+.calendarTile:has(.disable) {
+  background: none !important;
   color: #000;
-  font-weight: 600;
-  flex-basis: calc((100% - 6px) / 4) !important;
 }
 
-.calendar :global(.react-calendar__tile--active) {
-  background: rgba(69, 179, 105, 1) !important;
-  color: #fff;
-}
-.calendar :global(.react-calendar__tile--hasActive) {
-  background: rgba(69, 179, 105, 1) !important;
-  color: #fff;
+.calendarTile abbr {
+  color: #000 !important;
 }
 
-.yearCalendar .calendarTile:nth-child(4n) {
-  margin-right: 0;
+.calendar :global(.react-calendar__tile--active),
+.calendar :global(.react-calendar__tile--active) abbr {
+  background: rgba(69, 179, 105, 1) !important;
+  color: #fff !important;
+}
+
+.calendar :global(.react-calendar__tile--hasActive),
+.calendar :global(.react-calendar__tile--hasActive) abbr {
+  background: rgba(69, 179, 105, 1) !important;
+  color: #fff !important;
+}
+
+.calendar :global(.react-calendar__tile--active) .num,
+.calendar :global(.react-calendar__tile--hasActive) .num {
+  color: #fff !important;
 }

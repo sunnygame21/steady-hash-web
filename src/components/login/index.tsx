@@ -1,6 +1,7 @@
 "use client";
 import React, { useContext, useState } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 import { GlobalContext } from "@/app/state/global";
 import { classNames } from "@/utils/helper";
 import logo from "@/images/login-logo.png";
@@ -12,6 +13,7 @@ import styles from "./index.module.css";
 const Codebox = dynamic(() => import("react-otp-input"), { ssr: false });
 
 const Code = () => {
+  const router  = useRouter()
   const { fetchUserInfo, messageApi } = useContext(GlobalContext);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [showCode, setShowCode] = useState<boolean>(false);
@@ -53,6 +55,7 @@ const Code = () => {
     if (success) {
       const { access_token } = data || {};
       document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=${access_token}`;
+      router.push('/')
       await fetchUserInfo();
       messageApi.success("Login success!");
     } else {

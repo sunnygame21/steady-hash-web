@@ -1,22 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Collapse, CollapseProps } from "antd";
+import { GlobalContext } from "@/app/state/global";
+import { Product } from "@/types/info";
 import { AlertIcon, ArrowIcon, CloseIcon, ProfileIcon } from "../Icons";
 import icon from "@/images/home/item1.png";
+import Detail from "./detail";
 
 import styles from "./index.module.css";
-import Detail from "./detail";
-import { Collapse, CollapseProps } from "antd";
+
+
 const text = `
   A dog is a type of domesticated animal.
   Known for its loyalty and faithfulness,
   it can be found as a welcome guest in many households across the world.
 `;
 
-type ExpandIconPosition = "start" | "end";
-const Product = () => {
+const Products = () => {
   const router = useRouter();
-  const [selectProduct, setSelectProduct] = useState(0);
+  const { productsList } = useContext(GlobalContext);
+  const [selectProduct, setSelectProduct] = useState<Product | null>(null);
 
   const items: CollapseProps["items"] = [
     {
@@ -53,7 +57,7 @@ const Product = () => {
         Quant Trading Products powered by AI
       </div>
       <div className={styles.productList}>
-        {[1, 2, 3, 4].map((item, i) => {
+        {productsList.map((item, i) => {
           return (
             <div
               className={styles.productItem}
@@ -61,11 +65,11 @@ const Product = () => {
               onClick={() => setSelectProduct(item)}
             >
               <div className={styles.top}>
-                <img src={icon.src} alt="" />
+                <img src={item?.icon} alt="" />
                 <p>10%</p>
               </div>
               <div className={styles.bottom}>
-                <p>Steady</p>
+                <p>{item?.name}</p>
                 <p>by SteadyHash</p>
               </div>
             </div>
@@ -86,13 +90,13 @@ const Product = () => {
           className={styles.quesItem}
           expandIcon={() => <ArrowIcon className={styles.colIcon} />}
           expandIconPosition="end"
-          key={'product'}
+          key={"product"}
         />
       </div>
 
-      {!!selectProduct && <Detail onClose={() => setSelectProduct(0)} />}
+      {!!selectProduct && <Detail  detailData={selectProduct} onClose={() => setSelectProduct(null)} />}
     </div>
   );
 };
 
-export default Product;
+export default Products;

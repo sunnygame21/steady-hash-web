@@ -144,6 +144,10 @@ const EchartLine = () => {
 
   useEffect(() => {
     const chartDom = document.getElementById("line-chart");
+    const chart = echarts.getInstanceByDom(chartDom as any);
+    if (chart) {
+      chart.dispose();
+    }
     const myChart = echarts.init(chartDom);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     option && myChart.setOption(option);

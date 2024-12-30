@@ -1,29 +1,35 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import { GlobalContext } from "@/app/state/global";
 import { BalanceIcon, CreditIcon, InvestIcon, RevenueIcon } from "../icon";
 
 import styles from "./index.module.css";
-
 
 const listData = [
   {
     icon: <InvestIcon />,
     text: "Investment",
+    key: 'allInvest',
+
   },
   {
     icon: <RevenueIcon />,
     text: "Revenue",
+    key: 'allProfit'
   },
   {
     icon: <BalanceIcon />,
     text: "Balance",
+    key: 'allMoney'
   },
-  {
-    icon: <CreditIcon />,
-    text: "Credit",
-  },
+  // {
+  //   icon: <CreditIcon />,
+  //   text: "Credit",
+  //   key: 'Credit'
+  // },
 ];
 const Summary = () => {
+  const {user} = useContext(GlobalContext)
   return (
     <div className={styles.summaryWrap}>
         <div className={styles.title}>Summary</div>
@@ -34,7 +40,7 @@ const Summary = () => {
                 <div className={styles.icon}> {item.icon}</div>
                 <div className={styles.detail}>
                   <p>{item.text}</p>
-                  <p>98237e</p>
+                  <p>${ user?.[item.key]}</p>
                 </div>
               </div>
             );
