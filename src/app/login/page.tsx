@@ -1,5 +1,6 @@
 // import Login from "@/components/login";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 
 const Login = dynamic(() => import("@/components/login"), {
   loading: () => (
@@ -15,5 +16,9 @@ const Login = dynamic(() => import("@/components/login"), {
   ), // 显示占位符
 });
 export default function Home() {
-  return <Login></Login>;
+  return (
+    <Link href={"/login"}>
+      <Login></Login>
+    </Link>
+  );
 }

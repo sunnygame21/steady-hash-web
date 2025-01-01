@@ -46,8 +46,8 @@ const Products = ({ close, show }: any) => {
 
   return (
     <motion.div
-      initial={{ transform: "translateY(100vh)" }}
-      animate={{ transform: show ? "translateY(0)" : "translateY(100vh)" }}
+      initial={{ transform: "translateY(100%)" }}
+      animate={{ transform: show ? "translateY(0)" : "translateY(100%)" }}
       transition={{ duration: 0.2 }}
       className={classNames(styles.wrap)}
     >
@@ -61,7 +61,7 @@ const Products = ({ close, show }: any) => {
         <div className={styles.subTitle}>
           Quant Trading Products powered by AI
         </div>
-        
+
         <div className={styles.productList}>
           {productsList.map((item, i) => {
             return (
@@ -72,7 +72,7 @@ const Products = ({ close, show }: any) => {
               >
                 <div className={styles.top}>
                   <img src={item?.icon} alt="" />
-                  <p>{(multiply(item.apr_7day, 100).toFixed(2))}%</p>
+                  <p>{multiply(item.apr_7day, 100).toFixed(2)}%</p>
                 </div>
                 <div className={styles.bottom}>
                   <p>{item?.name}</p>
@@ -102,9 +102,9 @@ const Products = ({ close, show }: any) => {
 
         <motion.div
           className={styles.detailWrap}
-          initial={{ transform: "translateX(100vw)" }}
+          initial={{ transform: "translateX(100%)" }}
           animate={{
-            transform: !!selectProduct ? "translateX(0)" : "translateX(100vw)",
+            transform: !!selectProduct ? "translateX(0)" : "translateX(100%)",
           }}
           transition={{ duration: 0.2 }}
         >

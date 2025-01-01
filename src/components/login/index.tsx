@@ -20,7 +20,6 @@ const Code = () => {
   const [code, setCode] = useState<string>("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [pageLoad, setPageLoad] = useState(false);
 
   const getCode = async (email: string) => {
     setEmail(email);
@@ -65,10 +64,6 @@ const Code = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    setPageLoad(true);
-  }, []);
-
   return (
     <div className={styles.wrap}>
       <div className={styles.logo}>
@@ -107,9 +102,26 @@ const Code = () => {
           value={code}
           onChange={setCode}
           numInputs={6}
-          renderInput={(props) => <input {...props} />}
+          renderInput={(props) => {
+            return (
+              <input
+                type="text"
+                className={props.className}
+                autoComplete="off"
+                style={props.style}
+                value={props.value}
+                onChange={props.onChange}
+                onInput={props.onInput}
+                ref={props.ref}
+                onFocus={() => {}}
+                onBlur={() => {}}
+                onKeyDown={props.onKeyDown}
+              />
+            );
+          }}
           inputStyle={styles.codeInput}
           containerStyle={styles.codeBox}
+          shouldAutoFocus={false}
         />
         <div className={styles.confirm} onClick={loginByCode}>
           {loading && <div className="loading"></div>}

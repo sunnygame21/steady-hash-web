@@ -1,7 +1,11 @@
+
+import Link from "next/link";
 import Portfolio from "@/components/portfolio";
 
 export default function Home() {
   return (
-    <Portfolio />
+    <Link href={"/portfolio"}>
+      <Portfolio />
+    </Link>
   );
 }

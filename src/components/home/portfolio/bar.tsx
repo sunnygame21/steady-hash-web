@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import * as echarts from "echarts";
-import { get, maxBy, round } from "lodash";
+import { get, maxBy, minBy, round } from "lodash";
 import { addCommas, nextEvenNumber } from "@/utils/helper";
 import tipBg from "@/images/common/portfolio-chart-top-bg.png";
 
@@ -11,6 +11,7 @@ const Bar = ({ title, id, data }: any) => {
   useEffect(() => {
     if (data.length) {
       const max = get(maxBy(data, "profit"), "profit", 0);
+      const min = get(minBy(data, "profit"), "profit", 0);
       const y = data.map((item: any) => {
         if (max === item.profit && max) {
           return {
@@ -74,7 +75,7 @@ const Bar = ({ title, id, data }: any) => {
           type: "value",
           scale: true,
           max: max + 50,
-          min: 0,
+          min: min,
           splitNumber: 2, //max / splitNumber是间隔,
           inverse: false, // 确保坐标轴方向正常
           boundaryGap: 0, // 控制类目轴的起始位置，true 表示柱状图从第一个类别开始显示

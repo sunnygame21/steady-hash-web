@@ -103,11 +103,12 @@
   padding: 10px 0;
   font-size: 20px;
   background: rgba(249, 250, 251, 1);
-  border-radius: 10px;
+  border-radius: 10px !important;
   /* outline: none; */
   font-family: Roboto Bold;
 }
-.codeInput:hover {
+.codeInput:focus {
+  border-radius: 10px !important;
   outline: 0.8px solid rgba(22, 73, 81, 1) !important;
 }
 .confirm {

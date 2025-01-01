@@ -11,7 +11,7 @@ import { PreIcon, PreWhiteIcon } from "@/components/Icons";
 
 import styles from "./index.module.css";
 
-const CURRENT = moment().utc();
+const CURRENT = moment().utc().local();
 
 const CalenderViewType = {
   [CAlENDAR_TYPE.month]: {
@@ -217,6 +217,7 @@ const Calendar = ({ calendarTypeChange }: any) => {
         calendarType="gregory"
         locale="en"
         value={value}
+
         className={classNames(styles.calendar, calenderInfo.style)}
         tileClassName={classNames(styles.calendarTile)}
         tileContent={tileContent}

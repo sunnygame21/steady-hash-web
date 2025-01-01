@@ -2,12 +2,16 @@ import React, { useEffect } from "react";
 import * as echarts from "echarts";
 
 import styles from "./index.module.css";
-import { findIndex, get, maxBy, parseInt, round } from "lodash";
+import { findIndex, get, maxBy, minBy, parseInt, round } from "lodash";
 import { nextEvenNumber } from "@/utils/helper";
 
 const EchartLine = ({ data = [] }: any) => {
   const maxProfit: any = maxBy(data, "profit") || {};
-  const index = findIndex(data, (item: any) => maxProfit?.profit === item.profit);
+  const min = get(minBy(data, "profit"), "profit", 0);
+  const index = findIndex(
+    data,
+    (item: any) => maxProfit?.profit === item.profit
+  );
   const option = {
     tooltip: {
       trigger: "axis",
@@ -26,7 +30,7 @@ const EchartLine = ({ data = [] }: any) => {
         const value = params[0].value;
         const month = params[0].name;
         return `<div style="text-align: center; font-size: 12px;  ">
-                  <span style="font-weight: bold;">+${value}%</span><br/>
+                  <span style="font-weight: bold;">+${value}</span><br/>
                   <span style="color: rgba(162, 182, 185, 1);font-size: 12px; ">${month.toUpperCase()}</span>
                 </div>`;
       },
@@ -70,8 +74,12 @@ const EchartLine = ({ data = [] }: any) => {
       type: "value",
       scale: true,
       max: nextEvenNumber(maxProfit.profit || 0),
-      min: 0,
+      min: min,
       splitNumber: 2, //max / splitNumber是间隔,
+      splitList: [
+        min, maxProfit?.profit
+      ],
+
       inverse: false, // 确保坐标轴方向正常
       axisLine: {
         show: false, // 隐藏y轴线
@@ -164,7 +172,7 @@ const EchartLine = ({ data = [] }: any) => {
     myChart.dispatchAction({
       type: "showTip", // 显示 tooltip
       seriesIndex: 0, // 指定第一个 series
-      dataIndex: 2, // 指定展示第几个点的 tooltip，比如此处为 "June"
+      dataIndex: index, // 指定展示第几个点的 tooltip，比如此处为 "June"
     });
   }, [JSON.stringify(data)]);
 
