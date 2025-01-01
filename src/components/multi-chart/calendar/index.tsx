@@ -1,26 +1,29 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import moment, { MomentInput } from "moment";
 import ReactCalendar from "react-calendar";
 import { find, sumBy } from "lodash";
 import { GlobalContext } from "@/app/state/global";
 import { classNames, formatAmount } from "@/utils/helper";
+import { transMonthProfit, transProfit } from "@/utils/profit";
+import { CAlENDAR_TYPE } from "@/constant";
+import { Profit } from "@/types/info";
 import { PreIcon, PreWhiteIcon } from "@/components/Icons";
 
 import styles from "./index.module.css";
 
-const CURRENT = moment().utc().local();
+const CURRENT = moment().utc();
 
 const CalenderViewType = {
-  month: {
-    key: "month",
+  [CAlENDAR_TYPE.month]: {
+    key: CAlENDAR_TYPE.month,
     text: "D",
     style: "",
     date: CURRENT.format("YYYY-MM-DD"),
     lastDate: CURRENT.format("MMMM YYYY"),
     curDate: CURRENT.format("MMMM YYYY"),
   },
-  year: {
-    key: "year",
+  [CAlENDAR_TYPE.year]: {
+    key: CAlENDAR_TYPE.year,
     text: "M",
     style: styles.yearCalendar,
     date: CURRENT.format("YYYY-MM"),
@@ -30,139 +33,173 @@ const CalenderViewType = {
   },
 };
 
-let firstFetch = false;
+const HistoryData: any = {
+  [CAlENDAR_TYPE.month]: {},
+  [CAlENDAR_TYPE.year]: {},
+};
 
-const Calendar = () => {
-  useEffect(() => {}, []);
+const Calendar = ({ calendarTypeChange }: any) => {
   const { userShares, messageApi } = useContext(GlobalContext);
-  const [month, setMonth] = useState(CURRENT.month());
-  const [calenderType, setCalenderType] = useState<any>(CalenderViewType.month);
-  const [value, setDate] = useState(calenderType.date);
-  const [curDateText, setCurDateText] = useState<any>(calenderType.curDate);
-  const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState<any[]>([]);
-  console.log(
-    'format("YYYY-MM-DD")',
-    curDateText,
-    value,
-    calenderType,
-    moment().format("YYYY-MM-DD"),
-    moment().utc().local().format("YYYY-MM-DD")
-  );
-  const getMonthData = async () => {
+  const calenderRef = useRef<any>(null);
+  const [calenderInfo, setCalenderInfo] = useState<any>(CalenderViewType.month);
+  const [value, setDate] = useState(calenderInfo.date);
+  const [curDateText, setCurDateText] = useState<any>(calenderInfo.curDate);
+  const [results, setResults] = useState<Profit[]>([]);
+  const [loading, setLoading] = useState(false)
+
+  const isNotCurMonth = (date: any) => {
+    return date.getMonth() !== moment(value).month();
+  };
+
+  const getData = async (date: any) => {
+    if (calenderRef.current.loading) return;
+    const startDate = moment(date).startOf("month").format("YYYY-MM-DD");
     try {
       if (userShares?.length) {
-      
-        // setLoading(true);
+        if (HistoryData?.[calenderInfo.key]?.[startDate]) {
+          setResults(HistoryData?.[calenderInfo.key]?.[startDate]);
+          return;
+        }
+        calenderRef.current.loading = true;
+        setLoading(true)
         messageApi.open({
           type: "loading",
           content: "Loading",
           duration: 0,
         });
-        firstFetch = true;
-        const startDate = moment(value).startOf("month").format("YYYY-MM-DD");
-        const endDate = moment(value).endOf("month").format("YYYY-MM-DD");
-        console.log("startDate", startDate, endDate);
-        const allPromise = userShares.map((share) => {
-          return fetch(
-            `/api/user/profit?productId=${share.productId}&startDate=${startDate}&endDate=${endDate}`,
-            {
-              method: "GET",
-            }
-          )
-            .then((res) => res.json())
-            .catch(() => ({ success: false }));
-        });
-        const allRes = await Promise.allSettled(allPromise);
-        const resList = allRes
-          .filter((item) => item.status === "fulfilled")
-          .map((item) => item.value.data);
-        console.log("resList", resList);
-        if (resList?.[0]?.length) {
-          const daysDifference = moment(endDate).diff(
-            moment(startDate),
-            "days"
-          );
 
-          const sumRes = new Array(4).fill(1).map((item, i) => {
-            let dailyprofit = 0;
-            let date = "";
-            resList.forEach((profit: any, j) => {
-              console.log("profit", profit, profit[i]);
-              dailyprofit += Number(profit[i].dailyprofit);
-              if (!date) {
-                date = moment(profit[i].date).format("YYYY-MM-DD");
-              }
-            });
-            return {
-              date,
-              dailyprofit,
-            };
-          });
-          setResults(sumRes);
+        let url = "/api/user/daily-profit";
+        let endDate = moment(date).endOf("month").format("YYYY-MM-DD");
+        if (calenderInfo.key === CAlENDAR_TYPE.year) {
+          url = "/api/user/monthly-profit";
+          endDate = moment(date).endOf("year").format("YYYY-MM-DD");
         }
+        const { success, data = [] } = await fetch(
+          `${url}?startDate=${startDate}&endDate=${endDate}`,
+          {
+            method: "GET",
+          }
+        )
+          .then((res) => res.json())
+          .catch(() => ({ success: false }));
+        const daysDifference = moment(endDate).diff(moment(startDate), "days");
+        if (success) {
+          let res: any = [];
+          if (calenderInfo.key === CAlENDAR_TYPE.month) {
+            res = transProfit(data, daysDifference, startDate);
+          } else {
+            res = transMonthProfit(data);
+          }
+          setResults(res);
+          HistoryData[calenderInfo.key][startDate] = res;
+        }
+
+        messageApi.destroy();
+        calenderRef.current.loading = false;
+        setLoading(false)
       }
-      setLoading(false);
-      messageApi.destroy();
     } catch (error) {
+      calenderRef.current.loading = false;
+      setLoading(false)
+      messageApi.destroy();
       console.log("get calendar data error", error);
     }
   };
 
-  const monthChange = (date: MomentInput) => {
-    if (date) {
-      const res = moment(date).month();
-      setMonth(res);
-    }
-  };
-
   const tileContent = ({ date }: any) => {
-    if (moment(date).isAfter(CURRENT)) {
-      return <div className={styles.disable}></div>;
+    let curDate = moment(date).format("YYYY-MM-DD");
+    let curProfit: any = {};
+
+    if (calenderInfo.key === CAlENDAR_TYPE.month) {
+      curProfit = find(results, (item) => item.date === curDate);
+      if (isNotCurMonth(date) && moment(date).isBefore(value)) {
+        return <div className={styles.preMonth}>-</div>;
+      }
+      // 下个月的日期不显示
+      if (isNotCurMonth(date)) {
+        return "";
+      }
+      // 今天之后的日期 只显示数字
+      if (moment(date).isAfter(CURRENT)) {
+        return <div className={styles.disable}>{date.getDate()}</div>;
+      }
+      // 今天
+      if (curDate === moment(value).format("YYYY-MM-DD")) {
+        return (
+          <div className={styles.activeDate}>
+            <p className={styles.date}>{date.getDate()}</p>
+            <p className={styles.num}>{formatAmount(curProfit?.profit || 0)}</p>
+          </div>
+        );
+      }
+    } else {
+      curDate = moment(date).format("YYYY-MM");
+      curProfit = find(results, (item) => item.date === curDate);
+      if (
+        moment(date).month() > moment(CURRENT).month() &&
+        moment(date).isAfter(CURRENT)
+      ) {
+        return (
+          <div className={styles.disable}>
+            {moment(date).format("MMMM".substring(0, 3))}
+          </div>
+        );
+      }
+      if (moment(CURRENT).format("YYYY-MM") === curDate) {
+        return (
+          <div className={styles.activeDate}>
+            <p className={styles.date}>
+              {moment(curDate).format("MMMM").substring(0, 3)}
+            </p>
+            <p className={styles.num}>{formatAmount(curProfit?.profit || 0)}</p>
+          </div>
+        );
+      }
     }
+
     let className = "";
-    const calendarDate = moment(date).format("YYYY-MM-DD");
-    const calendarProfit = find(results, (item) => item.date === calendarDate);
-    if (!calendarProfit?.dailyprofit || calendarProfit?.dailyprofit === 0) {
+    if (!curProfit?.profit || curProfit?.profit === 0) {
       className = "noProfitDate";
     }
-    if (calendarProfit?.dailyprofit > 0) {
+    if (curProfit?.profit > 0) {
       className = "profitDate";
     }
-    if (calendarProfit?.dailyprofit < 0) {
+    if (curProfit?.profit < 0) {
       className = "lossProfitDate";
     }
-
     return (
       <div className={styles[className]}>
-        <div className={styles.num}>
-          {formatAmount(calendarProfit?.dailyprofit || 0)}
-        </div>
+        <p>
+          {calenderInfo.key === CAlENDAR_TYPE.month
+            ? date.getDate()
+            : moment(date).format("MMMM".substring(0, 3))}
+        </p>
+        <div className={styles.num}>{formatAmount(curProfit?.profit || 0)}</div>
       </div>
     );
   };
 
-  useEffect(() => {
-    if (!firstFetch) {
-      getMonthData();
-    }
-  }, [userShares.length]);
 
   useEffect(() => {
-    setCurDateText(calenderType.curDate);
-  }, [calenderType.key]);
+    if (userShares.length && calenderRef.current) {
+      getData(value);
+    }
+  }, [value, userShares.length]);
 
   return (
-    <div className={styles.wrap}>
-      {/* {loading && <Loading />} */}
+    <div style={{ position: "relative" }}  ref={calenderRef}>
+      {loading && <div className={styles.mask}></div>}
       <div className={styles.viewWrap}>
         {[CalenderViewType.month, CalenderViewType.year].map((item) => {
           return (
             <p
-              className={calenderType.key === item.key ? styles.viewActive : ""}
+              className={calenderInfo.key === item.key ? styles.viewActive : ""}
               key={`calender-view-${item.key}`}
               onClick={() => {
-                setCalenderType(item);
+                setCalenderInfo(item);
+                calendarTypeChange(item.key);
+                setCurDateText(item.curDate);
+                setDate(CURRENT);
               }}
             >
               {item.text}
@@ -171,20 +208,22 @@ const Calendar = () => {
         })}
       </div>
       <ReactCalendar
+       
+        key={calenderInfo.key}
         onChange={(date) => {
           console.log("onChange", date);
         }}
-        showNeighboringMonth={false}
+        showNeighboringMonth={true}
         calendarType="gregory"
         locale="en"
-        value={CURRENT.format("YYYY-MM-DD")}
-        className={classNames(styles.calendar, calenderType.style)}
+        value={value}
+        className={classNames(styles.calendar, calenderInfo.style)}
         tileClassName={classNames(styles.calendarTile)}
         tileContent={tileContent}
         next2Label={null}
         prev2Label={null}
         navigationLabel={({ date, label, locale, view }) => {
-          const num = sumBy(results, "dailyprofit");
+          const num = sumBy(results, "profit");
           return (
             <div className={styles.navigation}>
               <p>{label}</p>
@@ -199,7 +238,7 @@ const Calendar = () => {
           <PreIcon />
         }
         nextLabel={
-          curDateText == calenderType.lastDate ? (
+          curDateText == calenderInfo.lastDate ? (
             <PreWhiteIcon className={styles.nextBtn} />
           ) : (
             <PreIcon className={styles.nextBtn} />
@@ -212,11 +251,12 @@ const Calendar = () => {
           event.preventDefault(); // 阻止默认行为
         }}
         onActiveStartDateChange={(date) => {
-          console.log("onActiveStartDateChange", date, calenderType);
+          console.log("onActiveStartDateChange", date, calenderInfo);
           const { activeStartDate } = date;
           setDate(activeStartDate);
-          monthChange(activeStartDate);
-          switch (calenderType.key) {
+          // monthChange(activeStartDate);
+          // getData(activeStartDate);
+          switch (calenderInfo.key) {
             case "year":
               setCurDateText(moment(activeStartDate).year());
               break;
@@ -227,7 +267,7 @@ const Calendar = () => {
               break;
           }
         }}
-        view={calenderType.key}
+        view={calenderInfo.key}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useState } from "react";
-import Skeleton from "react-loading-skeleton";
+import { bignumber } from "mathjs";
 import { add, find } from "lodash";
 import { GlobalContext } from "@/app/state/global";
 import { addCommas } from "@/utils/helper";
@@ -17,13 +17,12 @@ const ChartType = {
 };
 
 const PortfolioList = ({ title, type }: any) => {
-  const { userShares, productsList, chartLoading, product7DaysData } =
-    useContext(GlobalContext);
+  const { userShares, productsList, chartLoading } = useContext(GlobalContext);
 
-  return (
+  console.log("userShares", userShares);
+  return userShares.length > 0 ? (
     <div className={styles.portfolioWrap}>
       <p className={styles.title}>{title}</p>
-
       <div className={styles.portfolioList}>
         {userShares.map((item, i) => {
           const curProduct = find(
@@ -41,30 +40,23 @@ const PortfolioList = ({ title, type }: any) => {
                   </div>
                 </div>
                 <p className={styles.money}>
-                  ${addCommas(add(item?.shareAmount, item?.profit))}
+                  ${addCommas(Number(add(item?.shareAmount, item?.profit)))}
                 </p>
                 <p className={styles.profit}>
                   <ProfitIcon />
                   10.78% (+0.11%)
                 </p>
               </div>
-              {chartLoading ? (
-                <Skeleton count={1} className={styles.skeletonChart} />
-              ) : (
-                <div className={styles.portfolioChart}>
-                  <Bar
-                    id={`chart-${item.productId}`}
-                    data={product7DaysData[item.productId] || []}
-                  />
-                  {/* {type === ChartType.bar ? <Bar /> : <Line />} */}
-                </div>
-              )}
+              <div className={styles.portfolioChart}>
+                <Bar id={`chart-${item.productId}`} data={item.data || []} />
+                {/* {type === ChartType.bar ? <Bar /> : <Line />} */}
+              </div>
             </div>
           );
         })}
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default PortfolioList;

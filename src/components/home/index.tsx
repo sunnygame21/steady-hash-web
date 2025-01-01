@@ -1,17 +1,18 @@
 "use client";
-import React, { useContext, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useContext, useEffect, useState } from "react";
+import Skeleton from "react-loading-skeleton";
 import { GlobalContext } from "@/app/state/global";
 import { CartIcon } from "../Icons";
+import BarCalendarChart from "../multi-chart";
+import Products from "../product";
 import PortfolioList from "./portfolio";
 import Orders from "./order";
-import BarCalendarChart from "../multi-chart";
 
 import styles from "./index.module.css";
 
 const Home = () => {
-  const router = useRouter();
-  const { user, userShares } = useContext(GlobalContext);
+  const { user, productsList } = useContext(GlobalContext);
+  const [productModal, setProductModal] = useState(false);
 
   return user?.id ? (
     <div className={styles.wrap}>
@@ -20,16 +21,20 @@ const Home = () => {
         <p className={styles.welcome}>Welcome back to SteadyHash!</p>
       </div>
       <BarCalendarChart defaultType="bar" />
-      <div
-        className={styles.exploreBtn}
-        onClick={() => router.push("/product")}
-      >
-        <CartIcon />
-        Explore
-      </div>
-      {userShares.length ? (
-        <PortfolioList title={"Portfolio"} type="bar" />
-      ) : null}
+      {productsList.length > 0 ? (
+        <div
+          className={styles.exploreBtn}
+          onClick={() => setProductModal(true)}
+        >
+          <CartIcon />
+          Explore
+        </div>
+      ) : (
+        <Skeleton className={styles.skeleton}></Skeleton>
+      )}
+
+      <PortfolioList title={"Portfolio"} type="bar" />
+      <Products show={productModal} close={() => setProductModal(false)} />
 
       {/* <Orders /> */}
     </div>

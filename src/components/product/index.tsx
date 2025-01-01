@@ -1,15 +1,16 @@
 "use client";
-import React, { useContext, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useContext, useEffect, useState } from "react";
 import { Collapse, CollapseProps } from "antd";
+import { bignumber, format } from "mathjs";
+import { motion } from "framer-motion";
 import { GlobalContext } from "@/app/state/global";
 import { Product } from "@/types/info";
+import { addCommas, classNames } from "@/utils/helper";
 import { AlertIcon, ArrowIcon, CloseIcon, ProfileIcon } from "../Icons";
-import icon from "@/images/home/item1.png";
 import Detail from "./detail";
 
 import styles from "./index.module.css";
-
+import { multiply } from "lodash";
 
 const text = `
   A dog is a type of domesticated animal.
@@ -17,8 +18,7 @@ const text = `
   it can be found as a welcome guest in many households across the world.
 `;
 
-const Products = () => {
-  const router = useRouter();
+const Products = ({ close, show }: any) => {
   const { productsList } = useContext(GlobalContext);
   const [selectProduct, setSelectProduct] = useState<Product | null>(null);
 
@@ -44,58 +44,79 @@ const Products = () => {
     console.log(key);
   };
 
-
   return (
-    <div className={styles.wrap}>
-      <CloseIcon className={styles.close} onClick={() => router.back()} />
-      <div className={styles.logo}>
-        Steady
-        <span>Hash</span>
-      </div>
-      <div className={styles.title}>Product Gallery</div>
-      <div className={styles.subTitle}>
-        Quant Trading Products powered by AI
-      </div>
-      <div className={styles.productList}>
-        {productsList.map((item, i) => {
-          return (
-            <div
-              className={styles.productItem}
-              key={`product-item-${i}`}
-              onClick={() => setSelectProduct(item)}
-            >
-              <div className={styles.top}>
-                <img src={item?.icon} alt="" />
-                <p>10%</p>
+    <motion.div
+      initial={{ transform: "translateY(100vh)" }}
+      animate={{ transform: show ? "translateY(0)" : "translateY(100vh)" }}
+      transition={{ duration: 0.2 }}
+      className={classNames(styles.wrap)}
+    >
+      <div>
+        <CloseIcon className={styles.close} onClick={close} />
+        <div className={styles.logo}>
+          Steady
+          <span>Hash</span>
+        </div>
+        <div className={styles.title}>Product Gallery</div>
+        <div className={styles.subTitle}>
+          Quant Trading Products powered by AI
+        </div>
+        
+        <div className={styles.productList}>
+          {productsList.map((item, i) => {
+            return (
+              <div
+                className={styles.productItem}
+                key={`product-item-${i}`}
+                onClick={() => setSelectProduct(item)}
+              >
+                <div className={styles.top}>
+                  <img src={item?.icon} alt="" />
+                  <p>{(multiply(item.apr_7day, 100).toFixed(2))}%</p>
+                </div>
+                <div className={styles.bottom}>
+                  <p>{item?.name}</p>
+                  <p>by SteadyHash</p>
+                </div>
               </div>
-              <div className={styles.bottom}>
-                <p>{item?.name}</p>
-                <p>by SteadyHash</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <div className={styles.warn}>
-        <AlertIcon />
-        APR based on last 6-month performance
-      </div>
-      <div className={styles.questionWrap}>
-        <p className={styles.quesTitle}>Popular Questions</p>
-        <Collapse
-          defaultActiveKey={["1"]}
-          onChange={onChange}
-          items={items}
-          bordered={false}
-          className={styles.quesItem}
-          expandIcon={() => <ArrowIcon className={styles.colIcon} />}
-          expandIconPosition="end"
-          key={"product"}
-        />
-      </div>
+            );
+          })}
+        </div>
+        <div className={styles.warn}>
+          <AlertIcon />
+          APR based on last 6-month performance
+        </div>
+        <div className={styles.questionWrap}>
+          <p className={styles.quesTitle}>Popular Questions</p>
+          <Collapse
+            defaultActiveKey={["1"]}
+            onChange={onChange}
+            items={items}
+            bordered={false}
+            className={styles.quesItem}
+            expandIcon={() => <ArrowIcon className={styles.colIcon} />}
+            expandIconPosition="end"
+            key={"product"}
+          />
+        </div>
 
-      {!!selectProduct && <Detail  detailData={selectProduct} onClose={() => setSelectProduct(null)} />}
-    </div>
+        <motion.div
+          className={styles.detailWrap}
+          initial={{ transform: "translateX(100vw)" }}
+          animate={{
+            transform: !!selectProduct ? "translateX(0)" : "translateX(100vw)",
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          {!!selectProduct ? (
+            <Detail
+              detailData={selectProduct}
+              onClose={() => setSelectProduct(null)}
+            />
+          ) : null}
+        </motion.div>
+      </div>
+    </motion.div>
   );
 };
 

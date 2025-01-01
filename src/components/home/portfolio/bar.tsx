@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect } from "react";
 import * as echarts from "echarts";
-import { get, maxBy } from "lodash";
-import { addCommas } from "@/utils/helper";
+import { get, maxBy, round } from "lodash";
+import { addCommas, nextEvenNumber } from "@/utils/helper";
 import tipBg from "@/images/common/portfolio-chart-top-bg.png";
 
 import styles from "./index.module.css";
@@ -10,11 +10,11 @@ import styles from "./index.module.css";
 const Bar = ({ title, id, data }: any) => {
   useEffect(() => {
     if (data.length) {
-      const max = get(maxBy(data, "dailyprofit"), "dailyprofit", 0);
+      const max = get(maxBy(data, "profit"), "profit", 0);
       const y = data.map((item: any) => {
-        if (max === item.dailyprofit) {
+        if (max === item.profit && max) {
           return {
-            value: item.dailyprofit,
+            value: item.profit,
             itemStyle: {
               color: "black",
               borderRadius: [1, 1, 0, 0],
@@ -22,7 +22,7 @@ const Bar = ({ title, id, data }: any) => {
             label: {
               show: true, // 显示数据标签
               position: "top", // 标签位置（柱子顶部）
-              formatter: `{a|$${addCommas(item.dailyprofit)}}`,
+              formatter: `{a|$${addCommas(item.profit)}}`,
               color: "#FF6F61", // 文本颜色
               rich: {
                 a: {
@@ -41,7 +41,7 @@ const Bar = ({ title, id, data }: any) => {
             },
           };
         }
-        return item.dailyprofit || 1;
+        return item.profit || 1;
       });
       const option = {
         tooltip: { show: false },
@@ -73,9 +73,9 @@ const Bar = ({ title, id, data }: any) => {
         yAxis: {
           type: "value",
           scale: true,
-          max: (max + 50).toFixed(0),
+          max: max + 50,
           min: 0,
-          splitNumber: 10, //max / splitNumber是间隔,
+          splitNumber: 2, //max / splitNumber是间隔,
           inverse: false, // 确保坐标轴方向正常
           boundaryGap: 0, // 控制类目轴的起始位置，true 表示柱状图从第一个类别开始显示
           splitLine: {

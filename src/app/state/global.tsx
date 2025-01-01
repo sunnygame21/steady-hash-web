@@ -1,13 +1,16 @@
 "use client";
 import { createContext, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import moment from "moment";
+import { create, all } from "mathjs";
 import { message } from "antd";
 import { add, sumBy } from "lodash";
 import Loading from "@/components/loading";
-import { Info, Product, Share } from "@/types/info";
-import { addCommas, sumProfit, transProfit } from "@/utils/helper";
+import { Info, Product, Profit, Share } from "@/types/info";
+import { addCommas } from "@/utils/helper";
+import { getProfitParams, sumProfit, transProfit } from "@/utils/profit";
 
+export const mathjs = create(all);
+mathjs.config({ number: "BigNumber", precision: 20 });
 export interface GlobalState {
   user: any;
   fetchUserInfo: () => void;
@@ -16,7 +19,8 @@ export interface GlobalState {
   userShares: Share[];
   chartLoading: boolean;
   sevenDaysSumData: any[];
-  product7DaysData: any;
+  productProfitData: any;
+  setProductProfitData: any;
 }
 
 export const initialGlobalState: GlobalState = {
@@ -27,7 +31,8 @@ export const initialGlobalState: GlobalState = {
   userShares: [],
   chartLoading: true,
   sevenDaysSumData: [],
-  product7DaysData: {},
+  productProfitData: {},
+  setProductProfitData: () => {},
 };
 
 export const GlobalContext = createContext<GlobalState>(initialGlobalState);
@@ -39,8 +44,9 @@ export const GlobalProvider = ({ children }: any) => {
   const [productsList, setList] = useState<any>([]);
   const [userShares, setShare] = useState<any>([]);
   const [messageApi, contextHolder] = message.useMessage();
-  const [sevenDaysSumData, setSevenDaysData] = useState<any>([]);
-  const [product7DaysData, setProduct7DaysData] = useState<any>({});
+  const [sevenDaysSumData, setSevenDaysData] = useState<Profit[]>([]);
+  const [productProfitData, setProductProfitData] = useState<any>({});
+
   const router = useRouter();
   const path = usePathname();
 
@@ -57,6 +63,7 @@ export const GlobalProvider = ({ children }: any) => {
         setUser({ ...data, showName: data?.username?.split("@")[0] });
         await fetchShare();
         fetchProducts();
+        fetch7DaysData();
         path === "/login" && router.push("/");
       } else {
         router.push("/login");
@@ -69,7 +76,7 @@ export const GlobalProvider = ({ children }: any) => {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`/api/products`, {
+      const res = await fetch(`/api/products/list`, {
         method: "GET",
       })
         .then((res) => res.json())
@@ -97,8 +104,22 @@ export const GlobalProvider = ({ children }: any) => {
         const allInvest = sumBy(data, "shareAmount");
         const allProfit = sumBy(data, "profit");
         const allMoney = addCommas(add(allInvest, allProfit));
-        setShare(data);
-        fetch7DaysData(data);
+        const { startDate, endDate, daysDifference } = getProfitParams(7);
+        const profitList: any = [];
+        const shares = data.map((item: Share) => {
+          const trans = transProfit(item.data, daysDifference, startDate);
+          profitList.push(trans);
+          return {
+            ...item,
+            data: trans,
+          };
+        });
+        sumProfit(
+          profitList.map((item: any) => item.data),
+          daysDifference,
+          startDate
+        );
+        setShare(shares);
         setUser((prev) => {
           return {
             ...prev,
@@ -117,43 +138,21 @@ export const GlobalProvider = ({ children }: any) => {
     }
   };
 
-  const fetch7DaysData = async (data: any) => {
+  const fetch7DaysData = async () => {
     try {
       setChartLoading(true);
-      const curDate = moment.utc().local();
-      const startDate = moment(curDate)
-        .subtract(7, "days")
-        .format("YYYY-MM-DD");
-      const endDate = moment(curDate).subtract(0, "days").format("YYYY-MM-DD");
-      const daysDifference = moment(endDate).diff(moment(startDate), "days");
-      const allPromise = data.map((share: any) => {
-        return fetch(
-          `/api/user/profit?productId=${share.productId}&startDate=${startDate}&endDate=${endDate}`,
-          {
-            method: "GET",
-          }
-        )
-          .then((res) => res.json())
-          .catch(() => ({ success: false }));
-      });
-      const allRes = await Promise.allSettled(allPromise);
-      const allData: any = {};
-      const resList = allRes
-        .filter((item: any, i) => {
-          if (item.value.data) {
-            allData[data[i].productId] = transProfit(
-              item.value.data,
-              daysDifference,
-              startDate
-            );
-          }
-
-          return item.status === "fulfilled";
-        })
-        .map((item: any) => item.value.data);
-      const sumRes = sumProfit(resList, daysDifference, startDate);
-      setSevenDaysData(sumRes);
-      setProduct7DaysData(allData);
+      const { startDate, endDate, daysDifference } = getProfitParams(7);
+      const { success, data = [] } = await fetch(
+        `/api/user/daily-profit?startDate=${startDate}&endDate=${endDate}`,
+        {
+          method: "GET",
+        }
+      )
+        .then((res) => res.json())
+        .catch(() => ({ success: false }));
+      if (success) {
+        setSevenDaysData(transProfit(data, daysDifference, startDate));
+      }
       setChartLoading(false);
     } catch (error) {
       setChartLoading(false);
@@ -174,7 +173,8 @@ export const GlobalProvider = ({ children }: any) => {
       userShares,
       chartLoading,
       sevenDaysSumData,
-      product7DaysData,
+      productProfitData,
+      setProductProfitData,
     }),
     [
       JSON.stringify(user),
@@ -182,7 +182,7 @@ export const GlobalProvider = ({ children }: any) => {
       JSON.stringify(userShares),
       chartLoading,
       JSON.stringify(sevenDaysSumData),
-      JSON.stringify(product7DaysData),
+      JSON.stringify([productProfitData]),
     ]
   );
 

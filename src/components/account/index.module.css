@@ -1,5 +1,5 @@
 .wrap {
-  background: rgba(22, 73, 81, 1);
+  background: rgba(17, 24, 39, 1);
 }
 
 .title {
@@ -16,8 +16,9 @@
   font-family: Roboto;
   color: rgba(162, 182, 185, 1);
 }
-.money {
+.allMoney {
   font-size: 32px;
+  font-family: Roboto Bold;
 }
 .action {
   padding: 0 8px;
@@ -26,7 +27,7 @@
   border-radius: 10px;
   background: #fff;
   position: absolute;
-  top: 150px;
+  top: 168px;
   left: 24px;
   right: 24px;
   display: flex;
@@ -84,11 +85,11 @@
   align-items: center;
   justify-content: space-between;
 }
-.name {
+.itemName {
   font-size: 14px;
   font-family: Roboto Bold;
 }
-.name span {
+.itemName span {
   font-family: Roboto;
 }
 .itemDetail {
@@ -98,7 +99,7 @@
 }
 .desc {
   margin-top: 4px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 400;
   color: rgba(162, 182, 185, 1);
   height: 18px;
@@ -112,10 +113,6 @@
   font-weight: 700;
 }
 
-.money {
-  font-size: 14px;
-  font-family: Roboto Bold;
-}
 .type {
   margin-top: 4px;
   text-align: center;
@@ -125,6 +122,10 @@
   font-family: Roboto Bold;
 }
 
+.money {
+  font-size: 14px;
+  font-family: Roboto Bold;
+}
 .Hline {
   background: rgba(235, 236, 239, 1);
   height: 1px;

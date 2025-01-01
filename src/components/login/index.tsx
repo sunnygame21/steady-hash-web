@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { GlobalContext } from "@/app/state/global";
@@ -13,13 +13,14 @@ import styles from "./index.module.css";
 const Codebox = dynamic(() => import("react-otp-input"), { ssr: false });
 
 const Code = () => {
-  const router  = useRouter()
+  const router = useRouter();
   const { fetchUserInfo, messageApi } = useContext(GlobalContext);
   const [showLogin, setShowLogin] = useState<boolean>(false);
   const [showCode, setShowCode] = useState<boolean>(false);
   const [code, setCode] = useState<string>("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [pageLoad, setPageLoad] = useState(false);
 
   const getCode = async (email: string) => {
     setEmail(email);
@@ -55,7 +56,7 @@ const Code = () => {
     if (success) {
       const { access_token } = data || {};
       document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=${access_token}`;
-      router.push('/')
+      router.push("/");
       await fetchUserInfo();
       messageApi.success("Login success!");
     } else {
@@ -64,10 +65,14 @@ const Code = () => {
     setLoading(false);
   };
 
+  useEffect(() => {
+    setPageLoad(true);
+  }, []);
+
   return (
     <div className={styles.wrap}>
       <div className={styles.logo}>
-        <img src={logo.src}></img>
+        <img src={logo.src} className={styles.img}></img>
       </div>
       <div className={styles.title}>Welcome to SteadyHash</div>
       <div className={styles.desc}>
@@ -90,10 +95,13 @@ const Code = () => {
         ></LoginModal>
       )}
       <div className={classNames(styles.codeWrap, showCode ? styles.show : "")}>
-        <BlackBackIcon className={styles.back} />
+        <BlackBackIcon
+          className={styles.back}
+          onClick={() => setShowCode(false)}
+        />
         <div className={styles.codeTitle}>Authentication Code</div>
         <div className={styles.codeDesc}>
-          Enter the 6-digit code we just sent to your email, user@steadyhash.ai
+          Enter the 6-digit code we just sent to your email, {email}
         </div>
         <Codebox
           value={code}

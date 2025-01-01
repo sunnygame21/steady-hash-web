@@ -16,7 +16,7 @@ const Account = () => {
       <div className={styles.title}>
         <p className={styles.name}>Hi, {user?.showName} 👋</p>
         <p className={styles.desc}>Account Value</p>
-        <p className={styles.money}>${user?.allMoney}</p>
+        <p className={styles.allMoney}>${user?.allMoney}</p>
       </div>
 
       <div className={styles.action}>
@@ -52,7 +52,7 @@ const Account = () => {
                 />
                 <div className={styles.itemRight}>
                   <div className={styles.itemDetail}>
-                    <p className={styles.name}>
+                    <p className={styles.itemName}>
                       {curProduct?.name} <span> ({curProduct?.code})</span>
                     </p>
                     <p className={styles.desc}>Earning starts soon</p>

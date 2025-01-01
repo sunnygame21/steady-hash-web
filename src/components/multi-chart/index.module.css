@@ -1,22 +1,23 @@
 .chartContainer {
   position: relative;
   border-radius: 10px;
-
 }
-.noData {
-  background: rgba(31, 41, 55, 1);
-  min-height: 240px;
-  padding: 0 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
-  font-size: 18px;
-  font-family: Roboto Bold;
+
+
+.calendarWrap {
+  background: rgba(249, 250, 251, 1);
+  transition: all 0.3s ease;
+  height: 350px;
+}
+.yearWarp {
+  transition: all 0.3s ease;
+  height: 250px;
 }
 .barWrap {
   background: rgba(31, 41, 55, 1);
   border-radius: 16px;
+  transition: height 0.3s ease;
+  height: 240px;
 }
 
 .icon {
@@ -30,18 +31,14 @@
 }
 .barIcon {
   background: rgba(55, 65, 81, 1);
-
 }
 
 .chartContainer :global(.react-calendar__navigation__label) {
   flex-grow: initial !important;
   width: 120px;
-
-  
 }
 .chartContainer :global(.react-calendar__navigation button) {
   background-color: transparent !important;
-
 }
 .navigation {
   background-color: transparent;
@@ -49,11 +46,25 @@
 .navigation p:first-child {
   font-size: 14px;
   font-weight: 500;
-
 }
 .navigation p:last-child {
   font-size: 10px;
   font-weight: 500;
   color: rgba(69, 179, 105, 1);
+}
+.chart {
+  position: relative;
+}
 
+
+.noData {
+  background: rgba(31, 41, 55, 1);
+  min-height: 240px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  font-family: Roboto Bold;
 }

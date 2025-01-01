@@ -2,8 +2,12 @@ import React, { useEffect } from "react";
 import * as echarts from "echarts";
 
 import styles from "./index.module.css";
+import { findIndex, get, maxBy, parseInt, round } from "lodash";
+import { nextEvenNumber } from "@/utils/helper";
 
-const EchartLine = () => {
+const EchartLine = ({ data = [] }: any) => {
+  const maxProfit: any = maxBy(data, "profit") || {};
+  const index = findIndex(data, (item: any) => maxProfit?.profit === item.profit);
   const option = {
     tooltip: {
       trigger: "axis",
@@ -36,15 +40,19 @@ const EchartLine = () => {
     },
     xAxis: {
       type: "category",
-      data: ["April", "May", "June", "July", "August"], // 自定义月份
+      data: data.map((item: any) => item.date.substring(5)), // 自定义月份
       axisLabel: {
         show: true, // 显示下方的标签
+        interval: parseInt(`${round(data?.length / 3)}`), // 每隔10个标签显示一次
+
         position: "bottom", // 坐标轴标签位置在底部
         color: "rgba(115, 146, 151, 1)",
         fontSize: 12,
         fontFamily: "Roboto",
         fontWeight: "bold",
+        customValues: [1, round(data.length / 2), data.length - 1],
       },
+
       axisTick: {
         show: false,
       },
@@ -61,9 +69,9 @@ const EchartLine = () => {
     yAxis: {
       type: "value",
       scale: true,
-      max: 1,
+      max: nextEvenNumber(maxProfit.profit || 0),
       min: 0,
-      splitNumber: 5, //max / splitNumber是间隔,
+      splitNumber: 2, //max / splitNumber是间隔,
       inverse: false, // 确保坐标轴方向正常
       axisLine: {
         show: false, // 隐藏y轴线
@@ -79,23 +87,23 @@ const EchartLine = () => {
       },
       axisLabel: {
         show: true,
-        formatter: "{value}%", // 添加百分号
+        formatter: "{value}", // 添加百分号
         color: "rgba(115, 146, 151, 1)",
         fontSize: 12,
         fontFamily: "Roboto",
       },
     },
     series: [
-      {
-        data: [0.2, 0.3, 0.42, 0.1, 0.15, 0.2, 0.3], // 数据
-        type: "line",
-        smooth: true, // 平滑曲线
-        showSymbol: false, // 显示拐点
-        lineStyle: {
-          color: "rgba(162, 182, 185, 1)", // 线条颜色
-          width: 1,
-        },
-      },
+      // {
+      //   data: [0.2, 0.3, 0.42, 0.1, 0.15, 0.2, 0.3], // 数据
+      //   type: "line",
+      //   smooth: true, // 平滑曲线
+      //   showSymbol: false, // 显示拐点
+      //   lineStyle: {
+      //     color: "rgba(162, 182, 185, 1)", // 线条颜色
+      //     width: 1,
+      //   },
+      // },
       {
         name: "Data",
         type: "line",
@@ -104,7 +112,7 @@ const EchartLine = () => {
         symbol: "circle", // 拐点形状
         symbolSize: function (data: any, params: any) {
           // 只在索引为 2 的点显示拐点，其他点设置为 0
-          return params.dataIndex === 4 ? 8 : 0;
+          return params.dataIndex === index ? 8 : 0;
         },
 
         itemStyle: {
@@ -126,7 +134,7 @@ const EchartLine = () => {
           label: { show: false },
           data: [
             {
-              xAxis: "August", // 起点和终点的数据
+              xAxis: maxProfit.date?.substring(5), // 起点和终点的数据
               // yAxis: 0.15,
               lineStyle: {
                 type: "dashed", // 虚线
@@ -137,12 +145,13 @@ const EchartLine = () => {
             // 如果不需要交点上方的虚线，可以直接移除多余的数据项
           ],
         },
-        data: [0.2, 0.3, 0.42, 0.1, 0.15], // 数据
+        data: data.map((item: any) => item.profit), // 数据
       },
     ],
   };
 
   useEffect(() => {
+    if (!data?.length) return;
     const chartDom = document.getElementById("line-chart");
     const chart = echarts.getInstanceByDom(chartDom as any);
     if (chart) {
@@ -157,7 +166,7 @@ const EchartLine = () => {
       seriesIndex: 0, // 指定第一个 series
       dataIndex: 2, // 指定展示第几个点的 tooltip，比如此处为 "June"
     });
-  }, []);
+  }, [JSON.stringify(data)]);
 
   return <div id="line-chart" className={styles.chart}></div>;
 };

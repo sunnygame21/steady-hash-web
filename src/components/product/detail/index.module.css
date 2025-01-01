@@ -1,12 +1,4 @@
-.wrap {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(17, 24, 39, 1);
-  overflow: auto;
-}
+
 
 .close {
   margin: 24px;
@@ -85,6 +77,18 @@
 .chart {
   height: 238px;
   background: rgba(17, 24, 39, 1);
+  position: relative;
+}
+.skeleton {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -0;
+  bottom: 0;
+  height: 100%;
+  width: calc(100% - 48px);
+  margin: auto;
+  z-index: 1;
 }
 .times {
   margin: 12px 24px 0 24px;

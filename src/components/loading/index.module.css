@@ -15,16 +15,37 @@
   height: 32px;
 }
 
-.loading {
+.wrap {
   display: flex;
   flex-direction: column;
 }
 
 .desc {
   margin-top: 16px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   line-height: 20px;
   text-align: center;
   color: #fff;
+}
+
+
+.loading {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: 5px solid #fff;
+  border-top-color: rgba(152, 157, 163, 0.2);
+  border-right-color: rgba(152, 157, 163, 0.2);
+  border-bottom-color: rgba(152, 157, 163, 0.2);
+  border-radius: 100%;
+  animation: circle infinite 2s linear;
+}
+@keyframes circle {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

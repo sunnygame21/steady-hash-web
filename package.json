@@ -11,7 +11,9 @@
   "dependencies": {
     "antd": "^5.22.5",
     "echarts": "^5.5.1",
+    "framer-motion": "^11.15.0",
     "lodash": "^4.17.21",
+    "mathjs": "^14.0.1",
     "moment": "^2.30.1",
     "next": "15.0.4",
     "react": "^19.0.0",

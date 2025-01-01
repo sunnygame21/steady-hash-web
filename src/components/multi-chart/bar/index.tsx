@@ -1,19 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import * as echarts from "echarts";
-import moment from "moment";
-import { get, maxBy, sumBy } from "lodash";
+import { get, maxBy, round, sumBy } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import { GlobalContext } from "@/app/state/global";
-import { formatAmount, sumProfit } from "@/utils/helper";
+import { addCommas, nextEvenNumber } from "@/utils/helper";
 
 import styles from "./index.module.css";
 
 const EchartsBar = () => {
-  const { userShares, chartLoading, sevenDaysSumData } =
-    useContext(GlobalContext);
+  const { chartLoading, sevenDaysSumData } = useContext(GlobalContext);
+
   useEffect(() => {
     if (sevenDaysSumData.length) {
-      const max = get(maxBy(sevenDaysSumData, "dailyprofit"), "dailyprofit", 0);
+      const max = get(maxBy(sevenDaysSumData, "profit"), "profit", 0);
+      console.log('nextEvenNumber(max)' , nextEvenNumber(max) , nextEvenNumber(max) / 2)
       const option = {
         tooltip: {},
         grid: {
@@ -25,9 +25,7 @@ const EchartsBar = () => {
         xAxis: {
           type: "category",
           data: sevenDaysSumData.map((item) => item.date.substring(8)),
-
           axisLine: {
-            // show: true, // 显示 x 轴轴线
             lineStyle: {
               type: "dashed", // 将轴线设置为虚线
               color: "rgba(55, 65, 81, 1)",
@@ -45,9 +43,10 @@ const EchartsBar = () => {
         yAxis: {
           type: "value",
           scale: true,
-          max: (max + 10).toFixed(0),
+          max: nextEvenNumber(max),
           min: 0,
-          splitNumber: 1, //max / splitNumber是间隔,
+  
+          splitNumber: 2, // max / splitNumber是间隔,
           inverse: false, // 确保坐标轴方向正常
           boundaryGap: 0, // 控制类目轴的起始位置，true 表示柱状图从第一个类别开始显示
           splitLine: {
@@ -68,7 +67,7 @@ const EchartsBar = () => {
         series: [
           {
             type: "bar",
-            data: sevenDaysSumData.map((item) => item.dailyprofit),
+            data: sevenDaysSumData.map((item) => item.profit),
             barWidth: 10,
             itemStyle: {
               color: "rgba(255, 216, 74, 1)",
@@ -91,11 +90,11 @@ const EchartsBar = () => {
   useEffect(() => {}, []);
 
   return (
-    <div className={styles.wrap}>
+    <div className={styles.barWrap}>
       <div className={styles.detailInfo}>
         <p className={styles.title}>Total Profit</p>
         <p className={styles.num}>
-          ${formatAmount(sumBy(sevenDaysSumData, "dailyprofit")).substring(1)}
+          ${addCommas(sumBy(sevenDaysSumData, "profit"))}
         </p>
         <p className={styles.desc}>
           {/* <ProfitIcon /> */}

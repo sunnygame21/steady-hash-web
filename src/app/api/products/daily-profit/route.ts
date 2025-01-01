@@ -6,7 +6,6 @@ export async function GET(req: any) {
     const token =
       req.cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value ||
       req.headers.get("STEADY_HASH_Authorization");
-    const productId = req.nextUrl.searchParams.get("productId");
     const startDate = req.nextUrl.searchParams.get("startDate");
     const endDate = req.nextUrl.searchParams.get("endDate");
     if (!token) {
@@ -15,7 +14,7 @@ export async function GET(req: any) {
         401
       );
     }
-    if (!productId || !startDate || !endDate) {
+    if (!startDate || !endDate) {
       return jsonResponse(
         { success: false, err: ServerErrorStatus.InvalidParams },
         500
@@ -23,7 +22,7 @@ export async function GET(req: any) {
     }
 
     const data = await fetch(
-      `${process.env.SERVICE_API_PREFIX}/api/v1/product/user-profit?productId=${productId}&startDate=${startDate}&endDate=${endDate}`,
+      `${process.env.SERVICE_API_PREFIX}/api/v1/product/user-profit/daily?startDate=${startDate}&endDate=${endDate}`,
       {
         method: "GET",
         headers: {

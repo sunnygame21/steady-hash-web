@@ -1,4 +1,4 @@
-import { find } from "lodash";
+import { find, round } from "lodash";
 import moment from "moment";
 
 export function classNames(...classes: (string | undefined)[]) {
@@ -41,14 +41,12 @@ export const getUniqueKey = (randomLength: number) => {
 };
 
 export const formatAmount = (amount: number) => {
-  if (amount === 0) {
+  if (!amount) {
     return "+0";
   }
   let str = "";
   if (amount > 0) {
     str = `+`;
-  } else {
-    str = "-";
   }
 
   if (amount >= 1000) {
@@ -57,49 +55,6 @@ export const formatAmount = (amount: number) => {
     str = str + amount.toFixed(2); // 小于1000时直接显示
   }
   return addCommas(str);
-};
-
-export const sumProfit = (resList: any, days: number, start: string) => {
-  const dayList = generateDays(days, start);
-  if (!resList?.[0].length) {
-    return dayList.map((item) => {
-      return {
-        dailyprofit: 0,
-        date: item,
-      };
-    });
-  }
-  const sumRes = dayList.map((curDate, i) => {
-    let dailyprofit = 0;
-    resList.forEach((profit: any, j: number) => {
-      const curDateData = find(profit, (item) => {
-        console.log("item", moment(item?.date).format("YYYY-MM-DD"), curDate);
-        return moment(item?.date).format("YYYY-MM-DD") === curDate;
-      });
-      console.log("profit", curDateData);
-      dailyprofit += Number(curDateData?.dailyprofit || 0);
-    });
-    return {
-      date: curDate,
-      dailyprofit,
-    };
-  });
-  return sumRes;
-};
-
-export const transProfit = (data: any, days: number, start: string) => {
-  const dayList = generateDays(days, start);
-
-  const res = dayList.map((date, i) => {
-    const curDateData = find(data, (item) => {
-      return moment(item?.date).format("YYYY-MM-DD") === date;
-    });
-    return {
-      date,
-      dailyprofit: Number(curDateData?.dailyprofit) || 0,
-    };
-  });
-  return res;
 };
 
 export const generateDays = (days: number, start: string) => {
@@ -120,3 +75,15 @@ export const addCommas = (num: any) => {
     maximumFractionDigits: 2,
   });
 };
+
+
+export const nextEvenNumber = (n: number) => {
+  const res = round(n)
+  // 如果是偶数，返回下一个偶数
+  if (res % 2 === 0) {
+      return res + 2;
+  } else {
+      // 如果是奇数，返回下一个偶数
+      return res + 1;
+  }
+}
