@@ -36,6 +36,7 @@ const BarCalendarChart = ({ defaultType }: { defaultType?: string }) => {
       setType(ChartType.calendar);
     } else {
       setType(ChartType.bar);
+      calendarTypeChange('')
     }
   };
 

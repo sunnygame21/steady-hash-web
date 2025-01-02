@@ -16,9 +16,5 @@ const Login = dynamic(() => import("@/components/login"), {
   ), // 显示占位符
 });
 export default function Home() {
-  return (
-    <Link href={"/login"}>
-      <Login></Login>
-    </Link>
-  );
+  return <Login></Login>;
 }
