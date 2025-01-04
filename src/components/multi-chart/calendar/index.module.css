@@ -34,7 +34,8 @@
   background: rgba(249, 250, 251, 1);
   border-radius: 10px;
   transition: all 0.1s ease;
-  height: 350px;
+  height: 340px;
+  width: 100%;
 }
 
 .calendar :global(.react-calendar__navigation__arrow) {
@@ -109,13 +110,14 @@
 
 .num {
   font-size: 10px;
-  font-family: Roboto Bold;
+  /* font-family: Roboto Bold; */
   width: 40px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   text-align: center;
   width: 100%;
+  padding: 0 2px;
 }
 
 .profitDate {

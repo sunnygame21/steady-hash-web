@@ -52,7 +52,7 @@ const Calendar = ({ calendarTypeChange }: any) => {
   };
 
   const getData = async (date: any) => {
-    if (calenderRef.current.loading) return;
+    if (calenderRef?.current?.loading) return;
     const startDate = moment(date).startOf("month").format("YYYY-MM-DD");
     try {
       if (userShares?.length) {

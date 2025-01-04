@@ -30,7 +30,7 @@ const Bar = ({ title, id, data }: any) => {
                   backgroundColor: {
                     image: tipBg.src,
                   },
-                  padding: [3, 5, 6, 5],
+                  padding: [3, 5, 7, 5],
                   width: 30,
                   color: "#fff",
                   fontSize: 8,
@@ -48,7 +48,7 @@ const Bar = ({ title, id, data }: any) => {
         tooltip: { show: false },
         grid: {
           top: "2%", // 调整顶部的间距
-          left: "0%",
+          left: "16%",
           right: "0%",
           bottom: "5%",
         },
@@ -86,6 +86,9 @@ const Bar = ({ title, id, data }: any) => {
               color: "rgba(55, 65, 81, 1)",
             },
           },
+          axisLabel: {
+            show: false
+          }
         },
         series: [
           {

@@ -111,6 +111,9 @@
   border-radius: 10px !important;
   outline: 0.8px solid rgba(22, 73, 81, 1) !important;
 }
+.codeInput:hover {
+  border-radius: 10px !important;
+}
 .confirm {
   margin-top: 160px;
   height: 56px;
