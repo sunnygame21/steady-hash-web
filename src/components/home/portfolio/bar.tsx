@@ -48,8 +48,8 @@ const Bar = ({ title, id, data }: any) => {
         tooltip: { show: false },
         grid: {
           top: "2%", // 调整顶部的间距
-          left: "16%",
-          right: "0%",
+          left: "18%",
+          right: "18%",
           bottom: "5%",
         },
         xAxis: {

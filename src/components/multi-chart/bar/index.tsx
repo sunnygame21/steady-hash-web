@@ -8,7 +8,8 @@ import { addCommas, nextEvenNumber } from "@/utils/helper";
 import styles from "./index.module.css";
 
 const EchartsBar = () => {
-  const { chartLoading, sevenDaysSumData } = useContext(GlobalContext);
+  const { chartLoading, sevenDaysSumData, userShares } = useContext(GlobalContext);
+  const sumProfit = addCommas(sumBy(userShares,'profit'))
 
   useEffect(() => {
     if (sevenDaysSumData.length) {
@@ -94,7 +95,7 @@ const EchartsBar = () => {
       <div className={styles.detailInfo}>
         <p className={styles.title}>Total Profit</p>
         <p className={styles.num}>
-          ${addCommas(sumBy(sevenDaysSumData, "profit"))}
+          ${sumProfit}
         </p>
         <p className={styles.desc}>
           {/* <ProfitIcon /> */}

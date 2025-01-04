@@ -108,8 +108,8 @@
   font-family: Roboto Bold;
 }
 .codeInput:focus {
-  border-radius: 10px !important;
   outline: 0.8px solid rgba(22, 73, 81, 1) !important;
+  border-radius: 10px !important;
 }
 .codeInput:hover {
   border-radius: 10px !important;
