@@ -18,6 +18,7 @@ const text = `
   it can be found as a welcome guest in many households across the world.
 `;
 
+let height = 0
 const Products = ({ close, show }: any) => {
   const { productsList } = useContext(GlobalContext);
   const [selectProduct, setSelectProduct] = useState<Product | null>(null);
@@ -44,11 +45,12 @@ const Products = ({ close, show }: any) => {
     console.log(key);
   };
 
+
   return (
     <motion.div
-      initial={{ transform: "translateY(100%)" }}
-      animate={{ transform: show ? "translateY(0)" : "translateY(100%)" }}
-      transition={{ duration: 0.2 }}
+      initial={{ transform: "translateY(100%)", top: 0}}
+      animate={{ transform: show ? "translateY(0)" : "translateY(100%)", top: show ? 0 : '100%' }}
+      transition={{ duration: 0.3 }}
       className={classNames(styles.wrap)}
     >
       <div>
@@ -106,7 +108,7 @@ const Products = ({ close, show }: any) => {
           animate={{
             transform: !!selectProduct ? "translateX(0)" : "translateX(100%)",
           }}
-          transition={{ duration: 0.2 }}
+          transition={{ duration: 0.3 }}
         >
           {!!selectProduct ? (
             <Detail

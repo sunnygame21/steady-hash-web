@@ -94,24 +94,30 @@
   font-size: 16px;
 }
 
-.codeBox {
-  justify-content: space-evenly;
-}
 .codeInput {
   margin-top: 30px;
+  display: flex !important;
+  justify-content: space-evenly;
+  width: 100%;
+}
+.codeInput input {
   width: calc((100% - 50px) / 6) !important;
   padding: 10px 0;
   font-size: 20px;
   background: rgba(249, 250, 251, 1);
   border-radius: 10px !important;
-  /* outline: none; */
   font-family: Roboto Bold;
+  text-align: center;
+  aspect-ratio: 1;
+  outline: none !important;
+  user-select: none;
 }
-.codeInput:focus {
-  outline: 0.8px solid rgba(22, 73, 81, 1) !important;
+.codeInput input:focus {
+  border: 0.8px solid rgba(22, 73, 81, 1) !important;
   border-radius: 10px !important;
+
 }
-.codeInput:hover {
+.codeInput input:hover {
   border-radius: 10px !important;
 }
 .confirm {

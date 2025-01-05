@@ -11,6 +11,9 @@
   font-family: Roboto Bold;
   color: rgba(17, 24, 39, 1);
 }
+.title  span{
+  font-family: Roboto;
+}
 
 .portfolioItem {
   display: flex;

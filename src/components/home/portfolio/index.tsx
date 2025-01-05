@@ -16,13 +16,13 @@ const ChartType = {
   line: "line",
 };
 
-const PortfolioList = ({ title, type }: any) => {
+const PortfolioList = ({ title, type, subTitle }: any) => {
   const { userShares, productsList, chartLoading } = useContext(GlobalContext);
 
   console.log("userShares", userShares);
   return userShares.length > 0 ? (
     <div className={styles.portfolioWrap}>
-      <p className={styles.title}>{title}</p>
+      <p className={styles.title}>{title}<span>&ensp;{subTitle}</span></p>
       <div className={styles.portfolioList}>
         {userShares.map((item, i) => {
           const curProduct = find(

@@ -1,7 +1,7 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
-import dynamic from "next/dynamic";
+import React, { useContext, useState } from "react";
 import { useRouter } from "next/navigation";
+import ReactCodeInput from "react-code-input";
 import { GlobalContext } from "@/app/state/global";
 import { classNames } from "@/utils/helper";
 import logo from "@/images/login-logo.png";
@@ -9,8 +9,6 @@ import LoginModal from "./loginModal";
 import { BlackBackIcon } from "../Icons";
 
 import styles from "./index.module.css";
-
-const Codebox = dynamic(() => import("react-otp-input"), { ssr: false });
 
 const Code = () => {
   const router = useRouter();
@@ -98,31 +96,16 @@ const Code = () => {
         <div className={styles.codeDesc}>
           Enter the 6-digit code we just sent to your email, {email}
         </div>
-        <Codebox
+        <div className={styles.codeBox}>
+        <ReactCodeInput
+          name='code'
+          inputMode='latin'
           value={code}
           onChange={setCode}
-          numInputs={6}
-          renderInput={(props) => {
-            return (
-              <input
-                type="text"
-                className={props.className}
-                autoComplete="off"
-                style={props.style}
-                value={props.value}
-                onChange={props.onChange}
-                onInput={props.onInput}
-                ref={props.ref}
-                onFocus={() => {}}
-                onBlur={() => {}}
-                onKeyDown={props.onKeyDown}
-              />
-            );
-          }}
-          inputStyle={styles.codeInput}
-          containerStyle={styles.codeBox}
-          shouldAutoFocus={false}
+          fields={6}
+          className={styles.codeInput}
         />
+      </div>
         <div className={styles.confirm} onClick={loginByCode}>
           {loading && <div className="loading"></div>}
           Continue

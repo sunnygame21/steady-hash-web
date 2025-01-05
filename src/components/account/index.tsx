@@ -58,8 +58,8 @@ const Account = () => {
                     <p className={styles.desc}>Earning starts soon</p>
                   </div>
                   <div className={styles.status}>
-                    <p className={styles.money}>$5,000.00</p>
-                    <p className={styles.type}>Buy</p>
+                    <p className={styles.money}>{ (item.profit/item.shareAmount * 100).toFixed(2)}%</p>
+                    <p className={styles.type}>Pnl</p>
                   </div>
                 </div>
               </div>

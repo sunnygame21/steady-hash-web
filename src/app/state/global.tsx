@@ -21,6 +21,7 @@ export interface GlobalState {
   sevenDaysSumData: any[];
   productProfitData: any;
   setProductProfitData: any;
+  logout: any;
 }
 
 export const initialGlobalState: GlobalState = {
@@ -33,6 +34,7 @@ export const initialGlobalState: GlobalState = {
   sevenDaysSumData: [],
   productProfitData: {},
   setProductProfitData: () => {},
+  logout: () => {},
 };
 
 export const GlobalContext = createContext<GlobalState>(initialGlobalState);
@@ -49,6 +51,11 @@ export const GlobalProvider = ({ children }: any) => {
 
   const router = useRouter();
   const path = usePathname();
+
+  const logout = () => {
+    document.cookie = "";
+    router.push("/login");
+  };
 
   const fetchUserInfo = async () => {
     try {
@@ -175,6 +182,7 @@ export const GlobalProvider = ({ children }: any) => {
       sevenDaysSumData,
       productProfitData,
       setProductProfitData,
+      logout,
     }),
     [
       JSON.stringify(user),

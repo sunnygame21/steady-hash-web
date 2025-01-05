@@ -45,7 +45,7 @@ const Calendar = ({ calendarTypeChange }: any) => {
   const [value, setDate] = useState(calenderInfo.date);
   const [curDateText, setCurDateText] = useState<any>(calenderInfo.curDate);
   const [results, setResults] = useState<Profit[]>([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const isNotCurMonth = (date: any) => {
     return date.getMonth() !== moment(value).month();
@@ -61,7 +61,7 @@ const Calendar = ({ calendarTypeChange }: any) => {
           return;
         }
         calenderRef.current.loading = true;
-        setLoading(true)
+        setLoading(true);
         messageApi.open({
           type: "loading",
           content: "Loading",
@@ -96,11 +96,11 @@ const Calendar = ({ calendarTypeChange }: any) => {
 
         messageApi.destroy();
         calenderRef.current.loading = false;
-        setLoading(false)
+        setLoading(false);
       }
     } catch (error) {
       calenderRef.current.loading = false;
-      setLoading(false)
+      setLoading(false);
       messageApi.destroy();
       console.log("get calendar data error", error);
     }
@@ -121,7 +121,12 @@ const Calendar = ({ calendarTypeChange }: any) => {
       }
       // 今天之后的日期 只显示数字
       if (moment(date).isAfter(CURRENT)) {
-        return <div className={styles.disable}>{date.getDate()}</div>;
+        return (
+          <div className={styles.disable}>
+            {date.getDate()}
+            <p className={styles.num}></p>
+          </div>
+        );
       }
       // 今天
       if (curDate === moment(value).format("YYYY-MM-DD")) {
@@ -179,7 +184,6 @@ const Calendar = ({ calendarTypeChange }: any) => {
     );
   };
 
-
   useEffect(() => {
     if (userShares.length && calenderRef.current) {
       getData(value);
@@ -187,7 +191,7 @@ const Calendar = ({ calendarTypeChange }: any) => {
   }, [value, userShares.length]);
 
   return (
-    <div style={{ position: "relative" }}  ref={calenderRef}>
+    <div style={{ position: "relative" }} ref={calenderRef}>
       {loading && <div className={styles.mask}></div>}
       <div className={styles.viewWrap}>
         {[CalenderViewType.month, CalenderViewType.year].map((item) => {
@@ -208,7 +212,6 @@ const Calendar = ({ calendarTypeChange }: any) => {
         })}
       </div>
       <ReactCalendar
-       
         key={calenderInfo.key}
         onChange={(date) => {
           console.log("onChange", date);
@@ -217,7 +220,6 @@ const Calendar = ({ calendarTypeChange }: any) => {
         calendarType="gregory"
         locale="en"
         value={value}
-
         className={classNames(styles.calendar, calenderInfo.style)}
         tileClassName={classNames(styles.calendarTile)}
         tileContent={tileContent}
@@ -254,7 +256,15 @@ const Calendar = ({ calendarTypeChange }: any) => {
         onActiveStartDateChange={(date) => {
           console.log("onActiveStartDateChange", date, calenderInfo);
           const { activeStartDate } = date;
-          setDate(activeStartDate);
+          if (
+            moment(activeStartDate).format("YYYY-MM-DD") ===
+            CURRENT.format("YYYY-MM-DD")
+          ) {
+            setDate(CURRENT);
+          } else {
+            setDate(activeStartDate);
+          }
+
           // monthChange(activeStartDate);
           // getData(activeStartDate);
           switch (calenderInfo.key) {

@@ -8,17 +8,16 @@ import Holdings from "./holding";
 
 import styles from "./index.module.css";
 
-
-const today = moment.utc().local().format('YYYY-MM-DD')
+const today = moment.utc().local().format("YYYY-MM-DD");
 
 const Portfolio = () => {
   return (
     <div className={styles.wrap}>
       <div className={styles.pageTitle}>Portfolio</div>
       <BarCalendarChart defaultType="calender" />
-      <PortfolioList title={`Holdings (P&L of ${today})`} />
+      <PortfolioList title={`Holdings`} subTitle={`(P&L of ${today})`} />
       <Summary />
-      {/* <Holdings /> */}
+      <Holdings />
     </div>
   );
 };
