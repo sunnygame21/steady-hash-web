@@ -1,23 +1,17 @@
 .chartContainer {
   position: relative;
   border-radius: 10px;
-  transition: max-height 1s ease, opacity 1s ease;
-  max-height: 0; /* 初始隐藏 */
+  transition: all 0.25s ease;
 }
 
 
 .calendarWrap {
   background: rgba(249, 250, 251, 1);
-  max-height: 410px;
 
-}
-.yearWarp {
-  max-height: 250px;
 }
 .barWrap {
   background: rgba(31, 41, 55, 1);
   border-radius: 16px;
-  max-height: 240px;
 }
 
 .icon {
@@ -25,7 +19,7 @@
   padding: 7px;
   border-radius: 8px;
   background: rgba(235, 236, 239, 1);
-  right: 12px;
+  right: 20px;
   top: 22px;
   z-index: 1;
 }
@@ -35,7 +29,7 @@
 
 .chartContainer :global(.react-calendar__navigation__label) {
   flex-grow: initial !important;
-  width: 100px;
+  width: 120px;
 }
 .chartContainer :global(.react-calendar__navigation button) {
   background-color: transparent !important;

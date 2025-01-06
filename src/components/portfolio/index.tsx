@@ -17,7 +17,7 @@ const Portfolio = () => {
       <BarCalendarChart defaultType="calender" />
       <PortfolioList title={`Holdings`} subTitle={`(P&L of ${today})`} />
       <Summary />
-      <Holdings />
+      {/* <Holdings /> */}
     </div>
   );
 };

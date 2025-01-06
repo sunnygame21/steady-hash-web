@@ -21,7 +21,7 @@ const EchartsBar = () => {
           top: "5%", // 调整顶部的间距
           left: "13%",
           right: "5%",
-          bottom: "30%",
+          bottom: "20%",
         },
         xAxis: {
           type: "category",

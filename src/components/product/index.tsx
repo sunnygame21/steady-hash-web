@@ -1,16 +1,15 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Collapse, CollapseProps } from "antd";
-import { bignumber, format } from "mathjs";
+import { multiply } from "lodash";
 import { motion } from "framer-motion";
 import { GlobalContext } from "@/app/state/global";
 import { Product } from "@/types/info";
-import { addCommas, classNames } from "@/utils/helper";
-import { AlertIcon, ArrowIcon, CloseIcon, ProfileIcon } from "../Icons";
+import { classNames } from "@/utils/helper";
+import { AlertIcon, ArrowIcon, CloseIcon } from "../Icons";
 import Detail from "./detail";
 
 import styles from "./index.module.css";
-import { multiply } from "lodash";
 
 const text = `
   A dog is a type of domesticated animal.
@@ -18,7 +17,7 @@ const text = `
   it can be found as a welcome guest in many households across the world.
 `;
 
-let height = 0
+
 const Products = ({ close, show }: any) => {
   const { productsList } = useContext(GlobalContext);
   const [selectProduct, setSelectProduct] = useState<Product | null>(null);
@@ -45,11 +44,13 @@ const Products = ({ close, show }: any) => {
     console.log(key);
   };
 
-
   return (
     <motion.div
-      initial={{ transform: "translateY(100%)", top: 0}}
-      animate={{ transform: show ? "translateY(0)" : "translateY(100%)", top: show ? 0 : '100%' }}
+      initial={{ transform: "translateY(100%)", top: 0 }}
+      animate={{
+        transform: show ? "translateY(0)" : "translateY(100%)",
+        top: show ? 0 : "100%",
+      }}
       transition={{ duration: 0.3 }}
       className={classNames(styles.wrap)}
     >
@@ -104,11 +105,11 @@ const Products = ({ close, show }: any) => {
 
         <motion.div
           className={styles.detailWrap}
-          initial={{ transform: "translateX(100%)" }}
+          initial={{ left: "100%" }}
           animate={{
-            transform: !!selectProduct ? "translateX(0)" : "translateX(100%)",
+            left: !!selectProduct ? 0 : "100%",
           }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.2 }}
         >
           {!!selectProduct ? (
             <Detail

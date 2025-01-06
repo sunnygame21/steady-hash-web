@@ -2,7 +2,8 @@
   padding: 16px 24px;
   background: rgb(17, 24, 39);
   color: #fff;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -11,7 +12,7 @@
 
 /* 使用 CSS 来隐藏滚动条但仍能滚动 */
 .wrap::-webkit-scrollbar {
-  display: none;  /* 隐藏滚动条 */
+  display: none; /* 隐藏滚动条 */
 }
 .logo {
   width: 152px;
@@ -122,13 +123,13 @@
   margin-bottom: 16px;
 }
 
- .detailWrap{
-  position: fixed;
+.detailWrap {
+  position: absolute;
   top: 0;
   bottom: 0;
-  left: 0;
-  right: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(17, 24, 39, 1);
   overflow: auto;
   z-index: 4;
- }
+}

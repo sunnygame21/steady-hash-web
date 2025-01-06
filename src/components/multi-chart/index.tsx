@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { classNames } from "@/utils/helper";
 import { GlobalContext } from "@/app/state/global";
 import { CAlENDAR_TYPE, CHART_TYPE } from "@/constant";
@@ -28,25 +28,45 @@ const BarCalendarChart = ({ defaultType }: { defaultType?: string }) => {
   const [type, setType] = useState(
     ChartType[defaultType || ""] || ChartType.calendar
   );
-  const [calendarType, calendarTypeChange] = useState("");
   const { userShares } = useContext(GlobalContext);
+
+  const divRef = useRef<any>(null); // 创建一个 ref 来引用 div 元素
+  const [divHeight, setDivHeight] = useState(0); // 存储 div 高度
 
   const chartTypeChange = () => {
     if (type.key === CHART_TYPE.bar) {
       setType(ChartType.calendar);
     } else {
       setType(ChartType.bar);
-      calendarTypeChange('')
     }
   };
 
+  useEffect(() => {
+    const divElement = divRef.current;
+    // 创建 ResizeObserver 实例
+    const resizeObserver = new ResizeObserver(() => {
+      if (divElement) {
+        setDivHeight(divElement.offsetHeight);
+        // divElement.style.height = divElement.offsetHeight;
+      }
+    });
+
+    if (divElement) {
+      resizeObserver.observe(divElement); // 监听 div 高度变化
+    }
+
+    // 清除观察器
+    return () => {
+      if (divElement) {
+        resizeObserver.unobserve(divElement);
+      }
+    };
+  }, [userShares.length]); // 只在组件初次渲染时设置 ResizeObserver
+
   return userShares.length ? (
     <div
-      className={classNames(
-        styles.chartContainer,
-        type.style,
-        calendarType === CAlENDAR_TYPE.year ? styles.yearWarp : ""
-      )}
+      style={{ height: divHeight }}
+      className={classNames(styles.chartContainer, type.style)}
     >
       <div
         className={classNames(styles.icon, type.iconStyle)}
@@ -54,12 +74,9 @@ const BarCalendarChart = ({ defaultType }: { defaultType?: string }) => {
       >
         {type.icon}
       </div>
-
-      {type.key === CHART_TYPE.bar ? (
-        <EchartsBar />
-      ) : (
-        <Calendar calendarTypeChange={calendarTypeChange} />
-      )}
+      <div ref={divRef}>
+        {type.key === CHART_TYPE.bar ? <EchartsBar /> : <Calendar />}
+      </div>
     </div>
   ) : (
     <div className={classNames(styles.chartContainer, styles.noData)}>

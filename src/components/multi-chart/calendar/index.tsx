@@ -38,7 +38,7 @@ const HistoryData: any = {
   [CAlENDAR_TYPE.year]: {},
 };
 
-const Calendar = ({ calendarTypeChange }: any) => {
+const Calendar = () => {
   const { userShares, messageApi } = useContext(GlobalContext);
   const calenderRef = useRef<any>(null);
   const [calenderInfo, setCalenderInfo] = useState<any>(CalenderViewType.month);
@@ -201,7 +201,6 @@ const Calendar = ({ calendarTypeChange }: any) => {
               key={`calender-view-${item.key}`}
               onClick={() => {
                 setCalenderInfo(item);
-                calendarTypeChange(item.key);
                 setCurDateText(item.curDate);
                 setDate(CURRENT);
               }}
