@@ -65,7 +65,6 @@ const Calendar = () => {
         messageApi.open({
           type: "loading",
           content: "Loading",
-          duration: 0,
         });
 
         let url = "/api/user/daily-profit";

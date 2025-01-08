@@ -1,17 +1,18 @@
 .chartContainer {
   position: relative;
   border-radius: 10px;
-  transition: all 0.25s ease;
 }
 
 
 .calendarWrap {
   background: rgba(249, 250, 251, 1);
+  transition: all 0.25s ease;
 
 }
 .barWrap {
   background: rgba(31, 41, 55, 1);
   border-radius: 16px;
+  transition: height 0.25s ease;
 }
 
 .icon {

@@ -48,8 +48,9 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                 </p>
               </div>
               <div className={styles.portfolioChart}>
-                <Bar id={`chart-${item.productId}`} data={item.data || []} />
+                {/* <Bar id={`chart-${item.productId}`} data={item.data || []} /> */}
                 {/* {type === ChartType.bar ? <Bar /> : <Line />} */}
+                <Line />
               </div>
             </div>
           );

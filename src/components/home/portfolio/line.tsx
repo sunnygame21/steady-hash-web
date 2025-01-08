@@ -10,7 +10,7 @@ const Line = ({ title }: any) => {
       top: "5%", // 调整顶部的间距
       left: "0%",
       right: "0%",
-      bottom: "10%",
+      bottom: "0%",
     },
     xAxis: {
       type: "category",
