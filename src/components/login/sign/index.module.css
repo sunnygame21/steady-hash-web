@@ -1,0 +1,105 @@
+.emailWrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+  padding: 16px 22px;
+}
+.title {
+  margin-top: 32px;
+  font-size: 24px;
+  font-weight: 700;
+  color: rgba(17, 24, 39, 1);
+}
+.loginType {
+  margin-top: 32px;
+  display: flex;
+
+}
+.google {
+  margin-right: 6px;
+}
+.apple {
+  margin-left: 6px;
+}
+.google, .apple{
+  width: 50%;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(243, 244, 246, 1);
+  border-radius: 12px;
+  /* background-color:rgba(243, 246, 246, 1) ; */
+}
+.loginType svg {
+  margin-right: 12px;
+}
+
+.signDesc {
+  margin-top: 10px;
+  color: rgba(156, 163, 175, 1);
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+.signDesc p {
+  margin: 0 12px;
+}
+.signDesc  span{
+  display: inline-block;
+  height: 1px;
+  width: calc((100% - 150px) / 2);
+  background-color: rgba(243, 244, 246, 1);
+}
+.inputWrap {
+  margin-top: 10px;
+  position: relative;
+  border-radius: 12px;
+}
+.input {
+  background-color: rgba(249, 250, 251, 1);
+  border-radius: 12px;
+  padding: 12px;
+  width: 100%;
+  color: rgba(107, 114, 128, 1);
+  outline: none;
+}
+.drop {
+  background-color: rgba(249, 250, 251, 1);
+}
+.arrow {
+  position: absolute;
+  /* transform: rotate(-90deg); */
+  right: 18px;
+  top: 15px;
+}
+.createBtn {
+  margin-top: 10px;
+  background-color: rgba(31, 41, 55, 1);
+  border-radius: 12px;
+  height: 56px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+.terms {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;;
+  color: rgba(107, 114, 128, 1);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+.terms  a {
+  color: #000;
+}

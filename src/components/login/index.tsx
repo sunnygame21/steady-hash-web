@@ -1,14 +1,18 @@
 "use client";
 import React, { useContext, useState } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import ReactCodeInput from "react-code-input";
 import { GlobalContext } from "@/app/state/global";
 import { classNames } from "@/utils/helper";
 import logo from "@/images/login-logo.png";
-import LoginModal from "./loginModal";
+import LoginModal from "./sign";
 import { BlackBackIcon } from "../Icons";
 
 import styles from "./index.module.css";
+
+const ReactCodeInput = dynamic(() => import("react-otp-input"), {
+  ssr: false,
+});
 
 const Code = () => {
   const router = useRouter();
@@ -87,30 +91,34 @@ const Code = () => {
           setEmail={setEmail}
         ></LoginModal>
       )}
-      <div className={classNames(styles.codeWrap, showCode ? styles.show : "")}>
-        <BlackBackIcon
-          className={styles.back}
-          onClick={() => setShowCode(false)}
-        />
-        <div className={styles.codeTitle}>Authentication Code</div>
-        <div className={styles.codeDesc}>
-          Enter the 6-digit code we just sent to your email, {email}
+      {showCode && (
+        <div
+          className={classNames(styles.codeWrap, showCode ? styles.show : "")}
+        >
+          <BlackBackIcon
+            className={styles.back}
+            onClick={() => setShowCode(false)}
+          />
+          <div className={styles.codeTitle}>Authentication Code</div>
+          <div className={styles.codeDesc}>
+            Enter the 6-digit code we just sent to your email, {email}
+          </div>
+          <div>
+            <ReactCodeInput
+              value={code}
+              onChange={setCode}
+              numInputs={6}
+              renderInput={(props) => <input {...props} />}
+              inputStyle={styles.codeInput}
+              containerStyle={styles.codeBox}
+            />
+          </div>
+          <div className={styles.confirm} onClick={loginByCode}>
+            {loading && <div className="loading"></div>}
+            Continue
+          </div>
         </div>
-        <div className={styles.codeBox}>
-        <ReactCodeInput
-          name='code'
-          inputMode='latin'
-          value={code}
-          onChange={setCode}
-          fields={6}
-          className={styles.codeInput}
-        />
-      </div>
-        <div className={styles.confirm} onClick={loginByCode}>
-          {loading && <div className="loading"></div>}
-          Continue
-        </div>
-      </div>
+      )}
     </div>
   );
 };

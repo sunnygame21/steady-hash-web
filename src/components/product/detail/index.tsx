@@ -3,13 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { bignumber } from "mathjs";
 import { multiply } from "lodash";
 import Skeleton from "react-loading-skeleton";
-import EchartLine from "@/components/multi-chart/line";
+import EchartLine from "@/components/product/line";
 import { BackIcon } from "@/components/Icons";
 import { GlobalContext } from "@/app/state/global";
 import { getProfitParams, transProfit } from "@/utils/profit";
 
 import styles from "./index.module.css";
-
 
 const DateType = {
   daily: {
@@ -37,6 +36,8 @@ const IntroType = [
   },
 ];
 
+let first = true;
+
 const Detail = ({ onClose, detailData, show }: any) => {
   const { productProfitData, setProductProfitData } = useContext(GlobalContext);
   const [profitData, setProfitData] = useState<any>([]);
@@ -46,6 +47,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      first = false;
       let url = "/api/products/daily-profit";
       let days = 30;
       if (timeType === DateType.Monthly) {
@@ -86,10 +88,14 @@ const Detail = ({ onClose, detailData, show }: any) => {
 
   useEffect(() => {
     if (!productProfitData?.[detailData?.id]?.[timeType.key]) {
-      fetchData();
+      first && fetchData();
     } else {
-      setProfitData(productProfitData?.[detailData?.id]?.[timeType.key]);
       setLoading(false);
+      setProfitData(productProfitData?.[detailData?.id]?.[timeType.key]);
+     
+    }
+    return () => {
+      first = true
     }
   }, [JSON.stringify(productProfitData), timeType.key]);
 
@@ -112,9 +118,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
           </div>
           <div className={styles.status}>
             <p className={styles.money}>
-              *APR{" "}
-              {multiply(detailData.apr_7day, 100).toFixed(2)}
-              %
+              *APR {multiply(detailData.apr_7day, 100).toFixed(2)}%
             </p>
             <p className={styles.type}>
               <span className={styles.open}>OPEN</span>&ensp;/&ensp;
@@ -131,7 +135,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
             <EchartLine data={profitData}></EchartLine>
           )}
         </div>
-        <div className={styles.times}>
+        {/* <div className={styles.times}>
           {Object.values(DateType).map((item) => (
             <div
               key={`product-detail-time-${item.key}`}
@@ -141,7 +145,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
               {item.text}
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
       <div className={styles.intro}>
         {/* <div className={styles.tabs}>

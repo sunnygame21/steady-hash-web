@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import moment, { MomentInput } from "moment";
+import moment from "moment";
 import ReactCalendar from "react-calendar";
 import { find, sumBy } from "lodash";
 import { GlobalContext } from "@/app/state/global";
@@ -20,16 +20,14 @@ const CalenderViewType = {
     style: "",
     date: CURRENT.format("YYYY-MM-DD"),
     lastDate: CURRENT.format("MMMM YYYY"),
-    curDate: CURRENT.format("MMMM YYYY"),
   },
-  [CAlENDAR_TYPE.year]: {
+  [CAlENDAR_TYPE.year]: { 
     key: CAlENDAR_TYPE.year,
     text: "M",
     style: styles.yearCalendar,
     date: CURRENT.format("YYYY-MM"),
     // 用来判断 nextBtn 的样式
     lastDate: `${CURRENT.year()}`,
-    curDate: `${CURRENT.year()}`,
   },
 };
 
@@ -43,9 +41,8 @@ const Calendar = () => {
   const calenderRef = useRef<any>(null);
   const [calenderInfo, setCalenderInfo] = useState<any>(CalenderViewType.month);
   const [value, setDate] = useState(calenderInfo.date);
-  const [curDateText, setCurDateText] = useState<any>(calenderInfo.curDate);
   const [results, setResults] = useState<Profit[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [disable, setDisable] = useState(false);
 
   const isNotCurMonth = (date: any) => {
     return date.getMonth() !== moment(value).month();
@@ -61,10 +58,11 @@ const Calendar = () => {
           return;
         }
         calenderRef.current.loading = true;
-        setLoading(true);
+        setDisable(true);
         messageApi.open({
           type: "loading",
           content: "Loading",
+          duration: 10000,
         });
 
         let url = "/api/user/daily-profit";
@@ -95,11 +93,11 @@ const Calendar = () => {
 
         messageApi.destroy();
         calenderRef.current.loading = false;
-        setLoading(false);
+        setDisable(false);
       }
     } catch (error) {
       calenderRef.current.loading = false;
-      setLoading(false);
+      setDisable(false);
       messageApi.destroy();
       console.log("get calendar data error", error);
     }
@@ -107,10 +105,12 @@ const Calendar = () => {
 
   const tileContent = ({ date }: any) => {
     let curDate = moment(date).format("YYYY-MM-DD");
-    let curProfit: any = {};
-
+    let  curProfit: any = find(results, (item) => item.date === curDate);
+    let money = formatAmount(curProfit?.profit || 0)
+    const monthText = moment(date).format("MMMM".substring(0, 3))
+    
     if (calenderInfo.key === CAlENDAR_TYPE.month) {
-      curProfit = find(results, (item) => item.date === curDate);
+      // 上个月的日期显示 -
       if (isNotCurMonth(date) && moment(date).isBefore(value)) {
         return <div className={styles.preMonth}>-</div>;
       }
@@ -132,20 +132,24 @@ const Calendar = () => {
         return (
           <div className={styles.activeDate}>
             <p className={styles.date}>{date.getDate()}</p>
-            <p className={styles.num}>{formatAmount(curProfit?.profit || 0)}</p>
+            <p className={styles.num}>
+              {disable ? "n/a" : money}
+            </p>
           </div>
         );
       }
     } else {
       curDate = moment(date).format("YYYY-MM");
       curProfit = find(results, (item) => item.date === curDate);
+      money = formatAmount(curProfit?.profit || 0)
+      // 之后的月份
       if (
         moment(date).month() > moment(CURRENT).month() &&
         moment(date).isAfter(CURRENT)
       ) {
         return (
           <div className={styles.disable}>
-            {moment(date).format("MMMM".substring(0, 3))}
+            {monthText}
           </div>
         );
       }
@@ -153,9 +157,11 @@ const Calendar = () => {
         return (
           <div className={styles.activeDate}>
             <p className={styles.date}>
-              {moment(curDate).format("MMMM").substring(0, 3)}
+              {monthText}
             </p>
-            <p className={styles.num}>{formatAmount(curProfit?.profit || 0)}</p>
+            <p className={styles.num}>
+              {disable ? "n/a" : money}
+            </p>
           </div>
         );
       }
@@ -176,9 +182,11 @@ const Calendar = () => {
         <p>
           {calenderInfo.key === CAlENDAR_TYPE.month
             ? date.getDate()
-            : moment(date).format("MMMM".substring(0, 3))}
+            : monthText}
         </p>
-        <div className={styles.num}>{formatAmount(curProfit?.profit || 0)}</div>
+        <div className={styles.num}>
+          {disable ? "n/a" : money}
+        </div>
       </div>
     );
   };
@@ -187,11 +195,11 @@ const Calendar = () => {
     if (userShares.length && calenderRef.current) {
       getData(value);
     }
-  }, [value, userShares.length]);
+  }, [value, userShares.length, calenderInfo.key]);
 
   return (
     <div style={{ position: "relative" }} ref={calenderRef}>
-      {loading && <div className={styles.mask}></div>}
+      {disable && <div className={styles.mask}></div>}
       <div className={styles.viewWrap}>
         {[CalenderViewType.month, CalenderViewType.year].map((item) => {
           return (
@@ -200,7 +208,6 @@ const Calendar = () => {
               key={`calender-view-${item.key}`}
               onClick={() => {
                 setCalenderInfo(item);
-                setCurDateText(item.curDate);
                 setDate(CURRENT);
               }}
             >
@@ -228,21 +235,18 @@ const Calendar = () => {
           return (
             <div className={styles.navigation}>
               <p>{label}</p>
-              <p>{formatAmount(num)}</p>
+              <p>{disable ? "n/a" : formatAmount(num)}</p>
             </div>
           );
         }}
         maxDate={new Date()} // 禁用前进按钮
         // minDate={new Date("2024-12-01")}
-        prevLabel={
-          // curDateText == calenderType.lastDate ? <PreWhiteIcon /> : <PreIcon />
-          <PreIcon />
-        }
+        prevLabel={<PreIcon />}
         nextLabel={
-          curDateText == calenderInfo.lastDate ? (
-            <PreWhiteIcon className={styles.nextBtn} />
-          ) : (
+          moment(calenderInfo.lastDate).isAfter(value) ? (
             <PreIcon className={styles.nextBtn} />
+          ) : (
+            <PreWhiteIcon className={styles.nextBtn} />
           )
         }
         formatMonth={(locale, date) => {
@@ -261,19 +265,6 @@ const Calendar = () => {
             setDate(CURRENT);
           } else {
             setDate(activeStartDate);
-          }
-
-          // monthChange(activeStartDate);
-          // getData(activeStartDate);
-          switch (calenderInfo.key) {
-            case "year":
-              setCurDateText(moment(activeStartDate).year());
-              break;
-            case "month":
-              setCurDateText(moment(activeStartDate).format("MMMM YYYY"));
-              break;
-            default:
-              break;
           }
         }}
         view={calenderInfo.key}

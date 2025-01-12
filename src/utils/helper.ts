@@ -70,6 +70,7 @@ export const generateDays = (days: number, start: string) => {
 };
 
 export const addCommas = (num: any) => {
+  if (!num) return 0
   return num.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,

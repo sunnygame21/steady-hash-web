@@ -16,11 +16,23 @@
 }
 
 .portfolioItem {
+  position: relative;
   display: flex;
   margin-right: 16px;
   padding: 14px 16px;
   border: 1px solid rgba(243, 244, 246, 1);
   background: rgba(249, 250, 251, 1);
+  border-radius: 12px;
+  min-width: 250px;
+  min-width: 240px;
+  min-height: 134px;
+}
+.skeleton {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
   border-radius: 12px;
 }
 .detailName {
@@ -71,14 +83,6 @@
   /* background-color: antiquewhite; */
 }
 
-.bar {
+.line {
   height: 90px;
-}
-.skeleton {
-  width: 100px;
-}
-.skeletonChart {
-  width: 100px;
-  height: 90px;
-  margin-left: 16px;
 }

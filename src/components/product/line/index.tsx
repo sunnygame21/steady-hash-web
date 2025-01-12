@@ -1,17 +1,15 @@
 import React, { useEffect } from "react";
 import * as echarts from "echarts";
+import { maxBy, round } from "lodash";
+import { calculateUnitNum } from "../utils";
 
 import styles from "./index.module.css";
-import { findIndex, get, maxBy, minBy, parseInt, round } from "lodash";
-import { nextEvenNumber } from "@/utils/helper";
 
 const EchartLine = ({ data = [] }: any) => {
   const maxProfit: any = maxBy(data, "profit") || {};
-  const min = get(minBy(data, "profit"), "profit", 0);
-  const index = findIndex(
-    data,
-    (item: any) => maxProfit?.profit === item.profit
-  );
+  const max = 0.2;
+  const unit = calculateUnitNum(max);
+  const index = 6;
   const option = {
     tooltip: {
       trigger: "axis",
@@ -38,47 +36,44 @@ const EchartLine = ({ data = [] }: any) => {
     },
     grid: {
       top: "5%", // 调整顶部的间距
-      left: "16%",
+      left: "12%",
       right: "5%",
       bottom: "10%",
     },
+
     xAxis: {
       type: "category",
+      boundaryGap: false,
       data: data.map((item: any) => item.date.substring(5)), // 自定义月份
       axisLabel: {
         show: true, // 显示下方的标签
-        interval: parseInt(`${round(data?.length / 3)}`), // 每隔10个标签显示一次
-
         position: "bottom", // 坐标轴标签位置在底部
         color: "rgba(115, 146, 151, 1)",
         fontSize: 12,
         fontFamily: "Roboto",
         fontWeight: "bold",
+        margin: 12,
         customValues: [1, round(data.length / 2), data.length - 1],
       },
-
       axisTick: {
         show: false,
       },
-      axisLine: {
-        show: false, // 显示 x 轴轴线
-      },
       splitLine: {
         show: false,
-        // width: function (index: number) {
-        //   return index % 2 === 0 ? 1 : 2;
-        // },
+      },
+      axisLine: {
+        show: true, // 显示 x 轴轴线
+        lineStyle: {
+          color: "rgba(255, 255, 255, 0)",
+        },
       },
     },
     yAxis: {
       type: "value",
-      scale: true,
-      max: nextEvenNumber(maxProfit.profit || 0),
-      min: min,
-      splitNumber: 2, //max / splitNumber是间隔,
-      splitList: [
-        min, maxProfit?.profit
-      ],
+      scale: false,
+      max: unit * 5,
+      min: 0,
+      splitNumber: 5,
 
       inverse: false, // 确保坐标轴方向正常
       axisLine: {
@@ -90,20 +85,34 @@ const EchartLine = ({ data = [] }: any) => {
       splitLine: {
         lineStyle: {
           type: "dashed", // 虚线
-          color: "#676C85",
+          color: [
+            "transparent",
+            "rgba(45, 91, 98, 1)",
+            "rgba(45, 91, 98, 1)",
+            "rgba(45, 91, 98, 1)",
+            "rgba(45, 91, 98, 1)",
+            "rgba(45, 91, 98, 1)",
+          ],
+        },
+        interval: function (index: number) {
+          return index !== 0; // 跳过 0 位置的分隔线
         },
       },
       axisLabel: {
         show: true,
-        formatter: "{value}", // 添加百分号
+        formatter: "{value}%", // 添加百分号
         color: "rgba(115, 146, 151, 1)",
         fontSize: 12,
         fontFamily: "Roboto",
       },
     },
+
     series: [
       // {
-      //   data: [0.2, 0.3, 0.42, 0.1, 0.15, 0.2, 0.3], // 数据
+      //   data: [
+      //     0.2, 0.3, 0.42, 0.1, 0.15, 0.2, 0.3, 0.2, 0.3, 0.42, 0.1, 0.15, 0.2,
+      //     0.3, 0.2, 0.3, 0.42, 0.1, 0.15, 0.2, 0.3, 0.1, 0.3,0, 0.3, 0.2
+      //   ], // 数据
       //   type: "line",
       //   smooth: true, // 平滑曲线
       //   showSymbol: false, // 显示拐点
@@ -142,7 +151,7 @@ const EchartLine = ({ data = [] }: any) => {
           label: { show: false },
           data: [
             {
-              xAxis: maxProfit.date?.substring(5), // 起点和终点的数据
+              xAxis: 6, // 起点和终点的数据
               // yAxis: 0.15,
               lineStyle: {
                 type: "dashed", // 虚线
@@ -153,7 +162,10 @@ const EchartLine = ({ data = [] }: any) => {
             // 如果不需要交点上方的虚线，可以直接移除多余的数据项
           ],
         },
-        data: data.map((item: any) => item.profit), // 数据
+        data: [
+          0.2, 0.3, 0.42, 0.2, 0.15, 0.23, 0.3, 0.2, 0.3, 0.42, 0.33, 0.15, 0.2,
+          0.3, 0.2, 0.3, 0.42, 0.22, 0.15, 0.2, 0.3, 0.5, 0.3,
+        ], // 数据
       },
     ],
   };
@@ -169,14 +181,18 @@ const EchartLine = ({ data = [] }: any) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     option && myChart.setOption(option);
     // 手动显示 tooltip
-    myChart.dispatchAction({
-      type: "showTip", // 显示 tooltip
-      seriesIndex: 0, // 指定第一个 series
-      dataIndex: index, // 指定展示第几个点的 tooltip，比如此处为 "June"
-    });
+    // myChart.dispatchAction({
+    //   type: "showTip", // 显示 tooltip
+    //   seriesIndex: 0, // 指定第一个 series
+    //   dataIndex: index, // 指定展示第几个点的 tooltip，比如此处为 "June"
+    // });
   }, [JSON.stringify(data)]);
 
-  return <div id="line-chart" className={styles.chart}></div>;
+  return (
+    <div className={styles.lineWrap}>
+      <div id="line-chart" className={styles.chart}></div>
+    </div>
+  );
 };
 
 export default EchartLine;

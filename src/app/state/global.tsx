@@ -53,8 +53,9 @@ export const GlobalProvider = ({ children }: any) => {
   const path = usePathname();
 
   const logout = () => {
-    document.cookie = "";
-    router.push("/login");
+    document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=''`;
+    fetchUserInfo()
+    window.location.replace("/login");
   };
 
   const fetchUserInfo = async () => {
@@ -70,7 +71,6 @@ export const GlobalProvider = ({ children }: any) => {
         setUser({ ...data, showName: data?.username?.split("@")[0] });
         await fetchShare();
         fetchProducts();
-        fetch7DaysData();
         path === "/login" && router.push("/");
       } else {
         router.push("/login");
@@ -110,7 +110,7 @@ export const GlobalProvider = ({ children }: any) => {
       if (success) {
         const allInvest = sumBy(data, "shareAmount");
         const allProfit = sumBy(data, "profit");
-        const allMoney = addCommas(add(allInvest, allProfit));
+        const allMoney = add(allInvest, allProfit);
         const { startDate, endDate, daysDifference } = getProfitParams(7);
         const profitList: any = [];
         const shares = data.map((item: Share) => {
@@ -121,49 +121,25 @@ export const GlobalProvider = ({ children }: any) => {
             data: trans,
           };
         });
-        sumProfit(
-          profitList.map((item: any) => item.data),
-          daysDifference,
-          startDate
-        );
         setShare(shares);
         setUser((prev) => {
           return {
             ...prev,
-            allInvest: addCommas(allInvest),
-            allProfit: addCommas(allProfit),
+            allInvest,
+            allProfit,
             allMoney,
+            balance: 0
           };
         });
       } else {
         message.error(err);
       }
       setLoading(false);
+      setChartLoading(false)
     } catch (error) {
       setLoading(false);
+      setChartLoading(false)
       console.log("fetchShare", error);
-    }
-  };
-
-  const fetch7DaysData = async () => {
-    try {
-      setChartLoading(true);
-      const { startDate, endDate, daysDifference } = getProfitParams(7);
-      const { success, data = [] } = await fetch(
-        `/api/user/daily-profit?startDate=${startDate}&endDate=${endDate}`,
-        {
-          method: "GET",
-        }
-      )
-        .then((res) => res.json())
-        .catch(() => ({ success: false }));
-      if (success) {
-        setSevenDaysData(transProfit(data, daysDifference, startDate));
-      }
-      setChartLoading(false);
-    } catch (error) {
-      setChartLoading(false);
-      console.log("get calendar data error", error);
     }
   };
 

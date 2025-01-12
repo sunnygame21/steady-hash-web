@@ -79,36 +79,24 @@ const Line = ({ title }: any) => {
         },
 
         data: [
-          0.2,
-          0.3,
-          -0.52,
-          0.3,
-          0.25,
-          0.4,
-          0.4,
-          0.2,
-          -0.6,
-          0.4,
-          0.6,
-          -0.2,
-          0.25,
-          0.4,
-          0.5,
-          0.2,
-          0.15,
-          -0.4,
+          0.2, 0.3, -0.52, 0.3, 0.25, 0.4, 0.4, 0.2, -0.6, 0.4, 0.6, -0.2, 0.25,
+          0.4, 0.5, 0.2, 0.15, -0.4,
         ], // 数据
       },
     ],
   };
   useEffect(() => {
     const chartDom = document.getElementById("portfolioChart-chart2");
+    const chart = echarts.getInstanceByDom(chartDom as any);
+    if (chart) {
+      chart.dispose();
+    }
     const myChart = echarts.init(chartDom);
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     option && myChart.setOption(option);
   }, []);
 
-  return <div id="portfolioChart-chart2" className={styles.bar}></div>;
+  return <div id="portfolioChart-chart2" className={styles.line}></div>;
 };
 
 export default Line;
