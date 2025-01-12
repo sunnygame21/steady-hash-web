@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import moment from "moment";
+import moment, { MomentInput } from "moment";
 import ReactCalendar from "react-calendar";
 import { find, sumBy } from "lodash";
 import { GlobalContext } from "@/app/state/global";
@@ -20,14 +20,16 @@ const CalenderViewType = {
     style: "",
     date: CURRENT.format("YYYY-MM-DD"),
     lastDate: CURRENT.format("MMMM YYYY"),
+    curDate: CURRENT.format("MMMM YYYY"),
   },
-  [CAlENDAR_TYPE.year]: { 
+  [CAlENDAR_TYPE.year]: {
     key: CAlENDAR_TYPE.year,
     text: "M",
     style: styles.yearCalendar,
     date: CURRENT.format("YYYY-MM"),
     // 用来判断 nextBtn 的样式
     lastDate: `${CURRENT.year()}`,
+    curDate: `${CURRENT.year()}`,
   },
 };
 
@@ -41,6 +43,7 @@ const Calendar = () => {
   const calenderRef = useRef<any>(null);
   const [calenderInfo, setCalenderInfo] = useState<any>(CalenderViewType.month);
   const [value, setDate] = useState(calenderInfo.date);
+  const [curDateText, setCurDateText] = useState<any>(calenderInfo.curDate);
   const [results, setResults] = useState<Profit[]>([]);
   const [disable, setDisable] = useState(false);
 
@@ -105,10 +108,10 @@ const Calendar = () => {
 
   const tileContent = ({ date }: any) => {
     let curDate = moment(date).format("YYYY-MM-DD");
-    let  curProfit: any = find(results, (item) => item.date === curDate);
-    let money = formatAmount(curProfit?.profit || 0)
-    const monthText = moment(date).format("MMMM".substring(0, 3))
-    
+    let curProfit: any = find(results, (item) => item.date === curDate);
+    let money = formatAmount(curProfit?.profit || 0);
+    const monthText = moment(date).format("MMMM".substring(0, 3));
+
     if (calenderInfo.key === CAlENDAR_TYPE.month) {
       // 上个月的日期显示 -
       if (isNotCurMonth(date) && moment(date).isBefore(value)) {
@@ -132,36 +135,25 @@ const Calendar = () => {
         return (
           <div className={styles.activeDate}>
             <p className={styles.date}>{date.getDate()}</p>
-            <p className={styles.num}>
-              {disable ? "n/a" : money}
-            </p>
+            <p className={styles.num}>{disable ? "n/a" : money}</p>
           </div>
         );
       }
     } else {
       curDate = moment(date).format("YYYY-MM");
       curProfit = find(results, (item) => item.date === curDate);
-      money = formatAmount(curProfit?.profit || 0)
-      // 之后的月份
+      money = formatAmount(curProfit?.profit || 0);
       if (
         moment(date).month() > moment(CURRENT).month() &&
         moment(date).isAfter(CURRENT)
       ) {
-        return (
-          <div className={styles.disable}>
-            {monthText}
-          </div>
-        );
+        return <div className={styles.disable}>{monthText}</div>;
       }
       if (moment(CURRENT).format("YYYY-MM") === curDate) {
         return (
           <div className={styles.activeDate}>
-            <p className={styles.date}>
-              {monthText}
-            </p>
-            <p className={styles.num}>
-              {disable ? "n/a" : money}
-            </p>
+            <p className={styles.date}>{monthText}</p>
+            <p className={styles.num}>{disable ? "n/a" : money}</p>
           </div>
         );
       }
@@ -184,9 +176,7 @@ const Calendar = () => {
             ? date.getDate()
             : monthText}
         </p>
-        <div className={styles.num}>
-          {disable ? "n/a" : money}
-        </div>
+        <p className={styles.num}>{disable ? "n/a" : money}</p>
       </div>
     );
   };
@@ -208,6 +198,7 @@ const Calendar = () => {
               key={`calender-view-${item.key}`}
               onClick={() => {
                 setCalenderInfo(item);
+                setCurDateText(item.curDate);
                 setDate(CURRENT);
               }}
             >
@@ -241,12 +232,15 @@ const Calendar = () => {
         }}
         maxDate={new Date()} // 禁用前进按钮
         // minDate={new Date("2024-12-01")}
-        prevLabel={<PreIcon />}
+        prevLabel={
+          // curDateText == calenderType.lastDate ? <PreWhiteIcon /> : <PreIcon />
+          <PreIcon />
+        }
         nextLabel={
-          moment(calenderInfo.lastDate).isAfter(value) ? (
-            <PreIcon className={styles.nextBtn} />
-          ) : (
+          curDateText == calenderInfo.lastDate ? (
             <PreWhiteIcon className={styles.nextBtn} />
+          ) : (
+            <PreIcon className={styles.nextBtn} />
           )
         }
         formatMonth={(locale, date) => {
@@ -265,6 +259,19 @@ const Calendar = () => {
             setDate(CURRENT);
           } else {
             setDate(activeStartDate);
+          }
+
+          // monthChange(activeStartDate);
+          // getData(activeStartDate);
+          switch (calenderInfo.key) {
+            case "year":
+              setCurDateText(moment(activeStartDate).year());
+              break;
+            case "month":
+              setCurDateText(moment(activeStartDate).format("MMMM YYYY"));
+              break;
+            default:
+              break;
           }
         }}
         view={calenderInfo.key}
