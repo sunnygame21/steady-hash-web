@@ -1,12 +1,12 @@
 .wrap {
-  background: rgba(17, 24, 39, 1);
+  /* background: rgba(17, 24, 39, 1); */
 }
 
 .title {
-  margin-left: 40px;
-  padding-top: 56px;
   font-family: Roboto Bold;
   color: #fff;
+  background: rgba(17, 24, 39, 1);
+  padding: 56px 0 78px 40px;
 }
 .name {
   font-size: 18px;
@@ -51,7 +51,6 @@
   width: 1px;
 }
 .bottom {
-  margin-top: 78px;
   background: #fff;
   /* height: 900px; */
   padding: 70px 24px 0 24px;
@@ -162,4 +161,18 @@
 }
 .balance .infoNum p{
   color: #000;
+}
+
+.logout {
+  margin: 20px 24px 0 24px;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid var(--Error-200, rgba(252, 218, 226, 1));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(239, 71, 112, 1);
+  font-size: 14px;
+  font-weight: 700;
+
 }

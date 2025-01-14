@@ -11,12 +11,12 @@ import Orders from "./order";
 import styles from "./index.module.css";
 
 const Home = () => {
-  const { user, productsList, logout } = useContext(GlobalContext);
+  const { user, productsList } = useContext(GlobalContext);
   const [productModal, setProductModal] = useState(false);
 
   return user?.id ? (
     <div className={styles.wrap}>
-      <div className={styles.info} onClick={logout}>
+      <div className={styles.info} >
         <p className={styles.name}>Hi, {user?.showName} 👋</p>
         <p className={styles.welcome}>Welcome back to SteadyHash!</p>
       </div>

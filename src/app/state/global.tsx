@@ -54,7 +54,7 @@ export const GlobalProvider = ({ children }: any) => {
 
   const logout = () => {
     document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=''`;
-    fetchUserInfo()
+    fetchUserInfo();
     window.location.replace("/login");
   };
 
@@ -75,7 +75,9 @@ export const GlobalProvider = ({ children }: any) => {
       } else {
         router.push("/login");
       }
-      setLoading(false);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       setLoading(false);
     }
@@ -128,17 +130,17 @@ export const GlobalProvider = ({ children }: any) => {
             allInvest,
             allProfit,
             allMoney,
-            balance: 0
+            balance: 0,
           };
         });
       } else {
         message.error(err);
       }
       setLoading(false);
-      setChartLoading(false)
+      setChartLoading(false);
     } catch (error) {
       setLoading(false);
-      setChartLoading(false)
+      setChartLoading(false);
       console.log("fetchShare", error);
     }
   };

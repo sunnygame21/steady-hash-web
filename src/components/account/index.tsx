@@ -10,7 +10,7 @@ import withdraw from "@/images/account/withdraw.png";
 import styles from "./index.module.css";
 
 const Account = () => {
-  const { user, userShares, productsList } = useContext(GlobalContext);
+  const { user, userShares, productsList, logout } = useContext(GlobalContext);
   return (
     <div className={styles.wrap}>
       <div className={styles.title}>
@@ -88,6 +88,7 @@ const Account = () => {
           </div>
         </div> */}
       </div>
+      <div className={styles.logout} onClick={logout}>Logout</div>
     </div>
   );
 };

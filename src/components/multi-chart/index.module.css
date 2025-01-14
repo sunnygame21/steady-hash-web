@@ -6,7 +6,7 @@
 
 .calendarWrap {
   background: rgba(249, 250, 251, 1);
-  transition: all 0.25s ease;
+  transition: height 0.25s ease;
 
 }
 .barWrap {
