@@ -1,4 +1,4 @@
-import { find, round } from "lodash";
+import { find, floor, round } from "lodash";
 import moment from "moment";
 
 export function classNames(...classes: (string | undefined)[]) {
@@ -47,22 +47,24 @@ export const formatAmount = (amount: number) => {
   let str = "";
   if (amount > 0) {
     str = `+`;
+  } else {
+    str = '-'
   }
 
   if (amount >= 1000) {
-    str = str + (amount / 1000).toFixed(2) + "k"; // 保留两位小数并加上 'k'
+    str = str + floor(amount / 1000, 2) + "k"; // 保留两位小数并加上 'k'
   } else {
-    str = str + amount.toFixed(2); // 小于1000时直接显示
+    str = str + floor(amount, 2); // 小于1000时直接显示
   }
   return addCommas(str);
 };
 
 export const generateDays = (days: number, start: string) => {
   const res = [];
-  for (let i = 0; i < days; i++) {
+  for (let i = 0; i <= days; i++) {
     res.push(
       moment(start)
-        .add(i + 1, "days")
+        .add(i, "days")
         .format("YYYY-MM-DD")
     );
   }
@@ -70,21 +72,20 @@ export const generateDays = (days: number, start: string) => {
 };
 
 export const addCommas = (num: any) => {
-  if (!num) return 0
+  if (!num) return 0;
   return num.toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   });
 };
 
-
 export const nextEvenNumber = (n: number) => {
-  const res = round(n)
+  const res = round(n);
   // 如果是偶数，返回下一个偶数
   if (res % 2 === 0) {
-      return res + 2;
+    return res + 2;
   } else {
-      // 如果是奇数，返回下一个偶数
-      return res + 1;
+    // 如果是奇数，返回下一个偶数
+    return res + 1;
   }
-}
+};

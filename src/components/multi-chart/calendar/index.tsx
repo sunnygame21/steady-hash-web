@@ -106,6 +106,7 @@ const Calendar = () => {
     }
   };
 
+  console.log('results', results)
   const tileContent = ({ date }: any) => {
     let curDate = moment(date).format("YYYY-MM-DD");
     let curProfit: any = find(results, (item) => item.date === curDate);
@@ -253,8 +254,8 @@ const Calendar = () => {
           console.log("onActiveStartDateChange", date, calenderInfo);
           const { activeStartDate } = date;
           if (
-            moment(activeStartDate).format("YYYY-MM-DD") ===
-            CURRENT.format("YYYY-MM-DD")
+            moment(activeStartDate).format("YYYY-MM") ===
+            CURRENT.format("YYYY-MM")
           ) {
             setDate(CURRENT);
           } else {

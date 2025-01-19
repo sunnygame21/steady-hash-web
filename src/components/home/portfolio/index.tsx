@@ -39,7 +39,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                       </div>
                     </div>
                     <p className={styles.money}>
-                      ${addCommas(Number(add(item?.shareAmount, item?.profit)))}
+                      ${addCommas(item?.shareAmount + item?.profit)}
                     </p>
                     <p className={styles.profit}>
                       <ProfitIcon />

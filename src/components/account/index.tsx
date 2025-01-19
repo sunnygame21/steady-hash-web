@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext } from "react";
-import { find } from "lodash";
+import { find, floor } from "lodash";
 import { GlobalContext } from "@/app/state/global";
 import { addCommas } from "@/utils/helper"
 import deposit from "@/images/account/deposit.png";
@@ -16,7 +16,7 @@ const Account = () => {
       <div className={styles.title}>
         <p className={styles.name}>Hi, {user?.showName} 👋</p>
         <p className={styles.desc}>Account Value</p>
-        <p className={styles.allMoney}>${user?.allMoney}</p>
+        <p className={styles.allMoney}>${addCommas(user?.allMoney)}</p>
       </div>
 
       <div className={styles.action}>
@@ -53,12 +53,12 @@ const Account = () => {
                 <div className={styles.itemRight}>
                   <div className={styles.itemDetail}>
                     <p className={styles.itemName}>
-                      {curProduct?.name} <span> ({curProduct?.code})</span>
+                      {curProduct?.name} 
                     </p>
                     <p className={styles.desc}>Earning starts soon</p>
                   </div>
                   <div className={styles.status}>
-                    <p className={styles.money}>{ (item.profit/item.shareAmount * 100).toFixed(2)}%</p>
+                    <p className={styles.money}>{ floor((item.profit/item.shareAmount * 100), 2)}%</p>
                     <p className={styles.type}>Pnl</p>
                   </div>
                 </div>

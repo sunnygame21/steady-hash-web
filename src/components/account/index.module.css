@@ -59,9 +59,10 @@
 .mainTitle {
   font-size: 16px;
   font-family: Roboto Bold;
-  margin-bottom: 20px;
+  margin-bottom: 4px;
 }
 .investItem {
+  margin-top: 16px;
   padding: 16px;
   border: 1px solid rgba(243, 244, 246, 1);
   background: rgba(249, 250, 251, 1);
@@ -88,9 +89,7 @@
   font-size: 14px;
   font-family: Roboto Bold;
 }
-.itemName span {
-  font-family: Roboto;
-}
+
 .itemDetail {
   flex: 1;
   width: calc(70%);

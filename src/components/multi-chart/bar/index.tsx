@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import * as echarts from "echarts";
-import { get, maxBy, round, sumBy } from "lodash";
+import { floor, get, maxBy, round, sumBy } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import { GlobalContext } from "@/app/state/global";
 import { calculateMaxNum, sumProfit } from "@/utils/profit";
+import { addCommas } from "@/utils/helper";
 import { UNIT_NUMBER, UNIT_PERCENT } from "@/constant";
 import { ProfitIcon } from "@/components/Icons";
 
@@ -121,7 +122,6 @@ const EchartsBar = () => {
             yAxisIndex: 1,
           },
         ],
-
       };
       const chartDom = document.getElementById("bar-chart");
       const chart = echarts.getInstanceByDom(chartDom as any);
@@ -142,7 +142,7 @@ const EchartsBar = () => {
         <p className={styles.desc}>
           <ProfitIcon />
           <span>
-            {(((maxProfit?.profit || 0) / user.allInvest) * 100).toFixed(2)}
+            {addCommas(((maxProfit?.profit || 0) / user.allInvest) * 100)}
             %&ensp;
           </span>
         </p>
