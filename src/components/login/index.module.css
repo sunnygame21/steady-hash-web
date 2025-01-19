@@ -111,6 +111,7 @@
   aspect-ratio: 1;
   outline: none !important;
   user-select: none;
+  border: 0.8px solid transparent;
 }
 .codeInput:focus {
   border: 0.8px solid rgba(22, 73, 81, 1) !important;

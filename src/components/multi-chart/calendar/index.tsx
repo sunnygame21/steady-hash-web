@@ -106,7 +106,6 @@ const Calendar = () => {
     }
   };
 
-  console.log('results', results)
   const tileContent = ({ date }: any) => {
     let curDate = moment(date).format("YYYY-MM-DD");
     let curProfit: any = find(results, (item) => item.date === curDate);
@@ -136,7 +135,7 @@ const Calendar = () => {
         return (
           <div className={styles.activeDate}>
             <p className={styles.date}>{date.getDate()}</p>
-            <p className={styles.num}>{disable ? "n/a" : money}</p>
+            <p className={styles.num}></p>
           </div>
         );
       }
