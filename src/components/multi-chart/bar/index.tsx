@@ -138,11 +138,11 @@ const EchartsBar = () => {
     <div className={styles.barWrap}>
       <div className={styles.detailInfo}>
         <p className={styles.title}>Total Value</p>
-        <p className={styles.num}>${user.allMoney}</p>
+        <p className={styles.num}>${addCommas(user.allMoney)}</p>
         <p className={styles.desc}>
           <ProfitIcon />
           <span>
-            {addCommas(((maxProfit?.profit || 0) / user.allInvest) * 100)}
+            {(((maxProfit?.profit || 0) / user.allInvest) * 100).toFixed(2)}
             %&ensp;
           </span>
         </p>
