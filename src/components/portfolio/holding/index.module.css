@@ -85,6 +85,7 @@
   display: flex;
   align-items: center;
   font-size: 16px;
+  font-family: Roboto Bold;
 }
 .colIcon {
   margin-left: 8px;
@@ -102,7 +103,7 @@
 .curName {
   color: rgba(107, 114, 128, 1);
   font-size: 14px;
-  font-weight: 500;
+  font-family: Roboto Bold;
   position: absolute;
   right: 0;
   top: 0;

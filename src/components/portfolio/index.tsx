@@ -15,7 +15,7 @@ const Portfolio = () => {
     <div className={styles.wrap}>
       <div className={styles.pageTitle}>Portfolio</div>
       <BarCalendarChart defaultType="calender" />
-      <PortfolioList title={`Holdings`} subTitle={`(P&L of ${today})`} />
+      {/* <PortfolioList title={`Holdings`} subTitle={`(P&L of ${today})`} /> */}
       <Summary />
       <Holdings />
     </div>
