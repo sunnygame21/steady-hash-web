@@ -130,12 +130,15 @@ const Calendar = () => {
           </div>
         );
       }
+      const activeDate = moment(value).format("YYYY-MM-DD");
       // 今天
-      if (curDate === moment(value).format("YYYY-MM-DD")) {
+      if (curDate === activeDate) {
         return (
           <div className={styles.activeDate}>
             <p className={styles.date}>{date.getDate()}</p>
-            <p className={styles.num}></p>
+            <p className={styles.num}>
+              {activeDate === moment(CURRENT).format("YYYY-MM-DD") ? "" : money}
+            </p>
           </div>
         );
       }
