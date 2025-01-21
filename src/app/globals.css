@@ -19,13 +19,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #fff;
-    --foreground: #ededed;
-  }
+  color-scheme: light;  /* 强制使用浅色模式 */
 }
 
 body {

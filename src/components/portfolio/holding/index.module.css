@@ -88,7 +88,6 @@
 }
 .colIcon {
   margin-left: 8px;
-  transform: rotate(-90deg);
 }
 .colIcon svg {
   fill: rgba(156, 163, 175, 1);
@@ -97,21 +96,26 @@
   margin-top: 24px;
 }
 
-.holdingWrap :global(.ant-collapse) {
-  background-color: transparent !important;
+.top {
+  position: relative;
 }
-.holdingWrap :global(.ant-collapse-item) {
-  border: none !important;
+.curName {
+  color: rgba(107, 114, 128, 1);
+  font-size: 14px;
+  font-weight: 500;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
-.holdingWrap :global(.ant-collapse-header) {
-  padding: 0 !important;
-  font-size: 16px;
-  font-family: Roboto Bold !important;
-  flex-direction: row-reverse;
+.userList {
+  border-radius: 8px;
+  background-color: #fff;
+  width: 50%;
+  outline: none;
+  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
 }
-.holdingWrap :global(.ant-collapse-content-box) {
-  padding: 0 !important;
-}
-.holdingWrap :global(.ant-collapse-item-active) .colIcon {
-  transform: rotate(0deg);
+.userItem {
+  padding: 10px;
+  text-align: center;
 }

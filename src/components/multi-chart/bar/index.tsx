@@ -142,7 +142,7 @@ const EchartsBar = () => {
         <p className={styles.desc}>
           <ProfitIcon />
           <span>
-            {(((maxProfit?.profit || 0) / user.allInvest) * 100).toFixed(2)}
+            {(((user.allProfit || 0) / user.allInvest) * 100).toFixed(2)}
             %&ensp;
           </span>
         </p>

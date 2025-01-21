@@ -11,13 +11,17 @@ import { getProfitParams, transProfit } from "@/utils/profit";
 import styles from "./index.module.css";
 
 const DateType = {
-  daily: {
-    text: "Daily",
-    key: "daily",
+  month: {
+    text: "Last 1 Month",
+    num: 30,
   },
-  Monthly: {
-    text: "Monthly",
-    key: "monthly",
+  halfYear: {
+    text: "Last 6 Months",
+    num: 180,
+  },
+  year: {
+    text: "Last 1 Year",
+    num: 365,
   },
 };
 
@@ -41,22 +45,17 @@ let first = true;
 const Detail = ({ onClose, detailData, show }: any) => {
   const { productProfitData, setProductProfitData } = useContext(GlobalContext);
   const [profitData, setProfitData] = useState<any>([]);
-  const [timeType, setTimeType] = useState(DateType.daily);
+  const [timeType, setTimeType] = useState(DateType.month);
   const [type, setType] = useState(IntroType[0]);
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
     try {
       setLoading(true);
-      first = false;
-      let url = "/api/products/daily-profit";
-      let days = 30;
-      if (timeType === DateType.Monthly) {
-        url = "/api/products/monthly-profit";
-        days = 180;
-      }
+      let days = timeType.num;
       const { startDate, endDate, daysDifference } = getProfitParams(days);
+      console.log('startDate, endDate, daysDifference', startDate, endDate, daysDifference, days)
       const { success, data = [] } = await fetch(
-        `${url}?startDate=${startDate}&endDate=${endDate}`,
+        `/api/products/daily-profit?startDate=${startDate}&endDate=${endDate}`,
         {
           method: "GET",
         }
@@ -64,14 +63,14 @@ const Detail = ({ onClose, detailData, show }: any) => {
         .then((res) => res.json())
         .catch(() => ({ success: false }));
       if (success) {
-        const res = transProfit(data, days, startDate);
+        const res = transProfit(data, daysDifference, startDate);
         console.log("res", res);
         setProfitData(res);
         setProductProfitData({
           ...productProfitData,
           [detailData?.id]: {
             ...(productProfitData?.[detailData?.id] || {}),
-            [timeType.key]: res,
+            [timeType.num]: res,
           },
         });
       }
@@ -81,23 +80,26 @@ const Detail = ({ onClose, detailData, show }: any) => {
       console.log(
         "get calendar data error",
         error,
-        productProfitData?.[detailData?.id]?.[timeType.key]
+        productProfitData?.[detailData?.id]?.[timeType.num]
       );
     }
   };
 
   useEffect(() => {
-    if (!productProfitData?.[detailData?.id]?.[timeType.key]) {
-      first && fetchData();
+    if (!productProfitData?.[detailData?.id]?.[timeType.num]) {
+      if (first) {
+        fetchData();
+        first = false
+      }     
     } else {
       setLoading(false);
-      setProfitData(productProfitData?.[detailData?.id]?.[timeType.key]);
+      setProfitData(productProfitData?.[detailData?.id]?.[timeType.num]);
      
     }
     return () => {
       first = true
     }
-  }, [JSON.stringify(productProfitData), timeType.key]);
+  }, [JSON.stringify(productProfitData), timeType.num]);
 
   return (
     <div
@@ -135,17 +137,17 @@ const Detail = ({ onClose, detailData, show }: any) => {
             <EchartLine data={profitData}></EchartLine>
           )}
         </div>
-        {/* <div className={styles.times}>
+        <div className={styles.times}>
           {Object.values(DateType).map((item) => (
             <div
-              key={`product-detail-time-${item.key}`}
-              className={timeType.key === item.key ? styles.timeActive : ""}
+              key={`product-detail-time-${item.num}`}
+              className={timeType.num === item.num ? styles.timeActive : ""}
               onClick={() => setTimeType(item)}
             >
               {item.text}
             </div>
           ))}
-        </div> */}
+        </div>
       </div>
       <div className={styles.intro}>
         {/* <div className={styles.tabs}>

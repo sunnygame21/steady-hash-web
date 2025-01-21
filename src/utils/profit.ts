@@ -35,7 +35,6 @@ export const sumProfit = (
 
 export const transProfit = (data: Profit[], days: number, start: string) => {
   const dayList = generateDays(days, start);
-
   const res = dayList.map((date, i) => {
     const curDateData = find(data, (item) => {
       return moment(item?.date).format("YYYY-MM-DD") === date;

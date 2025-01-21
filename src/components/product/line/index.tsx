@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import * as echarts from "echarts";
-import { maxBy, round } from "lodash";
+import { maxBy, round, sortBy } from "lodash";
 import { calculateUnitNum } from "../utils";
 
 import styles from "./index.module.css";
@@ -162,10 +162,10 @@ const EchartLine = ({ data = [] }: any) => {
             // 如果不需要交点上方的虚线，可以直接移除多余的数据项
           ],
         },
-        data: [
+        data: sortBy([
           0.2, 0.3, 0.42, 0.2, 0.15, 0.23, 0.3, 0.2, 0.3, 0.42, 0.33, 0.15, 0.2,
           0.3, 0.2, 0.3, 0.42, 0.22, 0.15, 0.2, 0.3, 0.5, 0.3,
-        ], // 数据
+        ], [], ['asc']), // 数据
       },
     ],
   };

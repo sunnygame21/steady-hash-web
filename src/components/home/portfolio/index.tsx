@@ -1,7 +1,8 @@
 "use client";
 import React, { useContext, useState } from "react";
-import { add, find } from "lodash";
+import { add, find, floor } from "lodash";
 import Skeleton from "react-loading-skeleton";
+import moment from "moment";
 import { GlobalContext } from "@/app/state/global";
 import { addCommas } from "@/utils/helper";
 import { ProfitIcon } from "@/components/Icons";
@@ -22,10 +23,17 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
       </p>
       <div className={styles.portfolioList}>
         {userShares.map((item, i) => {
-          const curProduct = find(
+          const curProduct: any = find(
             productsList,
             (product) => product?.id === item?.productId
           );
+          const profit = find(item?.data || [], (cur) => {
+            return (
+              moment().local().subtract(1, "days").format("YYYY-MM-DD") ===
+              moment(cur.date).format("YYYY-MM-DD")
+            );
+          });
+          console.log("profit", profit);
           return (
             <div className={styles.portfolioItem} key={`portfolio-item-${i}`}>
               {productsList?.length > 0 ? (
@@ -35,15 +43,22 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                       <img src={icon.src}></img>
                       <div className={styles.nameInfo}>
                         <p>{curProduct?.name}</p>
-                        <p>#{curProduct?.code}</p>
+                        {/* <p>#{curProduct?.code}</p> */}
                       </div>
                     </div>
                     <p className={styles.money}>
                       ${addCommas(item?.shareAmount + item?.profit)}
                     </p>
                     <p className={styles.profit}>
-                      <ProfitIcon />
-                      10.78% (+0.11%)
+                      <ProfitIcon />+
+                      {floor((item.profit / item.shareAmount) * 100, 2)}%
+                      {profit?.profit
+                        ? `(+${floor(
+                            (Number(profit?.profit) / item.shareAmount) *
+                              100,
+                            2
+                          )}%)`
+                        : ""}
                     </p>
                   </div>
                   <div className={styles.portfolioChart}>
