@@ -6,8 +6,7 @@ import { message } from "antd";
 import { add, sumBy } from "lodash";
 import Loading from "@/components/loading";
 import { Info, Product, Profit, Share } from "@/types/info";
-import { addCommas } from "@/utils/helper";
-import { getProfitParams, sumProfit, transProfit } from "@/utils/profit";
+import { getProfitParams } from "@/utils/profit";
 
 export const mathjs = create(all);
 mathjs.config({ number: "BigNumber", precision: 20 });
@@ -70,6 +69,7 @@ export const GlobalProvider = ({ children }: any) => {
       if (success) {
         setUser({ ...data, showName: data?.username?.split("@")[0] });
         await fetchShare();
+        fetchSevenData();
         fetchProducts();
         path === "/login" && router.push("/");
       } else {
@@ -113,17 +113,7 @@ export const GlobalProvider = ({ children }: any) => {
         const allInvest = sumBy(data, "shareAmount");
         const allProfit = sumBy(data, "profit");
         const allMoney = add(allInvest, allProfit);
-        const { startDate, endDate, daysDifference } = getProfitParams(7);
-        const profitList: any = [];
-        const shares = data.map((item: Share) => {
-          const trans = transProfit(item.data, daysDifference, startDate);
-          profitList.push(trans);
-          return {
-            ...item,
-            data: trans,
-          };
-        });
-        setShare(shares);
+        setShare(data);
         setUser((prev) => {
           return {
             ...prev,
@@ -137,11 +127,30 @@ export const GlobalProvider = ({ children }: any) => {
         message.error(err);
       }
       setLoading(false);
-      setChartLoading(false);
     } catch (error) {
       setLoading(false);
-      setChartLoading(false);
       console.log("fetchShare", error);
+    }
+  };
+
+  const fetchSevenData = async () => {
+    try {
+      const { startDate, endDate } = getProfitParams(7);
+      const { success, data = [] } = await fetch(
+        `/api/user/daily-profit?startDate=${startDate}&endDate=${endDate}`,
+        {
+          method: "GET",
+        }
+      )
+        .then((res) => res.json())
+        .catch(() => ({ success: false }));
+      if (success) {
+        setSevenDaysData(data);
+      }
+      setChartLoading(false);
+    } catch (error) {
+      setChartLoading(false);
+      console.log("get calendar data error", error);
     }
   };
 

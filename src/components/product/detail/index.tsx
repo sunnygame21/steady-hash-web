@@ -6,7 +6,11 @@ import Skeleton from "react-loading-skeleton";
 import EchartLine from "@/components/product/line";
 import { BackIcon } from "@/components/Icons";
 import { GlobalContext } from "@/app/state/global";
-import { getProfitParams, transProfit } from "@/utils/profit";
+import {
+  getProfitParams,
+  transProfit,
+  transProfitPercent,
+} from "@/utils/profit";
 
 import styles from "./index.module.css";
 
@@ -50,12 +54,19 @@ const Detail = ({ onClose, detailData, show }: any) => {
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
     try {
+      if (!detailData?.id) return
       setLoading(true);
       let days = timeType.num;
       const { startDate, endDate, daysDifference } = getProfitParams(days);
-      console.log('startDate, endDate, daysDifference', startDate, endDate, daysDifference, days)
+      console.log(
+        "startDate, endDate, daysDifference",
+        startDate,
+        endDate,
+        daysDifference,
+        days
+      );
       const { success, data = [] } = await fetch(
-        `/api/products/daily-profit?startDate=${startDate}&endDate=${endDate}`,
+        `/api/products/daily-profit?startDate=${startDate}&endDate=${endDate}&productId=${detailData.id}`,
         {
           method: "GET",
         }
@@ -63,8 +74,8 @@ const Detail = ({ onClose, detailData, show }: any) => {
         .then((res) => res.json())
         .catch(() => ({ success: false }));
       if (success) {
-        const res = transProfit(data, daysDifference, startDate);
-        console.log("res", res);
+        const res = transProfitPercent(data, daysDifference, startDate);
+        console.log("products", res, data);
         setProfitData(res);
         setProductProfitData({
           ...productProfitData,
@@ -86,22 +97,22 @@ const Detail = ({ onClose, detailData, show }: any) => {
   };
 
   useEffect(() => {
+    console.log("first", first, timeType, productProfitData);
     if (!productProfitData?.[detailData?.id]?.[timeType.num]) {
       if (first) {
         fetchData();
-        first = false
-      }     
+        first = false;
+      }
     } else {
       setLoading(false);
       setProfitData(productProfitData?.[detailData?.id]?.[timeType.num]);
-     
     }
     return () => {
-      first = true
-    }
-  }, [JSON.stringify(productProfitData), timeType.num]);
+      first = true;
+    };
+  }, [JSON.stringify(productProfitData), timeType.num, detailData?.id]);
 
-  return (
+  return detailData ? (
     <div
     // className={styles.wrap}
     // initial={{ transform: "translateX(100vw)" }}
@@ -114,9 +125,10 @@ const Detail = ({ onClose, detailData, show }: any) => {
         <div className={styles.itemRight}>
           <div className={styles.itemDetail}>
             <p className={styles.name}>
-              {detailData?.name} <span> ({detailData?.code})</span>
+              {detailData?.name}
+              {/* <span> ({detailData?.code})</span> */}
             </p>
-            <p className={styles.desc}>{/* Earning starts soon, 12-04 */}</p>
+            <p className={styles.desc}>Earning starts soon</p>
           </div>
           <div className={styles.status}>
             <p className={styles.money}>
@@ -169,7 +181,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default Detail;

@@ -3,31 +3,28 @@ import * as echarts from "echarts";
 import { floor, get, maxBy, round, sumBy } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import { GlobalContext } from "@/app/state/global";
-import { calculateMaxNum, sumProfit } from "@/utils/profit";
-import { addCommas } from "@/utils/helper";
+import { calculateMaxNum, transBarProfit } from "@/utils/profit";
+import { addCommas, nextEvenNumber } from "@/utils/helper";
 import { UNIT_NUMBER, UNIT_PERCENT } from "@/constant";
 import { ProfitIcon } from "@/components/Icons";
 
 import styles from "./index.module.css";
 
 const EchartsBar = () => {
-  const { chartLoading, userShares, user } = useContext(GlobalContext);
+  const { chartLoading, userShares, user, sevenDaysSumData } =
+    useContext(GlobalContext);
 
-  const profitList = sumProfit(
-    userShares.map((item: any) => item.data),
-    user.allInvest,
-    7
+  const dataList = transBarProfit(sevenDaysSumData, user.allInvest, 7);
+
+  const maxProfit = maxBy(dataList, "profit");
+  const maxNum = calculateMaxNum(maxProfit?.profit || 0, UNIT_NUMBER, 1.5);
+  const maxPercent = floor(
+    calculateMaxNum(maxProfit?.percent || 0, UNIT_PERCENT, 1.5),
+    1
   );
 
-  const maxProfit = maxBy(profitList, "profit");
-  const maxNum = calculateMaxNum(maxProfit?.profit || 0, UNIT_NUMBER);
-  const maxPercent = calculateMaxNum(
-    maxProfit?.percent || 0,
-    UNIT_PERCENT
-  ).toFixed(1);
-
   useEffect(() => {
-    if (userShares.length) {
+    if (sevenDaysSumData.length) {
       const option = {
         tooltip: {
           show: false, // 禁用 tooltip 提示框
@@ -40,7 +37,7 @@ const EchartsBar = () => {
         },
         xAxis: {
           type: "category",
-          data: profitList.map((item) => item.weekend),
+          data: dataList.map((item) => item.weekend),
           axisLine: {
             lineStyle: {
               type: "dashed", // 将轴线设置为虚线
@@ -62,16 +59,20 @@ const EchartsBar = () => {
             type: "value",
             max: maxNum,
             min: 0,
-            splitNumber: 2,
+            // splitNumber: 1,
             inverse: false, // 确保坐标轴方向正常
             boundaryGap: 0, // 控制类目轴的起始位置，true 表示柱状图从第一个类别开始显示
             axisLine: {
               show: false, // 隐藏y轴线
             },
-            axisLabel: {
+            interval: maxNum / 2,
+            showMaxLine: {
               show: false,
             },
             showMinLine: {
+              show: false,
+            },
+            axisLabel: {
               show: false,
             },
             splitLine: {
@@ -88,20 +89,20 @@ const EchartsBar = () => {
             min: 0,
             boundaryGap: 0,
             axisLine: {
-              show: false,
+              show: false, // 隐藏y轴线
             },
             axisLabel: {
               show: false,
             },
             splitLine: {
-              show: false,
+              show: false, // 显示分隔线
             },
           },
         ],
         series: [
           {
             type: "bar",
-            data: profitList.map((item) => item.profit),
+            data: dataList.map((item) => item.profit),
             barWidth: 10,
             itemStyle: {
               color: "rgba(255, 216, 74, 1)",
@@ -112,7 +113,7 @@ const EchartsBar = () => {
           },
           {
             type: "bar",
-            data: profitList.map((item) => item.percent),
+            data: dataList.map((item) => item.percent),
             barWidth: 10,
             itemStyle: {
               color: "rgba(55, 65, 81, 1)",
@@ -132,7 +133,7 @@ const EchartsBar = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       option && myChart.setOption(option);
     }
-  }, [userShares.length]);
+  }, [sevenDaysSumData.length]);
 
   return (
     <div className={styles.barWrap}>
@@ -142,7 +143,7 @@ const EchartsBar = () => {
         <p className={styles.desc}>
           <ProfitIcon />
           <span>
-            {(((user.allProfit || 0) / user.allInvest) * 100).toFixed(2)}
+            {floor(((user.allProfit || 0) / user.allInvest) * 100, 2)}
             %&ensp;
           </span>
         </p>

@@ -1,15 +1,20 @@
 import React, { useEffect } from "react";
 import * as echarts from "echarts";
-import { maxBy, round, sortBy } from "lodash";
+import { findIndex, maxBy, round, sortBy } from "lodash";
 import { calculateUnitNum } from "../utils";
 
 import styles from "./index.module.css";
+import { calculateMaxNum } from "@/utils/profit";
+import { PRODUCT_PERCENT } from "@/constant";
 
 const EchartLine = ({ data = [] }: any) => {
   const maxProfit: any = maxBy(data, "profit") || {};
-  const max = 0.2;
-  const unit = calculateUnitNum(max);
-  const index = 6;
+  const max = calculateMaxNum(maxProfit?.profit || 0, PRODUCT_PERCENT, 2);
+  console.log("unit", max);
+  const index = findIndex(
+    data,
+    (item: any) => maxProfit?.profit === item?.profit
+  );
   const option = {
     tooltip: {
       trigger: "axis",
@@ -28,7 +33,7 @@ const EchartLine = ({ data = [] }: any) => {
         const value = params[0].value;
         const month = params[0].name;
         return `<div style="text-align: center; font-size: 12px;  ">
-                  <span style="font-weight: bold;">+${value}</span><br/>
+                  <span style="font-weight: bold;">+${value}%</span><br/>
                   <span style="color: rgba(162, 182, 185, 1);font-size: 12px; ">${month.toUpperCase()}</span>
                 </div>`;
       },
@@ -71,10 +76,9 @@ const EchartLine = ({ data = [] }: any) => {
     yAxis: {
       type: "value",
       scale: false,
-      max: unit * 5,
+      max: max,
       min: 0,
-      splitNumber: 5,
-
+      internal: max / 5,
       inverse: false, // 确保坐标轴方向正常
       axisLine: {
         show: false, // 隐藏y轴线
@@ -108,19 +112,6 @@ const EchartLine = ({ data = [] }: any) => {
     },
 
     series: [
-      // {
-      //   data: [
-      //     0.2, 0.3, 0.42, 0.1, 0.15, 0.2, 0.3, 0.2, 0.3, 0.42, 0.1, 0.15, 0.2,
-      //     0.3, 0.2, 0.3, 0.42, 0.1, 0.15, 0.2, 0.3, 0.1, 0.3,0, 0.3, 0.2
-      //   ], // 数据
-      //   type: "line",
-      //   smooth: true, // 平滑曲线
-      //   showSymbol: false, // 显示拐点
-      //   lineStyle: {
-      //     color: "rgba(162, 182, 185, 1)", // 线条颜色
-      //     width: 1,
-      //   },
-      // },
       {
         name: "Data",
         type: "line",
@@ -151,7 +142,7 @@ const EchartLine = ({ data = [] }: any) => {
           label: { show: false },
           data: [
             {
-              xAxis: 6, // 起点和终点的数据
+              xAxis: index, // 起点和终点的数据
               // yAxis: 0.15,
               lineStyle: {
                 type: "dashed", // 虚线
@@ -162,10 +153,7 @@ const EchartLine = ({ data = [] }: any) => {
             // 如果不需要交点上方的虚线，可以直接移除多余的数据项
           ],
         },
-        data: sortBy([
-          0.2, 0.3, 0.42, 0.2, 0.15, 0.23, 0.3, 0.2, 0.3, 0.42, 0.33, 0.15, 0.2,
-          0.3, 0.2, 0.3, 0.42, 0.22, 0.15, 0.2, 0.3, 0.5, 0.3,
-        ], [], ['asc']), // 数据
+        data: data.map((item: any) => item.profit),
       },
     ],
   };

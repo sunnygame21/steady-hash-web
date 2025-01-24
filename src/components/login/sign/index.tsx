@@ -77,17 +77,17 @@ const LoginModal: React.FC<{
     <div className={classNames(styles.emailWrap)}>
       <BlackBackIcon className={styles.back} onClick={onClose} />
       <p className={styles.title}>Sign In to SteadyHash</p>
-      <div className={styles.loginType}>
+      {/* <div className={styles.loginType}>
         <button className={styles.google} disabled>
           <GoogleIcon /> Google
         </button>
         <button className={styles.apple} disabled>
           <AppleIcon /> Apple
         </button>
-      </div>
+      </div> */}
       <div className={styles.signDesc}>
         <span></span>
-        <p>Or sign in with email</p>
+        <p>Sign in with email</p>
         <span></span>
       </div>
       <Dropdown

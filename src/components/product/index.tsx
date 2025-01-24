@@ -17,7 +17,6 @@ const text = `
   it can be found as a welcome guest in many households across the world.
 `;
 
-
 const Products = ({ close, show }: any) => {
   const { productsList } = useContext(GlobalContext);
   const [selectProduct, setSelectProduct] = useState<Product | null>(null);
@@ -111,12 +110,10 @@ const Products = ({ close, show }: any) => {
           }}
           transition={{ duration: 0.2 }}
         >
-          {!!selectProduct ? (
-            <Detail
-              detailData={selectProduct}
-              onClose={() => setSelectProduct(null)}
-            />
-          ) : null}
+          <Detail
+            detailData={selectProduct}
+            onClose={() => setSelectProduct(null)}
+          />
         </motion.div>
       </div>
     </motion.div>

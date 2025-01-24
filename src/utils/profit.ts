@@ -4,26 +4,21 @@ import { addCommas, generateDays } from "./helper";
 import { Profit } from "@/types/info";
 import { WEEKENDS } from "@/constant";
 
-export const sumProfit = (
+export const transBarProfit = (
   resList: Profit[],
   allInvest: number,
   days: number
 ) => {
   const { startDate, daysDifference } = getProfitParams(days);
   const dayList = generateDays(daysDifference, startDate);
-  const sumRes = dayList.map((curDate, i) => {
-    let profit = 0;
-    let weekend = 0;
-    resList.forEach((list: any, j: number) => {
-      const curDateData = find(list, (item) => {
-        const date = moment(item?.date);
-        weekend = date.weekday();
-        return date.format("YYYY-MM-DD") === curDate;
-      });
-      profit = (curDateData?.profit || 0) + profit;
+  const sumRes = dayList.map((date, i) => {
+    const curDateData = find(resList, (item) => {
+      return moment(item?.date).format("YYYY-MM-DD") === date;
     });
+    const profit = Number(curDateData?.profit) || 0;
+    const weekend = moment(date).weekday();
     return {
-      date: curDate,
+      date,
       profit,
       percent: floor((profit / allInvest) * 100, 2),
       weekend: WEEKENDS[weekend],
@@ -46,12 +41,27 @@ export const transProfit = (data: Profit[], days: number, start: string) => {
   });
   return res;
 };
+export const transProfitPercent = (
+  data: Profit[],
+  days: number,
+  start: string
+) => {
+  const dayList = generateDays(days, start);
+  const res = dayList.map((date, i) => {
+    const curDateData: any = find(data, (item) => {
+      return moment(item?.date).format("YYYY-MM-DD") === date;
+    });
+    return {
+      date,
+      profit: floor(curDateData?.profit * 100 || 0, 2) || 0,
+    };
+  });
+  return res;
+};
 
 export const getProfitParams = (days: number) => {
   const curDate = moment.utc().local();
-  const startDate = moment(curDate)
-    .subtract(days, "days")
-    .format("YYYY-MM-DD");
+  const startDate = moment(curDate).subtract(days, "days").format("YYYY-MM-DD");
   const endDate = moment(curDate).subtract(1, "days").format("YYYY-MM-DD");
   const daysDifference = moment(endDate).diff(moment(startDate), "days");
   return {
@@ -82,13 +92,17 @@ export const transMonthProfit = (data: Profit[]) => {
   return res;
 };
 
-export const calculateMaxNum = (maxProfit: number, sequence: number[]) => {
+export const calculateMaxNum = (
+  maxProfit: number,
+  sequence: number[],
+  multiple: number
+) => {
   // 默认为 10
   let result = sequence[0];
 
   // 遍历序列，找到符合条件的最大值
   for (let i = 0; i < sequence.length; i++) {
-    const mul = sequence[i] * 1.5;
+    const mul = sequence[i] * multiple;
     if (maxProfit > sequence[i] && maxProfit <= mul) {
       result = mul;
       break;

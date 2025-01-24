@@ -137,7 +137,11 @@ const Calendar = () => {
           <div className={styles.activeDate}>
             <p className={styles.date}>{date.getDate()}</p>
             <p className={styles.num}>
-              {activeDate === moment(CURRENT).format("YYYY-MM-DD") ? "" : money}
+              {disable
+                ? "n/a"
+                : activeDate === moment(CURRENT).format("YYYY-MM-DD")
+                ? money || ''
+                : money}
             </p>
           </div>
         );
