@@ -8,6 +8,7 @@ export async function GET(req: any) {
       req.headers.get("STEADY_HASH_Authorization");
     const startDate = req.nextUrl.searchParams.get("startDate");
     const endDate = req.nextUrl.searchParams.get("endDate");
+    const productId = req.nextUrl.searchParams.get("productId");
     if (!token) {
       return jsonResponse(
         { success: false, err: ServerErrorStatus.InvalidAuthorization },
@@ -22,7 +23,7 @@ export async function GET(req: any) {
     }
 
     const data = await fetch(
-      `${process.env.SERVICE_API_PREFIX}/api/v1/product/user-profit/daily?startDate=${startDate}&endDate=${endDate}`,
+      `${process.env.SERVICE_API_PREFIX}/api/v1/product/user-profit/daily?startDate=${startDate}&endDate=${endDate}&productId=${productId}`,
       {
         method: "GET",
         headers: {

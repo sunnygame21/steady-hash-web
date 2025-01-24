@@ -13,8 +13,6 @@ import styles from "./index.module.css";
 
 const PortfolioList = ({ title, type, subTitle }: any) => {
   const { userShares, productsList } = useContext(GlobalContext);
-
-  console.log("userShares", userShares);
   return userShares.length > 0 ? (
     <div className={styles.portfolioWrap}>
       <p className={styles.title}>
@@ -33,7 +31,6 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
               moment(cur.date).format("YYYY-MM-DD")
             );
           });
-          console.log("profit", profit);
           return (
             <div className={styles.portfolioItem} key={`portfolio-item-${i}`}>
               {productsList?.length > 0 ? (
@@ -43,6 +40,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                       <img src={icon.src}></img>
                       <div className={styles.nameInfo}>
                         <p>{curProduct?.name}</p>
+                        <p>Steady</p>
                         {/* <p>#{curProduct?.code}</p> */}
                       </div>
                     </div>
@@ -54,8 +52,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                       {floor((item.profit / item.shareAmount) * 100, 2)}%
                       {profit?.profit
                         ? `(+${floor(
-                            (Number(profit?.profit) / item.shareAmount) *
-                              100,
+                            (Number(profit?.profit) / item.shareAmount) * 100,
                             2
                           )}%)`
                         : ""}
@@ -64,7 +61,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                   <div className={styles.portfolioChart}>
                     {/* <Bar id={`chart-${item.productId}`} data={item.data || []} /> */}
                     {/* {type === ChartType.bar ? <Bar /> : <Line />} */}
-                    <Line />
+                    <Line productId={item.productId} />
                   </div>
                 </>
               ) : (

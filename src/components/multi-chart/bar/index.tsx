@@ -1,22 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import * as echarts from "echarts";
-import { floor, get, maxBy, round, sumBy } from "lodash";
+import { floor, maxBy, round, sumBy } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import { GlobalContext } from "@/app/state/global";
 import { calculateMaxNum, transBarProfit } from "@/utils/profit";
-import { addCommas, nextEvenNumber } from "@/utils/helper";
+import { addCommas } from "@/utils/helper";
 import { UNIT_NUMBER, UNIT_PERCENT } from "@/constant";
 import { ProfitIcon } from "@/components/Icons";
 
 import styles from "./index.module.css";
 
-const EchartsBar = () => {
-  const { chartLoading, userShares, user, sevenDaysSumData } =
-    useContext(GlobalContext);
+interface Props {
+  chartData: any;
+}
 
-  const dataList = transBarProfit(sevenDaysSumData, user.allInvest, 7);
+const EchartsBar = (props: Props) => {
+  const { chartData } = props;
+  const { dataList, total, percent } = chartData || {};
+  const { chartLoading, user } = useContext(GlobalContext);
 
-  const maxProfit = maxBy(dataList, "profit");
+  const maxProfit: any = maxBy(dataList, "profit");
   const maxNum = calculateMaxNum(maxProfit?.profit || 0, UNIT_NUMBER, 1.5);
   const maxPercent = floor(
     calculateMaxNum(maxProfit?.percent || 0, UNIT_PERCENT, 1.5),
@@ -24,7 +27,7 @@ const EchartsBar = () => {
   );
 
   useEffect(() => {
-    if (sevenDaysSumData.length) {
+    if (dataList.length) {
       const option = {
         tooltip: {
           show: false, // 禁用 tooltip 提示框
@@ -37,7 +40,7 @@ const EchartsBar = () => {
         },
         xAxis: {
           type: "category",
-          data: dataList.map((item) => item.weekend),
+          data: dataList.map((item: any) => item.weekend),
           axisLine: {
             lineStyle: {
               type: "dashed", // 将轴线设置为虚线
@@ -102,7 +105,7 @@ const EchartsBar = () => {
         series: [
           {
             type: "bar",
-            data: dataList.map((item) => item.profit),
+            data: dataList.map((item: any) => item.profit),
             barWidth: 10,
             itemStyle: {
               color: "rgba(255, 216, 74, 1)",
@@ -113,7 +116,7 @@ const EchartsBar = () => {
           },
           {
             type: "bar",
-            data: dataList.map((item) => item.percent),
+            data: dataList.map((item: any) => item.percent),
             barWidth: 10,
             itemStyle: {
               color: "rgba(55, 65, 81, 1)",
@@ -133,17 +136,17 @@ const EchartsBar = () => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       option && myChart.setOption(option);
     }
-  }, [sevenDaysSumData.length]);
+  }, [JSON.stringify(dataList)]);
 
   return (
     <div className={styles.barWrap}>
       <div className={styles.detailInfo}>
         <p className={styles.title}>Total Value</p>
-        <p className={styles.num}>${addCommas(user.allMoney)}</p>
+        <p className={styles.num}>${total}</p>
         <p className={styles.desc}>
           <ProfitIcon />
           <span>
-            {floor(((user.allProfit || 0) / user.allInvest) * 100, 2)}
+            {percent}
             %&ensp;
           </span>
         </p>

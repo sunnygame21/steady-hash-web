@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import * as echarts from "echarts";
 import { findIndex, maxBy, round, sortBy } from "lodash";
-import { calculateUnitNum } from "../utils";
-
-import styles from "./index.module.css";
 import { calculateMaxNum } from "@/utils/profit";
 import { PRODUCT_PERCENT } from "@/constant";
 
+import styles from "./index.module.css";
+
+
 const EchartLine = ({ data = [] }: any) => {
   const maxProfit: any = maxBy(data, "profit") || {};
-  const max = calculateMaxNum(maxProfit?.profit || 0, PRODUCT_PERCENT, 2);
+  const max = calculateMaxNum(maxProfit?.profit || 0, PRODUCT_PERCENT, 4);
   console.log("unit", max);
   const index = findIndex(
     data,

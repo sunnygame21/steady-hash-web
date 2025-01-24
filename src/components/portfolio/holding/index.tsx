@@ -12,10 +12,10 @@ import styles from "./index.module.css";
 const users = ["Jillian", "Jasmin", "Beatty"];
 
 const Holdings = () => {
-  const { userShares, productsList } = useContext(GlobalContext);
+  const { userShares, productsList, user } = useContext(GlobalContext);
   const [open, setOpen] = useState(false);
   const [curUser, seCurUser] = useState(users[0]);
-  
+
   const changeUser = (name: string) => {
     setOpen(false);
     seCurUser(name);
@@ -52,14 +52,14 @@ const Holdings = () => {
             VA Holdings <ArrowIcon className={styles.colIcon} />
           </div>
         </Dropdown>
-        <p className={styles.curName}>{curUser}</p>
+        <p className={styles.curName}>{user?.showName}</p>
       </div>
       <div className={styles.orderList}>
         {userShares.map((share, i) => {
           const curProduct: any = find(
             productsList,
             (product) => product?.id === share?.productId
-          )
+          );
           return (
             <div className={styles.orderItem} key={`holding-item-${i}`}>
               <img src={icon.src} className={styles.itemImage}></img>

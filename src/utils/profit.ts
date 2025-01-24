@@ -17,6 +17,7 @@ export const transBarProfit = (
     });
     const profit = Number(curDateData?.profit) || 0;
     const weekend = moment(date).weekday();
+
     return {
       date,
       profit,
@@ -53,7 +54,7 @@ export const transProfitPercent = (
     });
     return {
       date,
-      profit: floor(curDateData?.profit * 100 || 0, 2) || 0,
+      profit: floor(curDateData?.profit * 365 || 0, 2) || 0,
     };
   });
   return res;

@@ -46,7 +46,7 @@ const IntroType = [
 
 let first = true;
 
-const Detail = ({ onClose, detailData, show }: any) => {
+const Detail = ({ onClose, detailData }: any) => {
   const { productProfitData, setProductProfitData } = useContext(GlobalContext);
   const [profitData, setProfitData] = useState<any>([]);
   const [timeType, setTimeType] = useState(DateType.month);
@@ -54,7 +54,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
   const [loading, setLoading] = useState(true);
   const fetchData = async () => {
     try {
-      if (!detailData?.id) return
+      if (!detailData?.id) return;
       setLoading(true);
       let days = timeType.num;
       const { startDate, endDate, daysDifference } = getProfitParams(days);
@@ -75,7 +75,6 @@ const Detail = ({ onClose, detailData, show }: any) => {
         .catch(() => ({ success: false }));
       if (success) {
         const res = transProfitPercent(data, daysDifference, startDate);
-        console.log("products", res, data);
         setProfitData(res);
         setProductProfitData({
           ...productProfitData,
@@ -97,7 +96,6 @@ const Detail = ({ onClose, detailData, show }: any) => {
   };
 
   useEffect(() => {
-    console.log("first", first, timeType, productProfitData);
     if (!productProfitData?.[detailData?.id]?.[timeType.num]) {
       if (first) {
         fetchData();
@@ -110,7 +108,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
     return () => {
       first = true;
     };
-  }, [JSON.stringify(productProfitData), timeType.num, detailData?.id]);
+  }, [JSON.stringify(productProfitData), timeType.num]);
 
   return detailData ? (
     <div
@@ -149,7 +147,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
             <EchartLine data={profitData}></EchartLine>
           )}
         </div>
-        <div className={styles.times}>
+        {/* <div className={styles.times}>
           {Object.values(DateType).map((item) => (
             <div
               key={`product-detail-time-${item.num}`}
@@ -159,7 +157,7 @@ const Detail = ({ onClose, detailData, show }: any) => {
               {item.text}
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
       <div className={styles.intro}>
         {/* <div className={styles.tabs}>

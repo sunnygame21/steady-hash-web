@@ -38,7 +38,7 @@ const HistoryData: any = {
   [CAlENDAR_TYPE.year]: {},
 };
 
-const Calendar = () => {
+const Calendar = ({ chartData }: any) => {
   const { userShares, messageApi } = useContext(GlobalContext);
   const calenderRef = useRef<any>(null);
   const [calenderInfo, setCalenderInfo] = useState<any>(CalenderViewType.month);
@@ -140,7 +140,9 @@ const Calendar = () => {
               {disable
                 ? "n/a"
                 : activeDate === moment(CURRENT).format("YYYY-MM-DD")
-                ? money || ''
+                ? money > 0
+                  ? money
+                  : ""
                 : money}
             </p>
           </div>
@@ -216,9 +218,6 @@ const Calendar = () => {
       </div>
       <ReactCalendar
         key={calenderInfo.key}
-        onChange={(date) => {
-          console.log("onChange", date);
-        }}
         showNeighboringMonth={true}
         calendarType="gregory"
         locale="en"

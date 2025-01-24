@@ -4,7 +4,6 @@ import jsonResponse from "@/utils/jsonResponse";
 export async function POST(req: any) {
   try {
     const { username, verifyCode } = await req.json();
-    console.log("userName, verifyCode", username, verifyCode);
     if (!username || !verifyCode) {
       return jsonResponse(
         { success: false, err: ServerErrorStatus.InvalidAuthorization },

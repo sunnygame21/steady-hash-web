@@ -2,7 +2,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { classNames } from "@/utils/helper";
 import { GlobalContext } from "@/app/state/global";
-import { CAlENDAR_TYPE, CHART_TYPE } from "@/constant";
+import { CHART_TYPE } from "@/constant";
 import { BarIcon, CalendarIcon } from "@/components/Icons";
 import EchartsBar from "./bar";
 import Calendar from "./calendar";
@@ -23,8 +23,13 @@ const ChartType: any = {
     iconStyle: styles.barIcon,
   },
 };
+interface Props {
+  chartData?: any;
+  defaultType?: string;
+}
 
-const BarCalendarChart = ({ defaultType }: { defaultType?: string }) => {
+const BarCalendarChart = (props: Props) => {
+  const { defaultType, chartData } = props;
   const [type, setType] = useState(
     ChartType[defaultType || ""] || ChartType.calendar
   );
@@ -75,7 +80,11 @@ const BarCalendarChart = ({ defaultType }: { defaultType?: string }) => {
         {type.icon}
       </div>
       <div ref={divRef}>
-        {type.key === CHART_TYPE.bar ? <EchartsBar /> : <Calendar />}
+        {type.key === CHART_TYPE.bar ? (
+          <EchartsBar chartData={chartData} />
+        ) : (
+          <Calendar chartData={chartData} />
+        )}
       </div>
     </div>
   ) : (
