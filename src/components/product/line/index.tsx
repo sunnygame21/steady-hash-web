@@ -9,7 +9,7 @@ import styles from "./index.module.css";
 
 const EchartLine = ({ data = [] }: any) => {
   const maxProfit: any = maxBy(data, "profit") || {};
-  const max = calculateMaxNum(maxProfit?.profit || 0, PRODUCT_PERCENT, 4);
+  const max = calculateMaxNum(maxProfit?.profit || 0, PRODUCT_PERCENT, 5);
   console.log("unit", max);
   const index = findIndex(
     data,
@@ -76,7 +76,7 @@ const EchartLine = ({ data = [] }: any) => {
     yAxis: {
       type: "value",
       scale: false,
-      max: max,
+      max: max / 5 * 5,
       min: 0,
       internal: max / 5,
       inverse: false, // 确保坐标轴方向正常

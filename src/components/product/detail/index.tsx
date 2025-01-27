@@ -108,7 +108,7 @@ const Detail = ({ onClose, detailData }: any) => {
     return () => {
       first = true;
     };
-  }, [JSON.stringify(productProfitData), timeType.num]);
+  }, [JSON.stringify(productProfitData), timeType.num, detailData?.id]);
 
   return detailData ? (
     <div

@@ -22,7 +22,6 @@ export const UNIT_PERCENT = [
 
 // 百分比
 export const PRODUCT_PERCENT = [
-  0.01, 0.02, 0.04, 0.08, 0.1, 0.2, 0.4, 0.8, 1, 2, 4, 8, 10, 20, 40, 80, 100,
-  200,
+  0.01, 0.02, 0.1, 0.2,  1, 2, 10, 20, 100, 200,
 ];
 export const WEEKENDS = ["S", "M", "T", "W", "T", "F", "S"];

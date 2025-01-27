@@ -8,12 +8,16 @@ import { Profit } from "@/types/info";
 
 import styles from "./index.module.css";
 
+let first = true;
+
 const Line = ({ title, productId }: any) => {
   const [data, setData] = useState<Profit[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
+      if (!first) return;
+      first = false;
       const { startDate, endDate, daysDifference } = getProfitParams(30);
       const { success, data = [] } = await fetch(
         `/api/user/daily-profit?startDate=${startDate}&endDate=${endDate}&productId=${productId}`,
@@ -40,7 +44,7 @@ const Line = ({ title, productId }: any) => {
   useEffect(() => {
     if (data.length) {
       const max: any = maxBy(data, "profit")?.profit || 0;
-      console.log('max', max)
+      console.log("max", max);
       const option = {
         grid: {
           top: "5%", // 调整顶部的间距
@@ -50,7 +54,7 @@ const Line = ({ title, productId }: any) => {
         },
         xAxis: {
           type: "category",
-          data:  data.map((item,i) => i),
+          data: data.map((item, i) => i),
 
           axisTick: {
             show: false,
@@ -66,9 +70,8 @@ const Line = ({ title, productId }: any) => {
         yAxis: {
           type: "value",
           scale: true,
-          max: max ,
+          max: max + 50,
           min: -50,
-          // splitNumber: 5, //max / splitNumber是间隔,
           inverse: false, // 确保坐标轴方向正常
           axisLine: {
             show: false, // 隐藏y轴线
@@ -93,13 +96,13 @@ const Line = ({ title, productId }: any) => {
             // },
             {
               gt: 0,
-              lte: max,
+              lte: max + 1,
               color: "rgba(69, 179, 105, 1)",
             },
           ],
           outOfRange: {
-            color: 'rgba(69, 179, 105, 1)'
-          }
+            color: "rgba(69, 179, 105, 1)",
+          },
         },
         series: [
           {
@@ -111,7 +114,9 @@ const Line = ({ title, productId }: any) => {
               itemStyle: {
                 color: function (params: any) {
                   // 根据 Y 值动态设置颜色
-                  return params.value >= 0 ? "rgba(69, 179, 105, 1" : "rgba(239, 71, 112, 1)"; // 蓝色/红色
+                  return params.value >= 0
+                    ? "rgba(69, 179, 105, 1"
+                    : "rgba(239, 71, 112, 1)"; // 蓝色/红色
                 },
               },
             },
@@ -120,7 +125,7 @@ const Line = ({ title, productId }: any) => {
           },
         ],
       };
-      const chartDom = document.getElementById("portfolioChart-chart2");
+      const chartDom = document.getElementById(`portfolioChart-${productId}`);
       const chart = echarts.getInstanceByDom(chartDom as any);
       if (chart) {
         chart.dispose();
@@ -133,8 +138,10 @@ const Line = ({ title, productId }: any) => {
 
   return loading ? (
     <Skeleton className={styles.lineSkeleton}></Skeleton>
+  ) : data.length > 0 ? (
+    <div id={`portfolioChart-${productId}`} className={styles.line}></div>
   ) : (
-    <div id="portfolioChart-chart2" className={styles.line}></div>
+    <div className={styles.noData}></div>
   );
 };
 
