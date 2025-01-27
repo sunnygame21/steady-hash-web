@@ -24,15 +24,17 @@
   background: rgba(249, 250, 251, 1);
   border-radius: 12px;
   min-height: 134px;
+  width: auto;
 }
 .skeleton {
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
   bottom: 0;
   top: 0;
   border-radius: 12px;
   min-width: 240px;
+  min-height: 134px;
 }
 .activityDetail {
   flex: 1;
@@ -40,7 +42,9 @@
 
 .detailName {
   display: flex;
+  white-space: nowrap;
 }
+
 
 .detailName img {
   margin-right: 12px;
@@ -51,7 +55,6 @@
   color: rgba(17, 24, 39, 1);
   font-size: 12px;
   font-family: Roboto Bold;
-  white-space: nowrap;
 }
 .nameInfo p:last-child {
   color: rgba(107, 114, 128, 1);
@@ -81,15 +84,17 @@
 
 .portfolioChart {
   align-self: flex-end;
-  margin-left: 15px;
   /* background-color: antiquewhite; */
 }
 
 .line {
-  height: 90px;
+  height: 80px;
   width: 100px;
+  margin-left: 15px;
 }
 
 .lineSkeleton {
-  height: 90px;
+  height: 80px;
+  width: 100px;
+  margin-left: 15px;
 }

@@ -8,7 +8,6 @@ import { Profit } from "@/types/info";
 
 import styles from "./index.module.css";
 
-let first = true;
 
 const Line = ({ title, productId }: any) => {
   const [data, setData] = useState<Profit[]>([]);
@@ -16,8 +15,6 @@ const Line = ({ title, productId }: any) => {
 
   const fetchData = async () => {
     try {
-      if (!first) return;
-      first = false;
       const { startDate, endDate, daysDifference } = getProfitParams(30);
       const { success, data = [] } = await fetch(
         `/api/user/daily-profit?startDate=${startDate}&endDate=${endDate}&productId=${productId}`,
@@ -50,7 +47,7 @@ const Line = ({ title, productId }: any) => {
           top: "5%", // 调整顶部的间距
           left: "0%",
           right: "0%",
-          bottom: "0%",
+          bottom: "10%",
         },
         xAxis: {
           type: "category",
@@ -70,8 +67,8 @@ const Line = ({ title, productId }: any) => {
         yAxis: {
           type: "value",
           scale: true,
-          max: max + 50,
-          min: -50,
+          max: max + 20,
+          min: 0,
           inverse: false, // 确保坐标轴方向正常
           axisLine: {
             show: false, // 隐藏y轴线
@@ -138,11 +135,7 @@ const Line = ({ title, productId }: any) => {
 
   return loading ? (
     <Skeleton className={styles.lineSkeleton}></Skeleton>
-  ) : data.length > 0 ? (
-    <div id={`portfolioChart-${productId}`} className={styles.line}></div>
-  ) : (
-    <div className={styles.noData}></div>
-  );
+  ) : <div id={`portfolioChart-${productId}`} className={styles.line}></div>
 };
 
 export default Line;
