@@ -39,6 +39,7 @@ const HistoryData: any = {
 };
 
 const Calendar = ({ chartData }: any) => {
+  const { productId } = chartData;
   const { userShares, messageApi } = useContext(GlobalContext);
   const calenderRef = useRef<any>(null);
   const [calenderInfo, setCalenderInfo] = useState<any>(CalenderViewType.month);
@@ -53,7 +54,7 @@ const Calendar = ({ chartData }: any) => {
 
   const getData = async (date: any) => {
     if (calenderRef?.current?.loading) return;
-    const startDate = moment(date).startOf("month").format("YYYY-MM-DD");
+    let startDate = moment(date).startOf("month").format("YYYY-MM-DD");
     try {
       if (userShares?.length) {
         if (HistoryData?.[calenderInfo.key]?.[startDate]) {
@@ -72,14 +73,17 @@ const Calendar = ({ chartData }: any) => {
         let endDate = moment(date).endOf("month").format("YYYY-MM-DD");
         if (calenderInfo.key === CAlENDAR_TYPE.year) {
           url = "/api/user/monthly-profit";
+          startDate = moment(date).startOf("year").format("YYYY-MM-DD");
           endDate = moment(date).endOf("year").format("YYYY-MM-DD");
         }
-        const { success, data = [] } = await fetch(
-          `${url}?startDate=${startDate}&endDate=${endDate}`,
-          {
-            method: "GET",
-          }
-        )
+
+        const params = productId
+          ? `startDate=${startDate}&endDate=${endDate}&productId=${productId}`
+          : `startDate=${startDate}&endDate=${endDate}`;
+
+        const { success, data = [] } = await fetch(`${url}?${params}`, {
+          method: "GET",
+        })
           .then((res) => res.json())
           .catch(() => ({ success: false }));
         const daysDifference = moment(endDate).diff(moment(startDate), "days");

@@ -1,15 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import * as echarts from "echarts";
 import Skeleton from "react-loading-skeleton";
-import { maxBy } from "lodash";
+import { last, maxBy, takeRight } from "lodash";
 import { getProfitParams, transProfit } from "@/utils/profit";
 import { Profit } from "@/types/info";
 
 import styles from "./index.module.css";
 
-
-const Line = ({ title, productId }: any) => {
+const Line = ({ title, product, setBarData }: any) => {
   const [data, setData] = useState<Profit[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +16,7 @@ const Line = ({ title, productId }: any) => {
     try {
       const { startDate, endDate, daysDifference } = getProfitParams(30);
       const { success, data = [] } = await fetch(
-        `/api/user/daily-profit?startDate=${startDate}&endDate=${endDate}&productId=${productId}`,
+        `/api/user/daily-profit?startDate=${startDate}&endDate=${endDate}&productId=${product?.productId}`,
         {
           method: "GET",
         }
@@ -25,7 +24,19 @@ const Line = ({ title, productId }: any) => {
         .then((res) => res.json())
         .catch(() => ({ success: false }));
       if (success) {
-        setData(transProfit(data, daysDifference, startDate));
+        const res = transProfit(data, daysDifference, startDate);
+        console.log("res", res);
+        let profit = product.shareAmount;
+        const lineData = res.map((item) => {
+          profit = item.profit + profit;
+          return {
+            ...item,
+            profit,
+          };
+        });
+        console.log("lineData", lineData);
+        setData(lineData);
+        setBarData(takeRight(res, 7));
       }
       setLoading(false);
     } catch (error) {
@@ -68,7 +79,7 @@ const Line = ({ title, productId }: any) => {
           type: "value",
           scale: true,
           max: max + 20,
-          min: 0,
+          min: product.shareAmount,
           inverse: false, // 确保坐标轴方向正常
           axisLine: {
             show: false, // 隐藏y轴线
@@ -122,7 +133,9 @@ const Line = ({ title, productId }: any) => {
           },
         ],
       };
-      const chartDom = document.getElementById(`portfolioChart-${productId}`);
+      const chartDom = document.getElementById(
+        `portfolioChart-${product?.productId}`
+      );
       const chart = echarts.getInstanceByDom(chartDom as any);
       if (chart) {
         chart.dispose();
@@ -135,7 +148,12 @@ const Line = ({ title, productId }: any) => {
 
   return loading ? (
     <Skeleton className={styles.lineSkeleton}></Skeleton>
-  ) : <div id={`portfolioChart-${productId}`} className={styles.line}></div>
+  ) : (
+    <div
+      id={`portfolioChart-${product?.productId}`}
+      className={styles.line}
+    ></div>
+  );
 };
 
-export default Line;
+export default memo(Line);

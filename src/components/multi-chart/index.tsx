@@ -29,7 +29,8 @@ interface Props {
 }
 
 const BarCalendarChart = (props: Props) => {
-  const { defaultType, chartData } = props;
+  const { defaultType, chartData = {} } = props;
+  const { detailStyle = {} } = chartData;
   const [type, setType] = useState(
     ChartType[defaultType || ""] || ChartType.calendar
   );
@@ -70,11 +71,16 @@ const BarCalendarChart = (props: Props) => {
 
   return userShares.length ? (
     <div
-      style={{ height: divHeight }}
-      className={classNames(styles.chartContainer, type.style)}
+      style={{ height: divHeight, background: detailStyle.background }}
+      className={classNames(
+        styles.chartContainer,
+        type.style,
+        chartData?.className
+      )}
     >
       <div
         className={classNames(styles.icon, type.iconStyle)}
+        style={{ background: detailStyle.icon }}
         onClick={chartTypeChange}
       >
         {type.icon}

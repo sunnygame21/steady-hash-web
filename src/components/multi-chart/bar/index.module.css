@@ -1,6 +1,5 @@
 .barWrap {
   width: 100%;
-  margin-top: 16px;
   padding: 20px;
   position: relative;
 }
@@ -34,6 +33,7 @@
   color: #fff;
   font-size: 24px;
   font-family: Roboto Bold;
+  word-break: break-all;
 }
 .desc {
   margin-top: 4px;

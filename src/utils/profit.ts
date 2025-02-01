@@ -54,7 +54,7 @@ export const transProfitPercent = (
     });
     return {
       date,
-      profit: floor(curDateData?.profit * 365 || 0, 2) || 0,
+      profit: floor(curDateData?.profit * 365 * 100 || 0, 2) || 0,
     };
   });
   return res;

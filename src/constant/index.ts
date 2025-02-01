@@ -25,3 +25,21 @@ export const PRODUCT_PERCENT = [
   0.01, 0.02, 0.1, 0.2,  1, 2, 10, 20, 100, 200,
 ];
 export const WEEKENDS = ["S", "M", "T", "W", "T", "F", "S"];
+
+
+export const CHART_STYLE = {
+  home: {
+    background: 'rgba(31, 41, 55, 1)',
+    title: 'rgba(162, 182, 185, 1)',
+    num: 'rgba(255, 255, 255, 1)',
+    icon: 'rgba(55, 65, 81, 1)',
+    chartText: 'rgba(162, 182, 185, 1)'
+  },
+  product: {
+    background: 'rgba(243, 244, 246, 1)',
+    title: 'rgba(31, 41, 55, 1)',
+    num: 'rgba(17, 24, 39, 1)',
+    icon: 'rgba(107, 114, 128, 1)',
+    chartText: 'rgba(31, 41, 55, 1)'
+  }
+}

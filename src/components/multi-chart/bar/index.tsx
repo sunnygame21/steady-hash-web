@@ -16,8 +16,9 @@ interface Props {
 
 const EchartsBar = (props: Props) => {
   const { chartData } = props;
-  const { dataList, total, percent } = chartData || {};
+  const { dataList, total, percent, productId, detailStyle = {} } = chartData || {};
   const { chartLoading, user } = useContext(GlobalContext);
+  console.log("dataList", dataList);
 
   const maxProfit: any = maxBy(dataList, "profit");
   const maxNum = calculateMaxNum(maxProfit?.profit || 0, UNIT_NUMBER, 1.5);
@@ -52,7 +53,7 @@ const EchartsBar = (props: Props) => {
           },
           axisLabel: {
             fontSize: 12,
-            color: "rgba(162, 182, 185, 1)",
+            color: detailStyle.chartText || "rgba(162, 182, 185, 1)",
             fontWeight: "bold",
             margin: 12,
           },
@@ -127,7 +128,7 @@ const EchartsBar = (props: Props) => {
           },
         ],
       };
-      const chartDom = document.getElementById("bar-chart");
+      const chartDom = document.getElementById(`bar-chart-${productId}`);
       const chart = echarts.getInstanceByDom(chartDom as any);
       if (chart) {
         chart.dispose();
@@ -141,8 +142,12 @@ const EchartsBar = (props: Props) => {
   return (
     <div className={styles.barWrap}>
       <div className={styles.detailInfo}>
-        <p className={styles.title}>Total Value</p>
-        <p className={styles.num}>${total}</p>
+        <p className={styles.title} style={{ color: detailStyle.title }}>
+          Total Value
+        </p>
+        <p className={styles.num} style={{ color: detailStyle.num }}>
+          ${total}
+        </p>
         <p className={styles.desc}>
           <ProfitIcon />
           <span>
@@ -151,7 +156,7 @@ const EchartsBar = (props: Props) => {
           </span>
         </p>
       </div>
-      <div id="bar-chart" className={styles.bar}></div>
+      <div id={`bar-chart-${productId}`} className={styles.bar}></div>
 
       {chartLoading && (
         <div className={styles.skeletonWrap}>

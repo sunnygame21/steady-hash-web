@@ -3,16 +3,22 @@ import React, { useContext, useState } from "react";
 import { add, find, floor } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import moment from "moment";
+import { motion } from "framer-motion";
 import { GlobalContext } from "@/app/state/global";
 import { addCommas } from "@/utils/helper";
 import { ProfitIcon } from "@/components/Icons";
 import icon from "@/images/home/item1.png";
 import Line from "./line";
+import Detail from "./detail";
 
 import styles from "./index.module.css";
 
+
 const PortfolioList = ({ title, type, subTitle }: any) => {
   const { userShares, productsList } = useContext(GlobalContext);
+  const [selectShare, setSelectShare] = useState<any>(null);
+  const [barData, setBarData] = useState([])
+
   return userShares.length > 0 ? (
     <div className={styles.portfolioWrap}>
       <p className={styles.title}>
@@ -32,7 +38,14 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
             );
           });
           return (
-            <div className={styles.portfolioItem} key={`portfolio-item-${i}`}>
+            <div
+              className={styles.portfolioItem}
+              key={`portfolio-item-${i}`}
+              onClick={() => {
+                if (!productsList?.length) return
+                setSelectShare({...item, ...curProduct})
+              }}
+            >
               {productsList?.length > 0 ? (
                 <>
                   <div className={styles.activityDetail}>
@@ -61,7 +74,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                   <div className={styles.portfolioChart}>
                     {/* <Bar id={`chart-${item.productId}`} data={item.data || []} /> */}
                     {/* {type === ChartType.bar ? <Bar /> : <Line />} */}
-                    <Line productId={item.productId} />
+                    <Line product={item} setBarData={setBarData} />
                   </div>
                 </>
               ) : (
@@ -71,6 +84,23 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
           );
         })}
       </div>
+
+      <motion.div
+        className={styles.detailWrap}
+        initial={{ left: "100%" }}
+        animate={{
+          left: !!selectShare ? 0 : "100%",
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        {selectShare ? (
+          <Detail
+            shareDetail={selectShare}
+            barData={barData}
+            onClose={() => setSelectShare(null)}
+          />
+        ) : null}
+      </motion.div>
     </div>
   ) : null;
 };
