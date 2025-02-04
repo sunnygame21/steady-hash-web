@@ -112,7 +112,7 @@ const Detail = ({ onClose, detailData }: any) => {
 
   return detailData ? (
     <div
-    // className={styles.wrap}
+    className={styles.wrap}
     // initial={{ transform: "translateX(100vw)" }}
     // animate={{ transform: show ? "translateX(0)" : "translateX(100vw)" }}
     // transition={{ duration: 0.2 }}
@@ -172,9 +172,11 @@ const Detail = ({ onClose, detailData }: any) => {
           ))}
         </div> */}
         <div className={styles.introDetail}>
-          <p className={styles.title}>Flagship 22% - Quant Pioneer Plan</p>
+          <p className={styles.title}>
+            {detailData?.name}&ensp;-&ensp;{multiply(detailData.apr_7day, 100).toFixed(0)}%
+          </p>
           <div className={styles.detail}>
-            <li>{detailData?.description}</li>
+          {detailData?.description}
           </div>
         </div>
       </div>

@@ -1,5 +1,11 @@
 
 
+.wrap {
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+}
 .close {
   margin: 24px;
 }
@@ -107,9 +113,11 @@
   color: rgba(22, 73, 81, 1);
 }
 .intro {
+  height: 100%;
   margin-top: 24px;
   padding: 24px;
   background-color: #fff;
+  overflow: auto;
 }
 .tabs {
   width: 200%;
