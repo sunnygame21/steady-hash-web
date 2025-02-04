@@ -137,7 +137,7 @@ const EchartsBar = (props: Props) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       option && myChart.setOption(option);
     }
-  }, [JSON.stringify(dataList)]);
+  }, [JSON.stringify(chartData)]);
 
   return (
     <div className={styles.barWrap}>

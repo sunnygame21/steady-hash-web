@@ -1,22 +1,13 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
-import { bignumber } from "mathjs";
-import { floor, multiply } from "lodash";
-import Skeleton from "react-loading-skeleton";
-import EchartLine from "@/components/product/line";
-import { BackBlackIcon, BackIcon } from "@/components/Icons";
-import { GlobalContext } from "@/app/state/global";
-import {
-  getProfitParams,
-  transBarProfit,
-  transProfit,
-  transProfitPercent,
-} from "@/utils/profit";
-
-import styles from "./index.module.css";
+import React from "react";
+import { floor, takeRight } from "lodash";
+import { BackBlackIcon } from "@/components/Icons";
 import BarCalendarChart from "@/components/multi-chart";
 import { addCommas } from "@/utils/helper";
 import { CHART_STYLE } from "@/constant";
+import { transBarProfit } from "@/utils/profit";
+
+import styles from "./index.module.css";
 
 const DateType = {
   month: {
@@ -48,12 +39,8 @@ const IntroType = [
   },
 ];
 
-let first = true;
-
 const Detail = ({ onClose, shareDetail, barData }: any) => {
-  const { productProfitData, setProductProfitData } = useContext(GlobalContext);
   const { name, icon, shareAmount, profit, productId } = shareDetail;
-  console.log("barData", barData);
 
   return (
     <div className={styles.wrap}>
@@ -75,11 +62,15 @@ const Detail = ({ onClose, shareDetail, barData }: any) => {
         </div>
         <BarCalendarChart
           chartData={{
-            dataList: transBarProfit(barData, shareAmount, 7),
+            dataList: transBarProfit(
+              takeRight(shareDetail.data || [], 7),
+              shareAmount,
+              7
+            ),
             percent: floor(((profit || 0) / shareAmount) * 100, 2),
             total: addCommas(shareAmount + profit),
             productId: productId,
-            detailStyle: CHART_STYLE.product
+            detailStyle: CHART_STYLE.product,
           }}
           defaultType="bar"
         ></BarCalendarChart>

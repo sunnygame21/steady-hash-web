@@ -1,5 +1,5 @@
-"use client";
-import React, { useContext, useEffect, useState } from "react";
+"use client"
+import React, { useContext, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { floor } from "lodash";
 import { GlobalContext } from "@/app/state/global";
@@ -9,21 +9,22 @@ import { CartIcon } from "../Icons";
 import BarCalendarChart from "../multi-chart";
 import Products from "../product";
 import PortfolioList from "./portfolio";
-import Orders from "./order";
 
 import styles from "./index.module.css";
-
 
 const Home = () => {
   const { user, productsList, sevenDaysSumData } = useContext(GlobalContext);
   const [productModal, setProductModal] = useState(false);
 
-  return user?.id ? (
+  if (!user?.id) return null;
+
+  return (
     <div className={styles.wrap}>
       <div className={styles.info}>
         <p className={styles.name}>Hi, {user?.showName} 👋</p>
         <p className={styles.welcome}>Welcome back to SteadyHash!</p>
       </div>
+      
       <BarCalendarChart
         defaultType="bar"
         chartData={{
@@ -32,6 +33,7 @@ const Home = () => {
           total: addCommas(user.allMoney)
         }}
       />
+
       {productsList.length > 0 ? (
         <div
           className={styles.exploreBtn}
@@ -41,15 +43,14 @@ const Home = () => {
           Explore
         </div>
       ) : (
-        <Skeleton className={styles.skeleton}></Skeleton>
+        <Skeleton className={styles.skeleton} />
       )}
 
-      <PortfolioList title={"Portfolio"} type="bar" />
-      <Products show={productModal} close={() => setProductModal(false)} />
+      <PortfolioList title="Portfolio" type="bar" />
 
-      {/* <Orders /> */}
+      <Products show={productModal} close={() => setProductModal(false)} />
     </div>
-  ) : null;
+  );
 };
 
-export default Home;
+export default React.memo(Home);

@@ -33,7 +33,7 @@ const CalenderViewType = {
   },
 };
 
-const HistoryData: any = {
+let HistoryData: any = {
   [CAlENDAR_TYPE.month]: {},
   [CAlENDAR_TYPE.year]: {},
 };
@@ -69,10 +69,11 @@ const Calendar = ({ chartData }: any) => {
           duration: 10000,
         });
 
-        let url = "/api/user/daily-profit";
+        let url = productId
+          ? "/api/user/product-profit"
+          : "/api/user/daily-profit";
         let endDate = moment(date).endOf("month").format("YYYY-MM-DD");
         if (calenderInfo.key === CAlENDAR_TYPE.year) {
-          url = "/api/user/monthly-profit";
           startDate = moment(date).startOf("year").format("YYYY-MM-DD");
           endDate = moment(date).endOf("year").format("YYYY-MM-DD");
         }
@@ -200,6 +201,14 @@ const Calendar = ({ chartData }: any) => {
     }
   }, [value, userShares.length, calenderInfo.key]);
 
+  useEffect(() => {
+    return () => {
+      HistoryData = {
+        [CAlENDAR_TYPE.month]: {},
+        [CAlENDAR_TYPE.year]: {},
+      };
+    };
+  }, []);
   return (
     <div style={{ position: "relative" }} ref={calenderRef}>
       {disable && <div className={styles.mask}></div>}

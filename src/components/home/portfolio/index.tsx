@@ -1,6 +1,6 @@
 "use client";
 import React, { useContext, useState } from "react";
-import { add, find, floor } from "lodash";
+import { add, find, floor, takeRight } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import moment from "moment";
 import { motion } from "framer-motion";
@@ -13,11 +13,9 @@ import Detail from "./detail";
 
 import styles from "./index.module.css";
 
-
 const PortfolioList = ({ title, type, subTitle }: any) => {
   const { userShares, productsList } = useContext(GlobalContext);
   const [selectShare, setSelectShare] = useState<any>(null);
-  const [barData, setBarData] = useState([])
 
   return userShares.length > 0 ? (
     <div className={styles.portfolioWrap}>
@@ -42,8 +40,8 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
               className={styles.portfolioItem}
               key={`portfolio-item-${i}`}
               onClick={() => {
-                if (!productsList?.length) return
-                setSelectShare({...item, ...curProduct})
+                if (!productsList?.length) return;
+                setSelectShare({ ...item, ...curProduct });
               }}
             >
               {productsList?.length > 0 ? (
@@ -74,7 +72,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                   <div className={styles.portfolioChart}>
                     {/* <Bar id={`chart-${item.productId}`} data={item.data || []} /> */}
                     {/* {type === ChartType.bar ? <Bar /> : <Line />} */}
-                    <Line product={item} setBarData={setBarData} />
+                    <Line product={item} />
                   </div>
                 </>
               ) : (
@@ -96,7 +94,6 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
         {selectShare ? (
           <Detail
             shareDetail={selectShare}
-            barData={barData}
             onClose={() => setSelectShare(null)}
           />
         ) : null}

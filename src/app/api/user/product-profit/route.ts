@@ -15,7 +15,7 @@ export async function GET(req: any) {
         401
       );
     }
-    if (!startDate || !endDate) {
+    if (!startDate || !endDate || !productId) {
       return jsonResponse(
         { success: false, err: ServerErrorStatus.InvalidParams },
         500
@@ -23,7 +23,7 @@ export async function GET(req: any) {
     }
 
     const data = await fetch(
-      `${process.env.SERVICE_API_PREFIX}/api/v1/product/user-profit/daily?startDate=${startDate}&endDate=${endDate}`,
+      `${process.env.SERVICE_API_PREFIX}/api/v1/product/user-profit?startDate=${startDate}&endDate=${endDate}&productId=${productId}`,
       {
         method: "GET",
         headers: {

@@ -2,43 +2,57 @@
 import React, { memo, useEffect, useState } from "react";
 import * as echarts from "echarts";
 import Skeleton from "react-loading-skeleton";
-import { last, maxBy, takeRight } from "lodash";
+import { maxBy } from "lodash";
 import { getProfitParams, transProfit } from "@/utils/profit";
 import { Profit } from "@/types/info";
 
 import styles from "./index.module.css";
 
-const Line = ({ title, product, setBarData }: any) => {
+const getMaxValue = (number: number) => {
+  // 将数字转换为字符串
+  const numString = number.toString();
+
+  // 如果是小数，返回1
+  if (numString.includes(".")) {
+    return 1;
+  }
+
+  // 如果是整数，返回10的整数位数次方
+  const integerPart = numString.split(".")[0]; // 整数部分
+  return Math.pow(10, integerPart.length);
+};
+
+const Line = ({ title, product }: any) => {
   const [data, setData] = useState<Profit[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
+      // setLoading(true)
+      // const { startDate, endDate, daysDifference } = getProfitParams(30);
+      // const { success, data = [] } = await fetch(
+      //   `/api/user/product-profit?startDate=${startDate}&endDate=${endDate}&productId=${product?.productId}`,
+      //   {
+      //     method: "GET",
+      //   }
+      // )
+      //   .then((res) => res.json())
+      //   .catch(() => ({ success: false }));
+      // if (success) {
+
+      // }
+      // setLoading(false);
       const { startDate, endDate, daysDifference } = getProfitParams(30);
-      const { success, data = [] } = await fetch(
-        `/api/user/daily-profit?startDate=${startDate}&endDate=${endDate}&productId=${product?.productId}`,
-        {
-          method: "GET",
-        }
-      )
-        .then((res) => res.json())
-        .catch(() => ({ success: false }));
-      if (success) {
-        const res = transProfit(data, daysDifference, startDate);
-        console.log("res", res);
-        let profit = product.shareAmount;
-        const lineData = res.map((item) => {
-          profit = item.profit + profit;
-          return {
-            ...item,
-            profit,
-          };
-        });
-        console.log("lineData", lineData);
-        setData(lineData);
-        setBarData(takeRight(res, 7));
-      }
-      setLoading(false);
+      const res = transProfit(product.data, daysDifference, startDate);
+      let profit = 0;
+      const lineData = res.map((item) => {
+        profit = profit + (item.profit / product.shareAmount) * 100;
+        return {
+          ...item,
+          profit: profit,
+        };
+      });
+      setData(lineData);
     } catch (error) {
       setLoading(false);
       console.log("get calendar data error", error);
@@ -52,7 +66,6 @@ const Line = ({ title, product, setBarData }: any) => {
   useEffect(() => {
     if (data.length) {
       const max: any = maxBy(data, "profit")?.profit || 0;
-      console.log("max", max);
       const option = {
         grid: {
           top: "5%", // 调整顶部的间距
@@ -78,8 +91,8 @@ const Line = ({ title, product, setBarData }: any) => {
         yAxis: {
           type: "value",
           scale: true,
-          max: max + 20,
-          min: product.shareAmount,
+          max: getMaxValue(max),
+          min: 0,
           inverse: false, // 确保坐标轴方向正常
           axisLine: {
             show: false, // 隐藏y轴线
