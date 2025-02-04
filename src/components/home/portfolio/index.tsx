@@ -48,7 +48,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                 <>
                   <div className={styles.activityDetail}>
                     <div className={styles.detailName}>
-                      <img src={icon.src}></img>
+                      <img src={curProduct.icon}></img>
                       <div className={styles.nameInfo}>
                         <p>{curProduct?.name}</p>
                         <p>By SteadyHash</p>
