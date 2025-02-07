@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import icon from "@/images/home/item1.png";
 

@@ -53,6 +53,12 @@
   border-radius: 12px;
   background: #fff;
 }
+.itemSkeleton {
+  width: 156px;
+  height: 100px;
+  margin-top: 16px;
+  border-radius: 12px;
+}
 .top {
   display: flex;
   justify-content: space-between;

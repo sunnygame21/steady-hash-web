@@ -1,6 +1,5 @@
-// import Login from "@/components/login";
+"use client";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 
 const Login = dynamic(() => import("@/components/login"), {
   loading: () => (

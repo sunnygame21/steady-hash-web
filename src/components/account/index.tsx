@@ -1,4 +1,3 @@
-"use client";
 import React, { useContext } from "react";
 import { find, floor } from "lodash";
 import { GlobalContext } from "@/app/state/global";

@@ -1,5 +1,5 @@
-"use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { add, find, floor, takeRight } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import moment from "moment";
@@ -7,15 +7,32 @@ import { motion } from "framer-motion";
 import { GlobalContext } from "@/app/state/global";
 import { addCommas } from "@/utils/helper";
 import { ProfitIcon } from "@/components/Icons";
-import icon from "@/images/home/item1.png";
 import Line from "./line";
 import Detail from "./detail";
 
 import styles from "./index.module.css";
 
 const PortfolioList = ({ title, type, subTitle }: any) => {
-  const { userShares, productsList } = useContext(GlobalContext);
+  const params = useSearchParams();
+  const assetId = params.get("assetId") || "";
+  const { userShares, productsList, setPage } = useContext(GlobalContext);
   const [selectShare, setSelectShare] = useState<any>(null);
+
+  useEffect(() => {
+    if (assetId) {
+      const curProduct: any = find(
+        productsList,
+        (product) => product?.id === assetId
+      );
+      const curShare: any = find(
+        userShares,
+        (share) => share.productId === assetId
+      );
+      setSelectShare({ ...curShare, ...curProduct });
+    } else {
+      setSelectShare(null);
+    }
+  }, [assetId, userShares.length, productsList.length]);
 
   return userShares.length > 0 ? (
     <div className={styles.portfolioWrap}>
@@ -41,7 +58,8 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
               key={`portfolio-item-${i}`}
               onClick={() => {
                 if (!productsList?.length) return;
-                setSelectShare({ ...item, ...curProduct });
+                // setSelectShare({ ...item, ...curProduct });
+                setPage(`assetId=${item.productId}`);
               }}
             >
               {productsList?.length > 0 ? (
@@ -92,10 +110,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
         transition={{ duration: 0.2 }}
       >
         {selectShare ? (
-          <Detail
-            shareDetail={selectShare}
-            onClose={() => setSelectShare(null)}
-          />
+          <Detail shareDetail={selectShare} onClose={() => setPage("")} />
         ) : null}
       </motion.div>
     </div>

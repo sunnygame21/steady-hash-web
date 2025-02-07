@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { classNames } from "@/utils/helper";
 import styles from "./index.module.css";

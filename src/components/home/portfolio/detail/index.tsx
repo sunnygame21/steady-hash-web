@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { floor, takeRight } from "lodash";
 import { BackBlackIcon } from "@/components/Icons";

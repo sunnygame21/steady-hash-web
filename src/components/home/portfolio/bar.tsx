@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect } from "react";
 import * as echarts from "echarts";
 import { get, maxBy, minBy, round } from "lodash";

@@ -1,4 +1,3 @@
-"use client";
 import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "@/app/state/global";
 import { BalanceIcon, CreditIcon, InvestIcon, RevenueIcon } from "../icon";

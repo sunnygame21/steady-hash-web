@@ -1,12 +1,13 @@
 "use client";
 import { createContext, useEffect, useMemo, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { create, all } from "mathjs";
 import { message } from "antd";
-import { add, sumBy } from "lodash";
+import { add, forIn, sumBy } from "lodash";
 import Loading from "@/components/loading";
 import { Info, Product, Profit, Share } from "@/types/info";
 import { getProfitParams } from "@/utils/profit";
+import { transParams } from "@/utils/helper";
 
 export const mathjs = create(all);
 mathjs.config({ number: "BigNumber", precision: 20 });
@@ -21,6 +22,8 @@ export interface GlobalState {
   productProfitData: any;
   setProductProfitData: any;
   logout: any;
+  page: string;
+  setPage: (page: string) => void;
 }
 
 export const initialGlobalState: GlobalState = {
@@ -34,8 +37,11 @@ export const initialGlobalState: GlobalState = {
   productProfitData: {},
   setProductProfitData: () => {},
   logout: () => {},
+  page: "",
+  setPage: () => {},
 };
 
+let first = true;
 export const GlobalContext = createContext<GlobalState>(initialGlobalState);
 
 export const GlobalProvider = ({ children }: any) => {
@@ -48,8 +54,12 @@ export const GlobalProvider = ({ children }: any) => {
   const [sevenDaysSumData, setSevenDaysData] = useState<Profit[]>([]);
   const [productProfitData, setProductProfitData] = useState<any>({});
 
+  // 保存每个页面的路由
+  const [page, setPage] = useState<string>("");
+
   const router = useRouter();
   const path = usePathname();
+  const searchParams = useSearchParams();
 
   const logout = () => {
     document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=''`;
@@ -158,6 +168,18 @@ export const GlobalProvider = ({ children }: any) => {
     fetchUserInfo();
   }, []);
 
+  useEffect(() => {
+    let query = page;
+    if (first) {
+      query = transParams(searchParams);
+      query && setPage(query)
+    }
+    first = false;
+    router.replace(query ? `${path}?${query}` : path);
+  }, [page]);
+
+  console.log('query', page, first)
+
   const globalValue = useMemo(
     () => ({
       user,
@@ -170,6 +192,8 @@ export const GlobalProvider = ({ children }: any) => {
       productProfitData,
       setProductProfitData,
       logout,
+      page,
+      setPage,
     }),
     [
       JSON.stringify(user),
@@ -177,7 +201,7 @@ export const GlobalProvider = ({ children }: any) => {
       JSON.stringify(userShares),
       chartLoading,
       JSON.stringify(sevenDaysSumData),
-      JSON.stringify([productProfitData]),
+      JSON.stringify([productProfitData, page]),
     ]
   );
 

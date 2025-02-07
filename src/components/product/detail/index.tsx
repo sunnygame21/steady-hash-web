@@ -1,7 +1,8 @@
 "use client";
 import React, { useContext, useEffect, useState } from "react";
-import { bignumber } from "mathjs";
-import { multiply } from "lodash";
+import { useSearchParams } from "next/navigation";
+import { find, multiply } from "lodash";
+import { motion } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
 import EchartLine from "@/components/product/line";
 import { BackIcon } from "@/components/Icons";
@@ -46,15 +47,26 @@ const IntroType = [
 
 let first = true;
 
-const Detail = ({ onClose, detailData }: any) => {
-  const { productProfitData, setProductProfitData } = useContext(GlobalContext);
+const Detail = ({}: any) => {
+  const params = useSearchParams();
+  const productId = params.get("productId") || "";
+  const { productProfitData, setProductProfitData, productsList, setPage } =
+    useContext(GlobalContext);
   const [profitData, setProfitData] = useState<any>([]);
   const [timeType, setTimeType] = useState(DateType.month);
   const [type, setType] = useState(IntroType[0]);
+
   const [loading, setLoading] = useState(true);
+
+  const detailData: any = find(productsList, (item) => item.id === productId);
+
+  const close = () => {
+    setPage("page=product");
+  };
+
   const fetchData = async () => {
     try {
-      if (!detailData?.id) return;
+      if (!productId) return;
       setLoading(true);
       let days = timeType.num;
       const { startDate, endDate, daysDifference } = getProfitParams(days);
@@ -66,7 +78,7 @@ const Detail = ({ onClose, detailData }: any) => {
         days
       );
       const { success, data = [] } = await fetch(
-        `/api/products/daily-profit?startDate=${startDate}&endDate=${endDate}&productId=${detailData.id}`,
+        `/api/products/daily-profit?startDate=${startDate}&endDate=${endDate}&productId=${productId}`,
         {
           method: "GET",
         }
@@ -78,8 +90,8 @@ const Detail = ({ onClose, detailData }: any) => {
         setProfitData(res);
         setProductProfitData({
           ...productProfitData,
-          [detailData?.id]: {
-            ...(productProfitData?.[detailData?.id] || {}),
+          [productId]: {
+            ...(productProfitData?.[productId] || {}),
             [timeType.num]: res,
           },
         });
@@ -90,55 +102,56 @@ const Detail = ({ onClose, detailData }: any) => {
       console.log(
         "get calendar data error",
         error,
-        productProfitData?.[detailData?.id]?.[timeType.num]
+        productProfitData?.[productId]?.[timeType.num]
       );
     }
   };
 
   useEffect(() => {
-    if (!productProfitData?.[detailData?.id]?.[timeType.num]) {
-      if (first) {
-        fetchData();
-        first = false;
-      }
+    if (!productProfitData?.[productId]?.[timeType.num] && productId) {
+      fetchData();
     } else {
       setLoading(false);
-      setProfitData(productProfitData?.[detailData?.id]?.[timeType.num]);
+      setProfitData(productProfitData?.[productId]?.[timeType.num]);
     }
-    return () => {
-      first = true;
-    };
-  }, [JSON.stringify(productProfitData), timeType.num, detailData?.id]);
+  }, [JSON.stringify(productProfitData), timeType.num, productId]);
 
-  return detailData ? (
-    <div
-    className={styles.wrap}
-    // initial={{ transform: "translateX(100vw)" }}
-    // animate={{ transform: show ? "translateX(0)" : "translateX(100vw)" }}
-    // transition={{ duration: 0.2 }}
+  return (
+    <motion.div
+      className={styles.detailWrap}
+      initial={{ left: "100%" }}
+      animate={{
+        left: productId ? 0 : "100%",
+      }}
+      transition={{ duration: 0.2 }}
     >
-      <BackIcon className={styles.close} onClick={onClose} />
-      <div className={styles.titleCard}>
-        <img src={detailData?.icon} className={styles.itemImage}></img>
-        <div className={styles.itemRight}>
-          <div className={styles.itemDetail}>
-            <p className={styles.name}>
-              {detailData?.name}
-              {/* <span> ({detailData?.code})</span> */}
-            </p>
-            <p className={styles.desc}>Earning starts soon</p>
-          </div>
-          <div className={styles.status}>
-            <p className={styles.money}>
-              *APR {multiply(detailData.apr_7day, 100).toFixed(2)}%
-            </p>
-            <p className={styles.type}>
-              <span className={styles.open}>OPEN</span>&ensp;/&ensp;
-              <span className={styles.closed}>CLOSED</span>
-            </p>
+      <BackIcon className={styles.close} onClick={close} />
+      {productsList?.length > 0 ? (
+        <div className={styles.titleCard}>
+          <img src={detailData?.icon} className={styles.itemImage}></img>
+          <div className={styles.itemRight}>
+            <div className={styles.itemDetail}>
+              <p className={styles.name}>
+                {detailData?.name}
+                {/* <span> ({detailData?.code})</span> */}
+              </p>
+              <p className={styles.desc}>Earning starts soon</p>
+            </div>
+            <div className={styles.status}>
+              <p className={styles.money}>
+                *APR {multiply(detailData?.apr_7day, 100).toFixed(2)}%
+              </p>
+              <p className={styles.type}>
+                <span className={styles.open}>OPEN</span>&ensp;/&ensp;
+                <span className={styles.closed}>CLOSED</span>
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Skeleton className={styles.titleCardSkeleton}></Skeleton>
+      )}
+
       <div className={styles.chartWrap}>
         <div className={styles.chart}>
           {loading ? (
@@ -148,40 +161,43 @@ const Detail = ({ onClose, detailData }: any) => {
           )}
         </div>
         {/* <div className={styles.times}>
-          {Object.values(DateType).map((item) => (
-            <div
-              key={`product-detail-time-${item.num}`}
-              className={timeType.num === item.num ? styles.timeActive : ""}
-              onClick={() => setTimeType(item)}
-            >
-              {item.text}
-            </div>
-          ))}
-        </div> */}
+      {Object.values(DateType).map((item) => (
+        <div
+          key={`product-detail-time-${item.num}`}
+          className={timeType.num === item.num ? styles.timeActive : ""}
+          onClick={() => setTimeType(item)}
+        >
+          {item.text}
+        </div>
+      ))}
+    </div> */}
       </div>
       <div className={styles.intro}>
         {/* <div className={styles.tabs}>
-          {IntroType.map((item) => (
-            <div
-              key={`product-detail-intro-${item.key}`}
-              className={type.key === item.key ? styles.tabActive : ""}
-              onClick={() => setType(item)}
-            >
-              {item.text}
-            </div>
-          ))}
-        </div> */}
-        <div className={styles.introDetail}>
-          <p className={styles.title}>
-            {detailData?.name}&ensp;-&ensp;{multiply(detailData.apr_7day, 100).toFixed(0)}%
-          </p>
-          <div className={styles.detail}>
-          {detailData?.description}
-          </div>
+      {IntroType.map((item) => (
+        <div
+          key={`product-detail-intro-${item.key}`}
+          className={type.key === item.key ? styles.tabActive : ""}
+          onClick={() => setType(item)}
+        >
+          {item.text}
         </div>
+      ))}
+    </div> */}
+        {productsList?.length > 0 ? (
+          <div className={styles.introDetail}>
+            <p className={styles.title}>
+              {detailData?.name}&ensp;-&ensp;
+              {multiply(detailData?.apr_7day, 100).toFixed(0)}%
+            </p>
+            <div className={styles.detail}>{detailData?.description}</div>
+          </div>
+        ) : (
+          <Skeleton className={styles.introSkeleton}></Skeleton>
+        )}
       </div>
-    </div>
-  ) : null;
+    </motion.div>
+  );
 };
 
 export default Detail;

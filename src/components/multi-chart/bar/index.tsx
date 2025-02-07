@@ -159,9 +159,7 @@ const EchartsBar = (props: Props) => {
       <div id={`bar-chart-${productId}`} className={styles.bar}></div>
 
       {chartLoading && (
-        <div className={styles.skeletonWrap}>
-          <Skeleton count={1} className={styles.skeleton} />
-        </div>
+        <Skeleton className={styles.skeleton} />
       )}
     </div>
   );

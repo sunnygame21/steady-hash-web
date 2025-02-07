@@ -48,7 +48,7 @@ export const formatAmount = (amount: number) => {
   if (amount > 0) {
     str = `+`;
   } else {
-    str = '-'
+    str = "-";
   }
 
   if (amount >= 1000) {
@@ -62,11 +62,7 @@ export const formatAmount = (amount: number) => {
 export const generateDays = (days: number, start: string) => {
   const res = [];
   for (let i = 0; i <= days; i++) {
-    res.push(
-      moment(start)
-        .add(i, "days")
-        .format("YYYY-MM-DD")
-    );
+    res.push(moment(start).add(i, "days").format("YYYY-MM-DD"));
   }
   return res;
 };
@@ -88,4 +84,13 @@ export const nextEvenNumber = (n: number) => {
     // 如果是奇数，返回下一个偶数
     return res + 1;
   }
+};
+
+export const transParams = (searchParams: any) => {
+  const params: any = [];
+  searchParams.forEach((value: string, key: string) => {
+    params.push(`${key}=${value}`);
+  });
+
+  return params.join("&");
 };

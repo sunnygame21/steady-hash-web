@@ -1,4 +1,3 @@
-"use client";
 import React, { useContext, useEffect, useState } from "react";
 import { find } from "lodash";
 import { Dropdown } from "antd";

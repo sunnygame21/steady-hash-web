@@ -1,4 +1,3 @@
-"use client";
 import React, { memo, useEffect, useState } from "react";
 import * as echarts from "echarts";
 import Skeleton from "react-loading-skeleton";

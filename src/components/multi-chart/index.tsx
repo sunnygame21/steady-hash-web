@@ -1,4 +1,3 @@
-"use client";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { classNames } from "@/utils/helper";
 import { GlobalContext } from "@/app/state/global";

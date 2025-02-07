@@ -1,8 +1,10 @@
 "use client";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Collapse, CollapseProps } from "antd";
 import { multiply } from "lodash";
 import { motion } from "framer-motion";
+import Skeleton from "react-loading-skeleton";
 import { GlobalContext } from "@/app/state/global";
 import { Product } from "@/types/info";
 import { classNames } from "@/utils/helper";
@@ -17,9 +19,14 @@ const text = `
   it can be found as a welcome guest in many households across the world.
 `;
 
-const Products = ({ close, show }: any) => {
-  const { productsList } = useContext(GlobalContext);
-  const [selectProduct, setSelectProduct] = useState<Product | null>(null);
+const Products = () => {
+  const params = useSearchParams();
+  const page = params.get("page");
+  const { productsList, setPage } = useContext(GlobalContext);
+  const [productModal, setProductModal] = useState(false);
+  const close = () => {
+    setPage("");
+  };
 
   const items: CollapseProps["items"] = [
     {
@@ -43,12 +50,16 @@ const Products = ({ close, show }: any) => {
     console.log(key);
   };
 
+  useEffect(() => {
+    setProductModal(page === "product");
+  }, [page]);
+
   return (
     <motion.div
       initial={{ transform: "translateY(100%)", top: 0 }}
       animate={{
-        transform: show ? "translateY(0)" : "translateY(100%)",
-        top: show ? 0 : "100%",
+        transform: productModal ? "translateY(0)" : "translateY(100%)",
+        top: productModal ? 0 : "100%",
       }}
       transition={{ duration: 0.3 }}
       className={classNames(styles.wrap)}
@@ -65,24 +76,30 @@ const Products = ({ close, show }: any) => {
         </div>
 
         <div className={styles.productList}>
-          {productsList.map((item, i) => {
-            return (
-              <div
-                className={styles.productItem}
-                key={`product-item-${i}`}
-                onClick={() => setSelectProduct(item)}
-              >
-                <div className={styles.top}>
-                  <img src={item?.icon} alt="" />
-                  <p>{multiply(item.apr_7day, 100).toFixed(2)}%</p>
+          {productsList.length > 0 ? (
+            productsList.map((item, i) => {
+              return (
+                <div
+                  className={styles.productItem}
+                  key={`product-item-${i}`}
+                  onClick={() => {
+                    setPage(`page=product&productId=${item.id}`);
+                  }}
+                >
+                  <div className={styles.top}>
+                    <img src={item?.icon} alt="" />
+                    <p>{multiply(item.apr_7day, 100).toFixed(2)}%</p>
+                  </div>
+                  <div className={styles.bottom}>
+                    <p>{item?.name}</p>
+                    <p>by SteadyHash</p>
+                  </div>
                 </div>
-                <div className={styles.bottom}>
-                  <p>{item?.name}</p>
-                  <p>by SteadyHash</p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <Skeleton className={styles.itemSkeleton}></Skeleton>
+          )}
         </div>
         <div className={styles.warn}>
           <AlertIcon />
@@ -101,7 +118,7 @@ const Products = ({ close, show }: any) => {
             key={"product"}
           />
         </div>
-
+        {/* 
         <motion.div
           className={styles.detailWrap}
           initial={{ left: "100%" }}
@@ -114,7 +131,8 @@ const Products = ({ close, show }: any) => {
             detailData={selectProduct}
             onClose={() => setSelectProduct(null)}
           />
-        </motion.div>
+        </motion.div> */}
+        <Detail />
       </div>
     </motion.div>
   );
