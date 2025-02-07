@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { floor } from "lodash";
 import { GlobalContext } from "@/app/state/global";
-import { transBarProfit } from "@/utils/profit";
+import { getYesterdayProfit, transBarProfit } from "@/utils/profit";
 import { addCommas } from "@/utils/helper";
 import { CartIcon } from "../Icons";
 import BarCalendarChart from "../multi-chart";
@@ -14,7 +14,6 @@ import styles from "./index.module.css";
 const Home = () => {
   const { user, productsList, sevenDaysSumData, setPage } =
     useContext(GlobalContext);
-
 
   if (!user?.id) return null;
 
@@ -30,6 +29,7 @@ const Home = () => {
         chartData={{
           dataList: transBarProfit(sevenDaysSumData, user.allInvest, 7),
           percent: floor(((user.allProfit || 0) / user.allInvest) * 100, 2),
+          yesterPercent: getYesterdayProfit(sevenDaysSumData, user.allInvest),
           total: addCommas(user.allMoney),
         }}
       />
@@ -48,7 +48,7 @@ const Home = () => {
 
       <PortfolioList title="Portfolio" type="bar" />
 
-      <Products  />
+      <Products />
     </div>
   );
 };

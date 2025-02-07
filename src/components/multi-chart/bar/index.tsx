@@ -3,7 +3,11 @@ import * as echarts from "echarts";
 import { floor, maxBy, round, sumBy } from "lodash";
 import Skeleton from "react-loading-skeleton";
 import { GlobalContext } from "@/app/state/global";
-import { calculateMaxNum, transBarProfit } from "@/utils/profit";
+import {
+  calculateMaxNum,
+  getYesterdayProfit,
+  transBarProfit,
+} from "@/utils/profit";
 import { addCommas } from "@/utils/helper";
 import { UNIT_NUMBER, UNIT_PERCENT } from "@/constant";
 import { ProfitIcon } from "@/components/Icons";
@@ -16,7 +20,14 @@ interface Props {
 
 const EchartsBar = (props: Props) => {
   const { chartData } = props;
-  const { dataList, total, percent, productId, detailStyle = {} } = chartData || {};
+  const {
+    dataList,
+    total,
+    percent,
+    yesterPercent,
+    productId,
+    detailStyle = {},
+  } = chartData || {};
   const { chartLoading, user } = useContext(GlobalContext);
   console.log("dataList", dataList);
 
@@ -153,14 +164,14 @@ const EchartsBar = (props: Props) => {
           <span>
             {percent}
             %&ensp;
+            {yesterPercent}
           </span>
+          vs Last week
         </p>
       </div>
       <div id={`bar-chart-${productId}`} className={styles.bar}></div>
 
-      {chartLoading && (
-        <Skeleton className={styles.skeleton} />
-      )}
+      {chartLoading && <Skeleton className={styles.skeleton} />}
     </div>
   );
 };

@@ -14,7 +14,7 @@ const Orders = () => {
         <div className={styles.itemRight}>
           <div className={styles.itemDetail}>
             <p className={styles.name}>Steady <span> (#STEADY_4)</span></p>
-            <p className={styles.desc}>Earning starts soon, 12-04</p>
+            <p className={styles.desc}>Earning starts soon</p>
           </div>
           <div className={styles.status}>
             <p className={styles.money}>$5,000.00</p>

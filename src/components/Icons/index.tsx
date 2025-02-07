@@ -534,3 +534,30 @@ export const ArrowIcon: React.FC<any> = ({ className, style, onClick }) => (
     />
   </svg>
 );
+
+export const DateIcon: React.FC<any> = ({ className, style, onClick }) => (
+  <svg
+    className={className}
+    style={style}
+    onClick={onClick}
+    width="16"
+    height="17"
+    viewBox="0 0 16 17"
+    fill="none"
+  >
+    <path
+      d="M2 8.19995C2 8.98788 2.15519 9.7681 2.45672 10.4961C2.75825 11.224 3.20021 11.8854 3.75736 12.4426C4.31451 12.9997 4.97595 13.4417 5.7039 13.7432C6.43185 14.0448 7.21207 14.2 8 14.2C8.78793 14.2 9.56815 14.0448 10.2961 13.7432C11.0241 13.4417 11.6855 12.9997 12.2426 12.4426C12.7998 11.8854 13.2417 11.224 13.5433 10.4961C13.8448 9.7681 14 8.98788 14 8.19995C14 6.60865 13.3679 5.08253 12.2426 3.95731C11.1174 2.83209 9.5913 2.19995 8 2.19995C6.4087 2.19995 4.88258 2.83209 3.75736 3.95731C2.63214 5.08253 2 6.60865 2 8.19995Z"
+      stroke="black"
+      strokeWidth="1.33333"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M8 4.86658V8.19991L10 10.1999"
+      stroke="black"
+      strokeWidth="1.33333"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

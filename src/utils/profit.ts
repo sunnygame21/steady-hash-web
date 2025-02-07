@@ -111,3 +111,16 @@ export const calculateMaxNum = (
   }
   return maxProfit >= result ? maxProfit : result;
 };
+
+export const getYesterdayProfit = (data: any[], shareAmount: number) => {
+  const yesterdayProfit = find(data || [], (cur) => {
+    return (
+      moment().local().subtract(1, "days").format("YYYY-MM-DD") ===
+      moment(cur.date).format("YYYY-MM-DD")
+    );
+  });
+  const profit = Number(yesterdayProfit?.profit);
+  const str = profit >= 0 ? "+" : "-";
+
+  return profit ? `(${str}${floor((profit / shareAmount) * 100, 2)}%)` : "";
+};

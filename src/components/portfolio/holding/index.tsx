@@ -53,19 +53,19 @@ const Holdings = () => {
         </Dropdown>
         <p className={styles.curName}>{user?.showName}</p>
       </div>
-      <div className={styles.orderList}>
+      <div className={styles.holdList}>
         {userShares.map((share, i) => {
           const curProduct: any = find(
             productsList,
             (product) => product?.id === share?.productId
           );
           return (
-            <div className={styles.orderItem} key={`holding-item-${i}`}>
-              <img src={icon.src} className={styles.itemImage}></img>
+            <div className={styles.holdItem} key={`holding-item-${i}`}>
+              <img src={curProduct.icon} className={styles.itemImage}></img>
               <div className={styles.itemRight}>
                 <div className={styles.itemDetail}>
                   <p className={styles.name}>{curProduct?.name}</p>
-                  <p className={styles.desc}>Earning starts soon, 12-04</p>
+                  <p className={styles.desc}>Earning starts soon</p>
                 </div>
                 <div className={styles.status}>
                   <p className={styles.money}>

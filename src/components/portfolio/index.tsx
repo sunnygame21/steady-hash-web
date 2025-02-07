@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { floor } from "lodash";
 import { GlobalContext } from "@/app/state/global";
-import { transBarProfit } from "@/utils/profit";
+import { getYesterdayProfit, transBarProfit } from "@/utils/profit";
 import { addCommas } from "@/utils/helper";
 import BarCalendarChart from "@/components/multi-chart";
 import Summary from "./summary";
@@ -21,6 +21,7 @@ const Portfolio = () => {
           chartData={{
             dataList: transBarProfit(sevenDaysSumData, user.allInvest, 7),
             percent: floor(((user.allProfit || 0) / user.allInvest) * 100, 2),
+            yesterPercent: getYesterdayProfit(sevenDaysSumData, user.allInvest),
             total: addCommas(user.allMoney),
           }}
         />

@@ -1,10 +1,10 @@
 import React from "react";
 import { floor, takeRight } from "lodash";
-import { BackBlackIcon } from "@/components/Icons";
+import { BackBlackIcon, DateIcon } from "@/components/Icons";
 import BarCalendarChart from "@/components/multi-chart";
 import { addCommas } from "@/utils/helper";
 import { CHART_STYLE } from "@/constant";
-import { transBarProfit } from "@/utils/profit";
+import { getYesterdayProfit, transBarProfit } from "@/utils/profit";
 
 import styles from "./index.module.css";
 
@@ -38,8 +38,13 @@ const IntroType = [
   },
 ];
 
-const Detail = ({ onClose, shareDetail, barData }: any) => {
+const Detail = ({ onClose, shareDetail }: any) => {
   const { name, icon, shareAmount, profit, productId } = shareDetail;
+  const barData = transBarProfit(
+    takeRight(shareDetail.data || [], 7),
+    shareAmount,
+    7
+  );
 
   return (
     <div className={styles.wrap}>
@@ -59,14 +64,15 @@ const Detail = ({ onClose, shareDetail, barData }: any) => {
             </div>
           </div>
         </div>
+        <div className={styles.soon}>
+          <DateIcon></DateIcon>
+          <span>{`You have a $${shareAmount} product that will begin accruing interest in 7 to 15 days.`}</span>
+        </div>
         <BarCalendarChart
           chartData={{
-            dataList: transBarProfit(
-              takeRight(shareDetail.data || [], 7),
-              shareAmount,
-              7
-            ),
+            dataList: barData,
             percent: floor(((profit || 0) / shareAmount) * 100, 2),
+            yesterPercent: getYesterdayProfit(barData, shareAmount),
             total: addCommas(shareAmount + profit),
             productId: productId,
             detailStyle: CHART_STYLE.product,

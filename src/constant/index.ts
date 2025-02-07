@@ -43,3 +43,10 @@ export const CHART_STYLE = {
     chartText: 'rgba(31, 41, 55, 1)'
   }
 }
+
+export enum Role {
+  INNER = 1000, // 内部用户
+  LP = 100, // lp 
+  HOLDER = 10, // holder
+  INIT = 1, // init
+}

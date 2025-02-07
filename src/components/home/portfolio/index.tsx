@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { add, find, floor, takeRight } from "lodash";
+import { find, floor } from "lodash";
 import Skeleton from "react-loading-skeleton";
-import moment from "moment";
 import { motion } from "framer-motion";
 import { GlobalContext } from "@/app/state/global";
 import { addCommas } from "@/utils/helper";
+import { getYesterdayProfit } from "@/utils/profit";
 import { ProfitIcon } from "@/components/Icons";
 import Line from "./line";
 import Detail from "./detail";
@@ -46,12 +46,6 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
             productsList,
             (product) => product?.id === item?.productId
           );
-          const profit = find(item?.data || [], (cur) => {
-            return (
-              moment().local().subtract(1, "days").format("YYYY-MM-DD") ===
-              moment(cur.date).format("YYYY-MM-DD")
-            );
-          });
           return (
             <div
               className={styles.portfolioItem}
@@ -79,12 +73,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
                     <p className={styles.profit}>
                       <ProfitIcon />+
                       {floor((item.profit / item.shareAmount) * 100, 2)}%
-                      {profit?.profit
-                        ? `(+${floor(
-                            (Number(profit?.profit) / item.shareAmount) * 100,
-                            2
-                          )}%)`
-                        : ""}
+                      {getYesterdayProfit(item.data || [], item.shareAmount)}
                     </p>
                   </div>
                   <div className={styles.portfolioChart}>
