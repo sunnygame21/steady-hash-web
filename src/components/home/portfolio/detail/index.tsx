@@ -66,7 +66,7 @@ const Detail = ({ onClose, shareDetail }: any) => {
         </div>
         <div className={styles.soon}>
           <DateIcon></DateIcon>
-          <span>{`You have a $${shareAmount} product that will begin accruing interest in 7 to 15 days.`}</span>
+          <span>{`You have a $${addCommas(shareAmount)} product that will begin accruing interest in 7 to 15 days.`}</span>
         </div>
         <BarCalendarChart
           chartData={{

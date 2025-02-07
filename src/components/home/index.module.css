@@ -17,25 +17,54 @@
   font-weight: 500;
   color: rgba(156, 163, 175, 1);
 }
-.exploreBtn {
+.btn {
+  margin-top: 16px;
+  height: 48px;
+  display: flex;
+}
+.btn div {
+  height: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 16px;
-  height: 48px;
-  background: rgba(31, 41, 55, 1);
   border-radius: 12px;
   font-size: 14px;
-  font-weight: 700;
-  color: #fff;
+  font-family: Roboto Bold;
 }
-.exploreBtn svg {
+.btn div svg {
   margin-right: 8px;
   width: 17px;
   height: 17px;
 }
+.exploreBtn {
+  margin-right: 8px;
+  background: rgba(31, 41, 55, 1);
+  color: #fff;
+}
+.holderBtn {
+  margin-left: 8px;
+  background: rgba(249, 250, 251, 1);
+  border: 1px solid rgba(243, 244, 246, 1);
+  color: rgba(22, 73, 81, 1);
+}
+
 .skeleton {
   margin-top: 16px;
   height: 48px;
   border-radius: 12px;
+}
+
+
+.manage {
+  padding: 16px 24px;
+  background: rgb(17, 24, 39);
+  color: #fff;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 3;
 }

@@ -162,9 +162,7 @@ const EchartsBar = (props: Props) => {
         <p className={styles.desc}>
           <ProfitIcon />
           <span>
-            {percent}
-            %&ensp;
-            {yesterPercent}
+            {percent}% {yesterPercent}%&ensp;
           </span>
           vs Last week
         </p>

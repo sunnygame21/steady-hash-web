@@ -561,3 +561,44 @@ export const DateIcon: React.FC<any> = ({ className, style, onClick }) => (
     />
   </svg>
 );
+
+export const AccountIcon: React.FC<any> = ({ className, style, onClick }) => (
+  <svg
+    className={className}
+    style={style}
+    onClick={onClick}
+    width="18"
+    height="18"
+    viewBox="0 0 18 18"
+    fill="none"
+  >
+    <path
+      d="M1.75 16.5V15.6667C1.75 13.825 3.24167 12.3334 5.08333 12.3334H8.41667C10.2583 12.3334 11.75 13.825 11.75 15.6667V16.5"
+      stroke="#164951"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M6.75 9.83337C5.36667 9.83337 4.25 8.71671 4.25 7.33337C4.25 5.95004 5.36667 4.83337 6.75 4.83337C8.13333 4.83337 9.25 5.95004 9.25 7.33337C9.25 8.71671 8.13333 9.83337 6.75 9.83337Z"
+      stroke="#164951"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M11.75 4H16.75"
+      stroke="#164951"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14.25 1.5V6.5"
+      stroke="#164951"
+      strokeWidth="1.66667"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);

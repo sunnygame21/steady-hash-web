@@ -1,6 +1,7 @@
 import { ServerErrorStatus } from "@/types/error";
 import jsonResponse from "@/utils/jsonResponse";
 
+// 用户每个产品的收益
 export async function GET(req: any) {
   try {
     const token =

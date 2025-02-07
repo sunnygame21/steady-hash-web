@@ -53,6 +53,7 @@ export const GlobalProvider = ({ children }: any) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [sevenDaysSumData, setSevenDaysData] = useState<Profit[]>([]);
   const [productProfitData, setProductProfitData] = useState<any>({});
+  const [holder, setHolder] = useState([])
 
   // 保存每个页面的路由
   const [page, setPage] = useState<string>("");
@@ -81,6 +82,7 @@ export const GlobalProvider = ({ children }: any) => {
         await fetchShare();
         fetchSevenData();
         fetchProducts();
+        getHolder()
         path === "/login" && router.push("/");
       } else {
         router.push("/login");
@@ -164,9 +166,31 @@ export const GlobalProvider = ({ children }: any) => {
     }
   };
 
+  const getHolder = async () => {
+    try {
+      const { success, data = [] } = await fetch(
+        `/api/user/holder`,
+        {
+          method: "GET",
+        }
+      )
+        .then((res) => res.json())
+        .catch(() => ({ success: false }));
+      console.log('data', data)
+      if (success) {
+        setHolder(data)
+      }
+      setChartLoading(false);
+    } catch (error) {
+      setChartLoading(false);
+      console.log("get calendar data error", error);
+    }
+  };
+
   useEffect(() => {
     fetchUserInfo();
   }, []);
+
 
   useEffect(() => {
     let query = page;
@@ -178,7 +202,6 @@ export const GlobalProvider = ({ children }: any) => {
     router.replace(query ? `${path}?${query}` : path);
   }, [page]);
 
-  console.log('query', page, first)
 
   const globalValue = useMemo(
     () => ({

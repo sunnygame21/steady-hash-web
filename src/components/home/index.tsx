@@ -1,10 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { floor } from "lodash";
+import { motion } from "framer-motion";
 import { GlobalContext } from "@/app/state/global";
 import { getYesterdayProfit, transBarProfit } from "@/utils/profit";
 import { addCommas } from "@/utils/helper";
-import { CartIcon } from "../Icons";
+import { AccountIcon, CartIcon } from "../Icons";
 import BarCalendarChart from "../multi-chart";
 import Products from "../product";
 import PortfolioList from "./portfolio";
@@ -14,6 +15,7 @@ import styles from "./index.module.css";
 const Home = () => {
   const { user, productsList, sevenDaysSumData, setPage } =
     useContext(GlobalContext);
+  const [manage, setManage] = useState(false);
 
   if (!user?.id) return null;
 
@@ -35,12 +37,18 @@ const Home = () => {
       />
 
       {productsList.length > 0 ? (
-        <div
-          className={styles.exploreBtn}
-          onClick={() => setPage("page=product")}
-        >
-          <CartIcon />
-          Explore
+        <div className={styles.btn}>
+          <div
+            className={styles.exploreBtn}
+            onClick={() => setPage("page=product")}
+          >
+            <CartIcon />
+            Explore
+          </div>
+          <div className={styles.holderBtn} onClick={() => setManage(true)}>
+            <AccountIcon />
+            Manage VAs (5)
+          </div>
         </div>
       ) : (
         <Skeleton className={styles.skeleton} />
@@ -49,6 +57,19 @@ const Home = () => {
       <PortfolioList title="Portfolio" type="bar" />
 
       <Products />
+
+      <motion.div
+        className={styles.manage}
+        initial={{ transform: "translateY(100%)", top: 0 }}
+        animate={{
+          transform: manage ? "translateY(0)" : "translateY(100%)",
+          top: manage ? 0 : "100%",
+        }}
+        transition={{ duration: 0.2 }}
+        onClick={() => setManage(false)}
+      >
+        account
+      </motion.div>
     </div>
   );
 };
