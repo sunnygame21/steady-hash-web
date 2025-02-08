@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
 import { floor } from "lodash";
 import { motion } from "framer-motion";
@@ -13,11 +14,20 @@ import PortfolioList from "./portfolio";
 import styles from "./index.module.css";
 
 const Home = () => {
+  const params = useSearchParams();
+  const page = params.get("page");
   const { user, productsList, sevenDaysSumData, setPage } =
     useContext(GlobalContext);
+  const [product, setProduct] = useState(false);
   const [manage, setManage] = useState(false);
 
+  useEffect(() => {
+    setProduct(page === "product");
+    setManage(page === "manage");
+  }, [page]);
+
   if (!user?.id) return null;
+
 
   return (
     <div className={styles.wrap}>
@@ -40,7 +50,10 @@ const Home = () => {
         <div className={styles.btn}>
           <div
             className={styles.exploreBtn}
-            onClick={() => setPage("page=product")}
+            onClick={() => {
+              setPage("page=product");
+              setProduct(true);
+            }}
           >
             <CartIcon />
             Explore
@@ -56,7 +69,25 @@ const Home = () => {
 
       <PortfolioList title="Portfolio" type="bar" />
 
-      <Products />
+      <motion.div
+        className={styles.manage}
+        initial={{ transform: "translateY(100%)", top: 0 }}
+        animate={{
+          transform: product ? "translateY(0)" : "translateY(100%)",
+          top: product ? 0 : "100%",
+        }}
+        transition={{ duration: 0.2 }}
+        onClick={() => setManage(false)}
+      >
+        {product && (
+          <Products
+            close={() => {
+              setProduct(false);
+              setPage("");
+            }}
+          />
+        )}
+      </motion.div>
 
       <motion.div
         className={styles.manage}

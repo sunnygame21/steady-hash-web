@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Collapse, CollapseProps } from "antd";
 import { multiply } from "lodash";
-import { motion } from "framer-motion";
+import { motion, useScroll } from "framer-motion";
 import Skeleton from "react-loading-skeleton";
 import { GlobalContext } from "@/app/state/global";
 import { Product } from "@/types/info";
@@ -19,14 +19,11 @@ const text = `
   it can be found as a welcome guest in many households across the world.
 `;
 
-const Products = () => {
+const Products = ({ close }: any) => {
   const params = useSearchParams();
-  const page = params.get("page");
+  const productId = params.get("productId") || "";
   const { productsList, setPage } = useContext(GlobalContext);
-  const [productModal, setProductModal] = useState(false);
-  const close = () => {
-    setPage("");
-  };
+  const [selectId, setSelectId] = useState("");
 
   const items: CollapseProps["items"] = [
     {
@@ -51,20 +48,12 @@ const Products = () => {
   };
 
   useEffect(() => {
-    setProductModal(page === "product");
-  }, [page]);
+    setSelectId(productId);
+  }, [productId]);
 
   return (
-    <motion.div
-      initial={{ transform: "translateY(100%)", top: 0 }}
-      animate={{
-        transform: productModal ? "translateY(0)" : "translateY(100%)",
-        top: productModal ? 0 : "100%",
-      }}
-      transition={{ duration: 0.3 }}
-      className={classNames(styles.wrap)}
-    >
-      <div>
+    <>
+      <div className={styles.wrap}>
         <CloseIcon className={styles.close} onClick={close} />
         <div className={styles.logo}>
           Steady
@@ -83,6 +72,7 @@ const Products = () => {
                   className={styles.productItem}
                   key={`product-item-${i}`}
                   onClick={() => {
+                    setSelectId(item.id);
                     setPage(`page=product&productId=${item.id}`);
                   }}
                 >
@@ -118,23 +108,26 @@ const Products = () => {
             key={"product"}
           />
         </div>
-        {/* 
-        <motion.div
-          className={styles.detailWrap}
-          initial={{ left: "100%" }}
-          animate={{
-            left: !!selectProduct ? 0 : "100%",
-          }}
-          transition={{ duration: 0.2 }}
-        >
-          <Detail
-            detailData={selectProduct}
-            onClose={() => setSelectProduct(null)}
-          />
-        </motion.div> */}
-        <Detail />
       </div>
-    </motion.div>
+      <motion.div
+        className={styles.detailWrap}
+        initial={{ left: "100%" }}
+        animate={{
+          left: selectId ? 0 : "100%",
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        {selectId && (
+          <Detail
+            productId={selectId}
+            onClose={() => {
+              setPage("page=product");
+              setSelectId("");
+            }}
+          />
+        )}
+      </motion.div>
+    </>
   );
 };
 

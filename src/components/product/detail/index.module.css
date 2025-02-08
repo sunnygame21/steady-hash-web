@@ -1,14 +1,14 @@
 
 
-.detailWrap {
-  position: absolute;
-  top: 0;
-  bottom: 0;
+.content {
+  height: 100vh;
   width: 100%;
-  height: 100%;
-  background: rgba(17, 24, 39, 1);
-  overflow: auto;
-  z-index: 4;
+  overflow: hidden;
+}
+
+/* 使用 CSS 来隐藏滚动条但仍能滚动 */
+.content::-webkit-scrollbar {
+  display: none; /* 隐藏滚动条 */
 }
 
 .close {
@@ -91,6 +91,7 @@
 }
 
 .chart {
+  width: 100%;
   height: 238px;
   background: rgba(17, 24, 39, 1);
   position: relative;
@@ -124,11 +125,12 @@
   color: rgba(22, 73, 81, 1);
 }
 .intro {
-  height: 100%;
   margin-top: 24px;
   padding: 24px;
   background-color: #fff;
+  height: calc(100% - 400px);
   overflow: auto;
+
 }
 .introSkeleton {
   margin-top: 24px;

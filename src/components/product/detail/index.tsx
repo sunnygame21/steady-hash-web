@@ -47,9 +47,7 @@ const IntroType = [
 
 let first = true;
 
-const Detail = ({}: any) => {
-  const params = useSearchParams();
-  const productId = params.get("productId") || "";
+const Detail = ({ productId, onClose }: any) => {
   const { productProfitData, setProductProfitData, productsList, setPage } =
     useContext(GlobalContext);
   const [profitData, setProfitData] = useState<any>([]);
@@ -59,10 +57,6 @@ const Detail = ({}: any) => {
   const [loading, setLoading] = useState(true);
 
   const detailData: any = find(productsList, (item) => item.id === productId);
-
-  const close = () => {
-    setPage("page=product");
-  };
 
   const fetchData = async () => {
     try {
@@ -117,15 +111,9 @@ const Detail = ({}: any) => {
   }, [JSON.stringify(productProfitData), timeType.num, productId]);
 
   return (
-    <motion.div
-      className={styles.detailWrap}
-      initial={{ left: "100%" }}
-      animate={{
-        left: productId ? 0 : "100%",
-      }}
-      transition={{ duration: 0.2 }}
-    >
-      <BackIcon className={styles.close} onClick={close} />
+    <div className={styles.content}>
+
+      <BackIcon className={styles.close} onClick={onClose} />
       {productsList?.length > 0 ? (
         <div className={styles.titleCard}>
           <img src={detailData?.icon} className={styles.itemImage}></img>
@@ -151,7 +139,6 @@ const Detail = ({}: any) => {
       ) : (
         <Skeleton className={styles.titleCardSkeleton}></Skeleton>
       )}
-
       <div className={styles.chartWrap}>
         <div className={styles.chart}>
           {loading ? (
@@ -161,29 +148,29 @@ const Detail = ({}: any) => {
           )}
         </div>
         {/* <div className={styles.times}>
-      {Object.values(DateType).map((item) => (
-        <div
-          key={`product-detail-time-${item.num}`}
-          className={timeType.num === item.num ? styles.timeActive : ""}
-          onClick={() => setTimeType(item)}
-        >
-          {item.text}
-        </div>
-      ))}
-    </div> */}
+    {Object.values(DateType).map((item) => (
+      <div
+        key={`product-detail-time-${item.num}`}
+        className={timeType.num === item.num ? styles.timeActive : ""}
+        onClick={() => setTimeType(item)}
+      >
+        {item.text}
+      </div>
+    ))}
+  </div> */}
       </div>
       <div className={styles.intro}>
         {/* <div className={styles.tabs}>
-      {IntroType.map((item) => (
-        <div
-          key={`product-detail-intro-${item.key}`}
-          className={type.key === item.key ? styles.tabActive : ""}
-          onClick={() => setType(item)}
-        >
-          {item.text}
-        </div>
-      ))}
-    </div> */}
+    {IntroType.map((item) => (
+      <div
+        key={`product-detail-intro-${item.key}`}
+        className={type.key === item.key ? styles.tabActive : ""}
+        onClick={() => setType(item)}
+      >
+        {item.text}
+      </div>
+    ))}
+  </div> */}
         {productsList?.length > 0 ? (
           <div className={styles.introDetail}>
             <p className={styles.title}>
@@ -196,7 +183,7 @@ const Detail = ({}: any) => {
           <Skeleton className={styles.introSkeleton}></Skeleton>
         )}
       </div>
-    </motion.div>
+    </div>
   );
 };
 

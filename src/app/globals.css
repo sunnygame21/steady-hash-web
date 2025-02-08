@@ -66,3 +66,6 @@ body {
     transform: rotate(360deg);
   }
 }
+.negative  {
+  color: rgba(239, 71, 112, 1) !important;
+}

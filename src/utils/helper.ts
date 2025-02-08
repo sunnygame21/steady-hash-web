@@ -45,10 +45,10 @@ export const formatAmount = (amount: number) => {
     return "+0";
   }
   let str = "";
-  if (amount > 0) {
+  if (amount >= 0) {
     str = `+`;
   } else {
-    str = "-";
+    str = "";
   }
 
   if (amount >= 1000) {

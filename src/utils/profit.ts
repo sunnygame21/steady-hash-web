@@ -120,7 +120,7 @@ export const getYesterdayProfit = (data: any[], shareAmount: number) => {
     );
   });
   const profit = Number(yesterdayProfit?.profit);
-  const str = profit >= 0 ? "+" : "-";
+  const str = profit >= 0 ? "+" : "";
 
   return profit ? `(${str}${floor((profit / shareAmount) * 100, 2)}%)` : "";
 };
