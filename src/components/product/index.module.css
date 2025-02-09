@@ -1,6 +1,7 @@
 
 .wrap {
   overflow: auto;
+  height: 100%;
   padding: 16px 24px;
   background: rgb(17, 24, 39);
   color: #fff;

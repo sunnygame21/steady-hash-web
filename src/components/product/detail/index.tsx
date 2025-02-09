@@ -113,7 +113,11 @@ const Detail = ({ productId, onClose }: any) => {
   return (
     <div className={styles.content}>
 
-      <BackIcon className={styles.close} onClick={onClose} />
+      <div className={styles.top}>
+      <div className={styles.title}>
+        <BackIcon className={styles.close} onClick={onClose} />
+        <h3 className={styles.head}>Asset Detail </h3>
+      </div>
       {productsList?.length > 0 ? (
         <div className={styles.titleCard}>
           <img src={detailData?.icon} className={styles.itemImage}></img>
@@ -159,6 +163,7 @@ const Detail = ({ productId, onClose }: any) => {
     ))}
   </div> */}
       </div>
+     </div>
       <div className={styles.intro}>
         {/* <div className={styles.tabs}>
     {IntroType.map((item) => (
@@ -173,7 +178,7 @@ const Detail = ({ productId, onClose }: any) => {
   </div> */}
         {productsList?.length > 0 ? (
           <div className={styles.introDetail}>
-            <p className={styles.title}>
+            <p className={styles.infoTitle}>
               {detailData?.name}&ensp;-&ensp;
               {multiply(detailData?.apr_7day, 100).toFixed(0)}%
             </p>

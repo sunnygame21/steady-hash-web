@@ -119,7 +119,7 @@ export const getYesterdayProfit = (data: any[], shareAmount: number) => {
       moment(cur.date).format("YYYY-MM-DD")
     );
   });
-  const profit = Number(yesterdayProfit?.profit);
+  const profit = Number(yesterdayProfit?.profit) || 0;
   const str = profit >= 0 ? "+" : "";
 
 

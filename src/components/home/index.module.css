@@ -57,8 +57,6 @@
 
 
 .manage {
-  overflow-y: auto;
-  overflow-x: hidden;
   position: fixed;
   bottom: 0;
   left: 0;
