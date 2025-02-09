@@ -56,7 +56,6 @@ const Footer: React.FC<{}> = ({}) => {
                 active === menu?.link ? styles.active : ""
               )}
               onClick={() => router.push(menu.link)}
-              onTouchStart={() => router.push(menu.link)}
             >
               {active === menu?.link ? menu.activeIcon : menu.icon}
               <p>{menu.title}</p>

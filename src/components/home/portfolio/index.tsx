@@ -52,7 +52,7 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
               key={`portfolio-item-${i}`}
               onClick={() => {
                 if (!productsList?.length) return;
-                // setSelectShare({ ...item, ...curProduct });
+                setSelectShare({ ...item, ...curProduct });
                 setPage(`assetId=${item.productId}`);
               }}
             >
@@ -99,7 +99,13 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
         transition={{ duration: 0.2 }}
       >
         {selectShare ? (
-          <Detail shareDetail={selectShare} onClose={() => setPage("")} />
+          <Detail
+            shareDetail={selectShare}
+            onClose={() => {
+              setSelectShare(null);
+              setPage("");
+            }}
+          />
         ) : null}
       </motion.div>
     </div>

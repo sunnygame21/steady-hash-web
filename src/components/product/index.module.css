@@ -1,6 +1,9 @@
 
 .wrap {
   overflow: auto;
+  padding: 16px 24px;
+  background: rgb(17, 24, 39);
+  color: #fff;
 }
 
 /* 使用 CSS 来隐藏滚动条但仍能滚动 */
@@ -131,4 +134,5 @@
   background: rgba(17, 24, 39, 1);
   overflow: auto;
   z-index: 4;
+  
 }

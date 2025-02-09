@@ -24,7 +24,7 @@ const Code = () => {
 
   const getCode = async (email: string) => {
     setEmail(email);
-    const { success, data, err } = await fetch("/api/user/email-login", {
+    const { success, data, err } = await fetch("/api/user/email-code", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

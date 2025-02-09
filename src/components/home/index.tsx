@@ -6,10 +6,12 @@ import { motion } from "framer-motion";
 import { GlobalContext } from "@/app/state/global";
 import { getYesterdayProfit, transBarProfit } from "@/utils/profit";
 import { addCommas } from "@/utils/helper";
+import { Role } from "@/constant";
 import { AccountIcon, CartIcon } from "../Icons";
 import BarCalendarChart from "../multi-chart";
 import Products from "../product";
 import PortfolioList from "./portfolio";
+import Account from "./account";
 
 import styles from "./index.module.css";
 
@@ -27,7 +29,6 @@ const Home = () => {
   }, [page]);
 
   if (!user?.id) return null;
-
 
   return (
     <div className={styles.wrap}>
@@ -58,10 +59,13 @@ const Home = () => {
             <CartIcon />
             Explore
           </div>
-          <div className={styles.holderBtn} onClick={() => setManage(true)}>
-            <AccountIcon />
-            Manage VAs (5)
-          </div>
+
+          {user?.role === Role.LP && (
+            <div className={styles.holderBtn} onClick={() => setManage(true)}>
+              <AccountIcon />
+              Manage VAs (5)
+            </div>
+          )}
         </div>
       ) : (
         <Skeleton className={styles.skeleton} />
@@ -99,7 +103,14 @@ const Home = () => {
         transition={{ duration: 0.2 }}
         onClick={() => setManage(false)}
       >
-        account
+        {manage && (
+          <Account
+            onClose={() => {
+              setManage(false);
+              setPage("");
+            }}
+          />
+        )}
       </motion.div>
     </div>
   );
