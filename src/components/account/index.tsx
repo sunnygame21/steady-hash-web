@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import { find, floor } from "lodash";
+import Cookies from "js-cookie";
 import { GlobalContext } from "@/app/state/global";
 import { addCommas } from "@/utils/helper";
 import { Role } from "@/constant";
@@ -11,12 +12,19 @@ import withdraw from "@/images/account/withdraw.png";
 
 import styles from "./index.module.css";
 
-
 const users = ["Jillian", "Jasmin", "Beatty"];
 
 const Account = () => {
-  const { user, userShares, productsList, logout } = useContext(GlobalContext);
+  const { user, userShares, productsList, logout, fetchUserInfo } =
+    useContext(GlobalContext);
   const [curUser, seCurUser] = useState(users[0]);
+
+  const toMainAccount = async () => {
+    document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=${Cookies.get(
+      process.env.NEXT_PUBLIC_MAIN_COOKIE_NAME || ""
+    )}`;
+    await fetchUserInfo();
+  };
   return (
     <div className={styles.wrap}>
       <div className={styles.title}>
@@ -110,8 +118,11 @@ const Account = () => {
           </div>
         </div> */}
       </div>
+      <div className={styles.logout} onClick={toMainAccount}>
+          Return to Main Account
+        </div>
       {user?.role === Role.HOLDER ? (
-        <div className={styles.logout} onClick={logout}>
+        <div className={styles.logout} onClick={toMainAccount}>
           Return to Main Account
         </div>
       ) : (

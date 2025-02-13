@@ -3,7 +3,7 @@ import { createContext, useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { create, all } from "mathjs";
 import { message } from "antd";
-import { add, forIn, sumBy } from "lodash";
+import { add, find, forIn, sumBy } from "lodash";
 import Loading from "@/components/loading";
 import { Info, Product, Profit, Share } from "@/types/info";
 import { getProfitParams } from "@/utils/profit";
@@ -24,6 +24,9 @@ export interface GlobalState {
   logout: any;
   page: string;
   setPage: (page: string) => void;
+  holder: any[];
+  fetchHolder: () => void;
+  changeUser: (id: string) => void;
 }
 
 export const initialGlobalState: GlobalState = {
@@ -39,13 +42,19 @@ export const initialGlobalState: GlobalState = {
   logout: () => {},
   page: "",
   setPage: () => {},
+  holder: [],
+  fetchHolder: () => {},
+  changeUser: () => {},
 };
 
 let first = true;
+let curUserId: any = undefined;
 export const GlobalContext = createContext<GlobalState>(initialGlobalState);
 
 export const GlobalProvider = ({ children }: any) => {
   const [user, setUser] = useState<Info | null>();
+  const [preUser, setPreUser] = useState<Info | null>();
+
   const [loading, setLoading] = useState<boolean>(true);
   const [chartLoading, setChartLoading] = useState(true);
   const [productsList, setList] = useState<any>([]);
@@ -53,7 +62,7 @@ export const GlobalProvider = ({ children }: any) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [sevenDaysSumData, setSevenDaysData] = useState<Profit[]>([]);
   const [productProfitData, setProductProfitData] = useState<any>({});
-  const [holder, setHolder] = useState([])
+  const [holder, setHolder] = useState([]);
 
   // 保存每个页面的路由
   const [page, setPage] = useState<string>("");
@@ -79,10 +88,13 @@ export const GlobalProvider = ({ children }: any) => {
       const { data = {}, success } = res || {};
       if (success) {
         setUser({ ...data, showName: data?.username?.split("@")[0] });
+        curUserId = data?.id;
         await fetchShare();
         fetchSevenData();
         fetchProducts();
-        getHolder()
+        if (user?.role) {
+        }
+        fetchHolder();
         path === "/login" && router.push("/");
       } else {
         router.push("/login");
@@ -166,19 +178,41 @@ export const GlobalProvider = ({ children }: any) => {
     }
   };
 
-  const getHolder = async () => {
+  const fetchHolder = async () => {
     try {
-      const { success, data = [] } = await fetch(
-        `/api/user/holder`,
-        {
-          method: "GET",
-        }
-      )
+      const { success, data = [] } = await fetch(`/api/user/holder`, {
+        method: "GET",
+      })
         .then((res) => res.json())
         .catch(() => ({ success: false }));
-      console.log('data', data)
+      console.log("fetchHolder", data);
       if (success) {
-        setHolder(data)
+        setHolder(data);
+      }
+      setChartLoading(false);
+    } catch (error) {
+      setChartLoading(false);
+      console.log("get calendar data error", error);
+    }
+  };
+
+  const changeUser = async (vaUserId: string) => {
+    try {
+      const { success, data } = await fetch(`/api/assume-role`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ vaUserId }),
+      })
+        .then((res) => res.json())
+        .catch(() => ({ success: false }));
+      console.log("changeUser", data);
+      if (success) {
+        document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=${data?.token}`;
+        const curUser = find(holder, (item: any) => item?.id === vaUserId);
+        setUser(curUser);
+        router.refresh();
       }
       setChartLoading(false);
     } catch (error) {
@@ -188,20 +222,21 @@ export const GlobalProvider = ({ children }: any) => {
   };
 
   useEffect(() => {
-    fetchUserInfo();
-  }, []);
-
+    console.log("curUser", user?.id, curUserId);
+    if (curUserId !== user?.id || !user?.id) {
+      fetchUserInfo();
+    }
+  }, [user?.id]);
 
   useEffect(() => {
     let query = page;
     if (first) {
       query = transParams(searchParams);
-      query && setPage(query)
+      query && setPage(query);
     }
     first = false;
     router.replace(query ? `${path}?${query}` : path);
   }, [page]);
-
 
   const globalValue = useMemo(
     () => ({
@@ -217,14 +252,18 @@ export const GlobalProvider = ({ children }: any) => {
       logout,
       page,
       setPage,
+      holder,
+      fetchHolder,
+      changeUser,
     }),
     [
+      chartLoading,
       JSON.stringify(user),
       JSON.stringify(productsList),
       JSON.stringify(userShares),
-      chartLoading,
       JSON.stringify(sevenDaysSumData),
       JSON.stringify([productProfitData, page]),
+      JSON.stringify(holder),
     ]
   );
 

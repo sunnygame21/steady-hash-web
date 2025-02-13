@@ -56,6 +56,7 @@ const Code = () => {
     if (success) {
       const { access_token } = data || {};
       document.cookie = `${process.env.NEXT_PUBLIC_COOKIE_NAME}=${access_token}`;
+      document.cookie = `${process.env.NEXT_PUBLIC_MAIN_COOKIE_NAME}=${access_token}`;
       router.push("/");
       await fetchUserInfo();
       messageApi.success("Login success!");

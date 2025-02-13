@@ -8,15 +8,11 @@ import { Profit } from "@/types/info";
 import styles from "./index.module.css";
 
 const getMaxValue = (number: number) => {
-  // 将数字转换为字符串
-  const numString = number.toString();
-
-  // 如果是小数，返回1
-  if (numString.includes(".")) {
+  if (number < 1) {
     return 1;
   }
-
-  // 如果是整数，返回10的整数位数次方
+  const numString = number.toString();
+  // 返回10的整数位数次方
   const integerPart = numString.split(".")[0]; // 整数部分
   return Math.pow(10, integerPart.length);
 };
@@ -51,6 +47,7 @@ const Line = ({ title, product }: any) => {
           profit: profit,
         };
       });
+      console.log("lineData", lineData);
       setData(lineData);
     } catch (error) {
       setLoading(false);
@@ -65,9 +62,10 @@ const Line = ({ title, product }: any) => {
   useEffect(() => {
     if (data.length) {
       const max: any = maxBy(data, "profit")?.profit || 0;
+      console.log("datadatadata", data, getMaxValue(max));
       const option = {
         grid: {
-          top: "5%", // 调整顶部的间距
+          top: "0%", // 调整顶部的间距
           left: "0%",
           right: "0%",
           bottom: "10%",

@@ -6,7 +6,7 @@ export async function GET(req: any) {
   try {
     const token =
       req.cookies.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value ||
-      req.headers.get("STEADY_HASH_Authorization");
+      req.headers.get(process.env.NEXT_PUBLIC_COOKIE_NAME);
     const startDate = req.nextUrl.searchParams.get("startDate");
     const endDate = req.nextUrl.searchParams.get("endDate");
     const productId = req.nextUrl.searchParams.get("productId");

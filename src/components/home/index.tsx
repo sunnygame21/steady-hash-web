@@ -18,7 +18,7 @@ import styles from "./index.module.css";
 const Home = () => {
   const params = useSearchParams();
   const page = params.get("page");
-  const { user, productsList, sevenDaysSumData, setPage } =
+  const { user, productsList, sevenDaysSumData, setPage, holder } =
     useContext(GlobalContext);
   const [product, setProduct] = useState(false);
   const [manage, setManage] = useState(false);
@@ -63,7 +63,7 @@ const Home = () => {
           {user?.role === Role.LP && (
             <div className={styles.holderBtn} onClick={() => setManage(true)}>
               <AccountIcon />
-              Manage VAs (5)
+              Manage VAs ({holder?.length})
             </div>
           )}
         </div>
@@ -86,8 +86,8 @@ const Home = () => {
         {product && (
           <Products
             close={() => {
-              setProduct(false);
               setPage("");
+              setProduct(false);
             }}
           />
         )}
@@ -101,13 +101,12 @@ const Home = () => {
           top: manage ? 0 : "100%",
         }}
         transition={{ duration: 0.2 }}
-        onClick={() => setManage(false)}
       >
         {manage && (
           <Account
             onClose={() => {
-              setManage(false);
               setPage("");
+              setManage(false);
             }}
           />
         )}

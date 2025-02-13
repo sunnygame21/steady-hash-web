@@ -82,10 +82,31 @@
 .right {
   font-family: Roboto Bold;
   font-size: 14px;
+  text-transform: capitalize;
+  
 }
 .active {
 color: rgba(69, 179, 105, 1);
 }
 .init {
   color: rgba(239, 71, 112, 1);
+}
+.createBtn {
+  text-align: center;
+  margin-top: 16px;
+  border: 1px solid rgba(235, 236, 239, 1);
+  border-radius: 12px;
+  padding: 16px;
+  width: 100%;
+  font-size: 16px;
+}
+
+.input {
+  margin-top: 16px;
+  background-color: rgba(249, 250, 251, 1);
+  border-radius: 12px;
+  padding: 12px;
+  width: 100%;
+  color: rgba(107, 114, 128, 1);
+  outline: none;
 }

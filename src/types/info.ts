@@ -3,6 +3,7 @@ export interface Info {
   username?: string;
   access_token?: string;
   showName?: string;
+  role?: number
 }
 
 export interface Share {

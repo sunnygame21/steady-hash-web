@@ -29,8 +29,9 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
         (share) => share.productId === assetId
       );
       setSelectShare({ ...curShare, ...curProduct });
-    } else {
-      setSelectShare(null);
+    } 
+    return () => {
+      setSelectShare(null)
     }
   }, [assetId, userShares.length, productsList.length]);
 
@@ -52,8 +53,9 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
               key={`portfolio-item-${i}`}
               onClick={() => {
                 if (!productsList?.length) return;
-                setSelectShare({ ...item, ...curProduct });
                 setPage(`assetId=${item.productId}`);
+                setSelectShare({ ...item, ...curProduct });
+                
               }}
             >
               {productsList?.length > 0 ? (
@@ -102,8 +104,9 @@ const PortfolioList = ({ title, type, subTitle }: any) => {
           <Detail
             shareDetail={selectShare}
             onClose={() => {
-              setSelectShare(null);
               setPage("");
+              setSelectShare(null);
+              
             }}
           />
         ) : null}

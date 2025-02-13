@@ -38,6 +38,8 @@ const EchartsBar = (props: Props) => {
     1
   );
 
+  console.log('dataList----', dataList, chartData)
+
   useEffect(() => {
     if (dataList.length) {
       const option = {

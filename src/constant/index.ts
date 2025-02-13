@@ -45,8 +45,14 @@ export const CHART_STYLE = {
 }
 
 export enum Role {
-  INNER = 1000, // 内部用户
-  LP = 100, // lp 
-  HOLDER = 10, // holder
-  INIT = 1, // init
+  INNER = 1000,
+  LP = 100,
+  HOLDER = 10,
+  HOLDER_READ_ONLY = 5,
+  INIT = 1,
+}
+
+export enum Status {
+  init = 'init',
+  active = 'active',
 }

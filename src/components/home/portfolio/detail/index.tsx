@@ -1,5 +1,5 @@
 import React from "react";
-import { floor, takeRight } from "lodash";
+import { floor, take } from "lodash";
 import { BackBlackIcon, DateIcon } from "@/components/Icons";
 import BarCalendarChart from "@/components/multi-chart";
 import { addCommas } from "@/utils/helper";
@@ -40,11 +40,7 @@ const IntroType = [
 
 const Detail = ({ onClose, shareDetail }: any) => {
   const { name, icon, shareAmount, profit, productId } = shareDetail;
-  const barData = transBarProfit(
-    takeRight(shareDetail.data || [], 7),
-    shareAmount,
-    7
-  );
+  const barData = transBarProfit(shareDetail.data, shareAmount, 7);
 
   return (
     <div className={styles.wrap}>
@@ -64,10 +60,14 @@ const Detail = ({ onClose, shareDetail }: any) => {
             </div>
           </div>
         </div>
-        <div className={styles.soon}>
-          <DateIcon></DateIcon>
-          <span>{`You have a $${addCommas(shareAmount)} product that will begin accruing interest in 7 to 15 days.`}</span>
-        </div>
+        {profit ? null : (
+          <div className={styles.soon}>
+            <DateIcon></DateIcon>
+            <span>{`You have a $${addCommas(
+              shareAmount
+            )} product that will begin accruing interest in 7 to 15 days.`}</span>
+          </div>
+        )}
         <BarCalendarChart
           chartData={{
             dataList: barData,
